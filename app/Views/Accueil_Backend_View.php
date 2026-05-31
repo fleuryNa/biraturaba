@@ -322,7 +322,7 @@
                             <!-- /.direct-chat-infos -->
                             <img
                               class="direct-chat-img"
-                              src="./assets/img/user1-128x128.jpg"
+                              src="<?= base_url('public/assets/img/user1-128x128.jpg') ?>"
                               alt="message user image"
                             />
                             <!-- /.direct-chat-img -->
@@ -344,7 +344,7 @@
                             <!-- /.direct-chat-infos -->
                             <img
                               class="direct-chat-img"
-                              src="./assets/img/user3-128x128.jpg"
+                              src="<?= base_url('public/assets/img/user3-128x128.jpg') ?>"
                               alt="message user image"
                             />
                             <!-- /.direct-chat-img -->
@@ -362,7 +362,7 @@
                             <!-- /.direct-chat-infos -->
                             <img
                               class="direct-chat-img"
-                              src="./assets/img/user1-128x128.jpg"
+                              src="<?= base_url('public/assets/img/user1-128x128.jpg') ?>"
                               alt="message user image"
                             />
                             <!-- /.direct-chat-img -->
@@ -384,7 +384,7 @@
                             <!-- /.direct-chat-infos -->
                             <img
                               class="direct-chat-img"
-                              src="./assets/img/user3-128x128.jpg"
+                              src="<?= base_url('public/assets/img/user3-128x128.jpg') ?>"
                               alt="message user image"
                             />
                             <!-- /.direct-chat-img -->
@@ -402,7 +402,7 @@
                               <a href="#">
                                 <img
                                   class="contacts-list-img"
-                                  src="./assets/img/user1-128x128.jpg"
+                                  src="<?= base_url('public/assets/img/user1-128x128.jpg') ?>"
                                   alt="User Avatar"
                                 />
 
@@ -423,7 +423,7 @@
                               <a href="#">
                                 <img
                                   class="contacts-list-img"
-                                  src="./assets/img/user7-128x128.jpg"
+                                  src="<?= base_url('public/assets/img/user7-128x128.jpg') ?>"
                                   alt="User Avatar"
                                 />
 
@@ -442,7 +442,7 @@
                               <a href="#">
                                 <img
                                   class="contacts-list-img"
-                                  src="./assets/img/user3-128x128.jpg"
+                                  src="<?= base_url('public/assets/img/user3-128x128.jpg') ?>"
                                   alt="User Avatar"
                                 />
 
@@ -461,7 +461,7 @@
                               <a href="#">
                                 <img
                                   class="contacts-list-img"
-                                  src="./assets/img/user5-128x128.jpg"
+                                  src="<?= base_url('public/assets/img/user5-128x128.jpg') ?>"
                                   alt="User Avatar"
                                 />
 
@@ -480,7 +480,7 @@
                               <a href="#">
                                 <img
                                   class="contacts-list-img"
-                                  src="./assets/img/user6-128x128.jpg"
+                                  src="<?= base_url('public/assets/img/user6-128x128.jpg') ?>"
                                   alt="User Avatar"
                                 />
 
@@ -499,7 +499,7 @@
                               <a href="#">
                                 <img
                                   class="contacts-list-img"
-                                  src="./assets/img/user8-128x128.jpg"
+                                  src="<?= base_url('public/assets/img/user8-128x128.jpg') ?>"
                                   alt="User Avatar"
                                 />
 
@@ -568,7 +568,7 @@
                           <div class="col-3 p-2">
                             <img
                               class="img-fluid rounded-circle"
-                              src="./assets/img/user1-128x128.jpg"
+                              src="<?= base_url('public/assets/img/user1-128x128.jpg') ?>"
                               alt="User Image"
                             />
                             <a
@@ -582,7 +582,7 @@
                           <div class="col-3 p-2">
                             <img
                               class="img-fluid rounded-circle"
-                              src="./assets/img/user1-128x128.jpg"
+                              src="<?= base_url('public/assets/img/user1-128x128.jpg') ?>"
                               alt="User Image"
                             />
                             <a
@@ -596,7 +596,7 @@
                           <div class="col-3 p-2">
                             <img
                               class="img-fluid rounded-circle"
-                              src="./assets/img/user7-128x128.jpg"
+                              src="<?= base_url('public/assets/img/user7-128x128.jpg') ?>"
                               alt="User Image"
                             />
                             <a
@@ -610,7 +610,7 @@
                           <div class="col-3 p-2">
                             <img
                               class="img-fluid rounded-circle"
-                              src="./assets/img/user6-128x128.jpg"
+                              src="<?= base_url('public/assets/img/user6-128x128.jpg') ?>"
                               alt="User Image"
                             />
                             <a
@@ -624,7 +624,7 @@
                           <div class="col-3 p-2">
                             <img
                               class="img-fluid rounded-circle"
-                              src="./assets/img/user2-160x160.jpg"
+                              src="<?= base_url('public/assets/img/user2-160x160.jpg') ?>"
                               alt="User Image"
                             />
                             <a
@@ -638,7 +638,7 @@
                           <div class="col-3 p-2">
                             <img
                               class="img-fluid rounded-circle"
-                              src="./assets/img/user5-128x128.jpg"
+                              src="<?= base_url('public/assets/img/user5-128x128.jpg') ?>"
                               alt="User Image"
                             />
                             <a
@@ -652,7 +652,7 @@
                           <div class="col-3 p-2">
                             <img
                               class="img-fluid rounded-circle"
-                              src="./assets/img/user4-128x128.jpg"
+                              src="<?= base_url('public/assets/img/user4-128x128.jpg') ?>"
                               alt="User Image"
                             />
                             <a
@@ -666,7 +666,7 @@
                           <div class="col-3 p-2">
                             <img
                               class="img-fluid rounded-circle"
-                              src="./assets/img/user3-128x128.jpg"
+                              src="<?= base_url('public/assets/img/user3-128x128.jpg') ?>"
                               alt="User Image"
                             />
                             <a
@@ -683,7 +683,7 @@
                       <!-- /.card-body -->
                       <div class="card-footer text-center">
                         <a
-                          href="javascript:"
+                          href="javascript:void(0)"
                           class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
                           >View All Users</a
                         >
@@ -727,7 +727,7 @@
                           <tr>
                             <td>
                               <a
-                                href="pages/examples/invoice.html"
+                                href="javascript:void(0)"
                                 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
                                 >OR9842</a
                               >
@@ -743,7 +743,7 @@
                           <tr>
                             <td>
                               <a
-                                href="pages/examples/invoice.html"
+                                href="javascript:void(0)"
                                 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
                                 >OR1848</a
                               >
@@ -759,7 +759,7 @@
                           <tr>
                             <td>
                               <a
-                                href="pages/examples/invoice.html"
+                                href="javascript:void(0)"
                                 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
                                 >OR7429</a
                               >
@@ -775,7 +775,7 @@
                           <tr>
                             <td>
                               <a
-                                href="pages/examples/invoice.html"
+                                href="javascript:void(0)"
                                 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
                                 >OR7429</a
                               >
@@ -791,7 +791,7 @@
                           <tr>
                             <td>
                               <a
-                                href="pages/examples/invoice.html"
+                                href="javascript:void(0)"
                                 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
                                 >OR1848</a
                               >
@@ -807,7 +807,7 @@
                           <tr>
                             <td>
                               <a
-                                href="pages/examples/invoice.html"
+                                href="javascript:void(0)"
                                 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
                                 >OR7429</a
                               >
@@ -823,7 +823,7 @@
                           <tr>
                             <td>
                               <a
-                                href="pages/examples/invoice.html"
+                                href="javascript:void(0)"
                                 class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover"
                                 >OR9842</a
                               >
@@ -987,7 +987,7 @@
                       <div class="d-flex border-top py-2 px-1">
                         <div class="col-2">
                           <img
-                            src="./assets/img/default-150x150.png"
+                            src="<?= base_url('public/assets/img/default-150x150.png') ?>"
                             alt="Product Image"
                             class="img-size-50"
                           />
@@ -1004,7 +1004,7 @@
                       <div class="d-flex border-top py-2 px-1">
                         <div class="col-2">
                           <img
-                            src="./assets/img/default-150x150.png"
+                            src="<?= base_url('public/assets/img/default-150x150.png') ?>"
                             alt="Product Image"
                             class="img-size-50"
                           />
@@ -1023,7 +1023,7 @@
                       <div class="d-flex border-top py-2 px-1">
                         <div class="col-2">
                           <img
-                            src="./assets/img/default-150x150.png"
+                            src="<?= base_url('public/assets/img/default-150x150.png') ?>"
                             alt="Product Image"
                             class="img-size-50"
                           />
@@ -1042,7 +1042,7 @@
                       <div class="d-flex border-top py-2 px-1">
                         <div class="col-2">
                           <img
-                            src="./assets/img/default-150x150.png"
+                            src="<?= base_url('public/assets/img/default-150x150.png') ?>"
                             alt="Product Image"
                             class="img-size-50"
                           />
