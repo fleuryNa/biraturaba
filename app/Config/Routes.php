@@ -4,8 +4,15 @@ use CodeIgniter\Router\RouteCollection;
 
 /** @var RouteCollection $routes */
 
-// $routes->get('/', 'Home::index');
-$routes->get('/', 'Login::index');
+$routes->get('/', 'Home::index');
+$routes->get('cordonne', 'Home::gererCordcommune');
+
+$routes->get('backend', 'Login::index');
+$routes->post('login', 'Login::doLogin');
+$routes->get('logout', 'Login::doLogout');
+$routes->get('checkSession', 'Login::checkSession');
+$routes->get('createPassword/(:any)', 'Login::indexCP/$1');
+$routes->post('savenewpassword', 'Login::createPassWord'); 
 
 // $routes->get('/', 'Accueil_Backend::index');
 $routes->get('accueil', 'AccueilBackend::index');
@@ -27,12 +34,7 @@ $routes->get('blog/post/(:segment)', '\\App\Modules\Blog\Controllers\Blog::post/
 // Temporary: clear page cache
 $routes->get('blog/clear-cache', '\\App\Modules\Blog\Controllers\Blog::clearCache');
 
-$routes->get('/', 'Home::index');
-$routes->get('cordonne', 'Home::gererCordcommune');
 
-
-
-//////////////////////////////////
 
 // Route principale (comme votre 'blog')
 $routes->get('cartographie', '\\App\\Modules\\Cartographie\\Controllers\\Cartographie::index');
@@ -43,3 +45,12 @@ $routes->get('cartographie/map', '\\App\\Modules\\Cartographie\\Controllers\\Car
 $routes->get('cartographie/api/zones', '\\App\\Modules\\Cartographie\\Controllers\\Cartographie::apiGetZones');
 $routes->get('cartographie/export/geojson', '\\App\\Modules\\Cartographie\\Controllers\\Cartographie::exportGeoJson');
 
+////Carto Front
+
+$routes->get('cartograph', '\\App\\Modules\\Cartographie\\Controllers\\Carto::index');
+
+// Routes supplémentaires
+$routes->get('cartograph/zones', '\\App\\Modules\\Cartographie\\Controllers\\Carto::zones');
+$routes->get('cartograph/map', '\\App\\Modules\\Cartographie\\Controllers\\Carto::map');
+$routes->get('cartograph/api/zones', '\\App\\Modules\\Cartographie\\Controllers\\Carto::apiGetZones');
+$routes->get('cartograph/export/geojson', '\\App\\Modules\\Cartograph\\Controllers\\Carto::exportGeoJson');

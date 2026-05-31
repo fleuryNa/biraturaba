@@ -3,12 +3,14 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         <meta name="description" content="Monoline - Design Agency HTML Template">
         <meta name="keywords" content="agency, business, corporate, creative, html5, modern, multipurpose, One Page, parallax, startup ">       
         <!-- SITE TITLE -->
         <title>Biraturaba</title>           
         <!-- Latest Bootstrap min CSS -->
+         <link rel="icon" type="image/x-icon" href="<?= base_url('public/assets/logo/favicon.ico') ?>">
         <link rel="stylesheet" href="<?= base_url()?>public/assets/bootstrap/css/bootstrap.min.css">       
         <!-- Google Font -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800"> 

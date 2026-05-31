@@ -24,6 +24,8 @@
                 <li><a href="<?= base_url()?>mono_index/index_three.html" class="nav-link">Les Finances</a></li>
                 <li><a href="<?= base_url()?>mono_index/index_three.html" class="nav-link">Notre Equipe</a></li>
                 <li><a href="<?= base_url()?>mono_index/index_three.html" class="nav-link">Contact</a></li>
+                
+
               </ul>
             </li>   
             <li class="has-children">
@@ -33,13 +35,15 @@
                 <li><a href="<?= base_url()?>mono_index/single_service.html" class="nav-link">Notre strategie</a></li>
                 <li><a href="<?= base_url()?>mono_index/single_service.html" class="nav-link">Notre approche</a></li>
                 <li><a href="<?= base_url()?>mono_index/single_service.html" class="nav-link">Notre systeme de suivi-evaluation</a></li>
-                
+              
+
               </ul>
             </li>                    
             <li><a class="nav-link" href="<?= base_url()?>mono_index/casestudy.html">Notre impact</a></li>  <li><a class="nav-link" href="contact.html">Notre particularite</a></li>                                
             
             <li><a class="nav-link" href="contact.html">Documentation
-            </a></li>                   
+            </a></li>  
+            <li><a href="<?= base_url('cartograph')?>" class="nav-link">SIG</a></li>                 
           </ul>
         </nav>
       </div>
