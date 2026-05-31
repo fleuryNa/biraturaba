@@ -3,6 +3,7 @@
 use CodeIgniter\Router\RouteCollection;
 
 /** @var RouteCollection $routes */
+<<<<<<< HEAD
 // $routes->get('/', 'Home::index');
 $routes->get('/', 'Login::index');
 
@@ -25,4 +26,8 @@ $routes->get('blog', '\\App\Modules\Blog\Controllers\Blog::index');
 $routes->get('blog/post/(:segment)', '\\App\Modules\Blog\Controllers\Blog::post/$1');
 // Temporary: clear page cache
 $routes->get('blog/clear-cache', '\\App\Modules\Blog\Controllers\Blog::clearCache');
+=======
+$routes->get('/', 'Home::index');
+$routes->get('cordonne', 'Home::gererCordcommune');
+>>>>>>> c54479b (change)
 
