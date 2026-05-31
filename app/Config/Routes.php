@@ -26,3 +26,15 @@ $routes->get('blog/post/(:segment)', '\\App\Modules\Blog\Controllers\Blog::post/
 // Temporary: clear page cache
 $routes->get('blog/clear-cache', '\\App\Modules\Blog\Controllers\Blog::clearCache');
 
+
+//////////////////////////////////
+
+// Route principale (comme votre 'blog')
+$routes->get('cartographie', '\\App\\Modules\\Cartographie\\Controllers\\Cartographie::index');
+
+// Routes supplémentaires
+$routes->get('cartographie/zones', '\\App\\Modules\\Cartographie\\Controllers\\Cartographie::zones');
+$routes->get('cartographie/map', '\\App\\Modules\\Cartographie\\Controllers\\Cartographie::map');
+$routes->get('cartographie/api/zones', '\\App\\Modules\\Cartographie\\Controllers\\Cartographie::apiGetZones');
+$routes->get('cartographie/export/geojson', '\\App\\Modules\\Cartographie\\Controllers\\Cartographie::exportGeoJson');
+
