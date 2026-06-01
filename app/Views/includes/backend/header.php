@@ -33,6 +33,9 @@
      <!-- CSS personnalisé -->
      <link rel="stylesheet" href="<?= base_url('public/dist/css/custom.css') ?>" />
 
+      <link rel="stylesheet" href="<?= base_url('public/dist/datatables/datatables.min.css') ?>" />
+      <link rel="stylesheet" href="<?= base_url()?>/public/dist/datatables/buttons.dataTables.min.css">
+
      <!-- Favicon -->
      <link rel="icon" type="image/png" href="<?= base_url('public/dist/img/favicon.png') ?>" />
 </head>

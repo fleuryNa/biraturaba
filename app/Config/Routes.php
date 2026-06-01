@@ -5,7 +5,20 @@ use CodeIgniter\Router\RouteCollection;
 /** @var RouteCollection $routes */
 
 $routes->get('/', 'Home::index');
-$routes->get('cordonne', 'Home::gererCordcommune');
+$routes->get('identite', 'NosIdentite::index');
+$routes->get('histoire', 'Histoire::index');
+$routes->get('finance', 'Finance::index');
+$routes->get('equipe', 'Equipe::index');
+$routes->get('contact', 'Contact::index');
+
+
+$routes->get('solution', 'Resolution::index');
+$routes->get('strategie', 'NosStrategie::index');
+$routes->get('approche', 'Approche::index');
+$routes->get('suivi', 'SuiviEvaluation::index');
+$routes->get('impact', 'Impact::index');
+$routes->get('part', 'Particularite::index');
+$routes->get('documentation', 'Documentation::index');
 
 $routes->get('backend', 'Login::index');
 $routes->post('login', 'Login::doLogin');
@@ -38,6 +51,7 @@ $routes->get('blog/clear-cache', '\\App\Modules\Blog\Controllers\Blog::clearCach
 //features
 $routes->group('caracteristique', ['namespace' => '\App\Modules\Features\Controllers'], static function ($routes) {
     $routes->get('/', 'Features::index');
+    $routes->post('liste', 'Features::getList');
   
 });
 
