@@ -25,7 +25,7 @@ $routes->post('login', 'Login::doLogin');
 $routes->get('logout', 'Login::doLogout');
 $routes->get('checkSession', 'Login::checkSession');
 $routes->get('createPassword/(:any)', 'Login::indexCP/$1');
-$routes->post('savenewpassword', 'Login::createPassWord');
+$routes->post('savenewpassword', 'Login::createPassWord'); 
 
 // $routes->get('/', 'Accueil_Backend::index');
 $routes->get('accueil', 'AccueilBackend::index');
@@ -55,5 +55,21 @@ $routes->group('caracteristique', ['namespace' => '\App\Modules\Features\Control
   
 });
 
+// Route principale (comme votre 'blog')
+$routes->get('cartographie', '\\App\\Modules\\Cartographie\\Controllers\\Cartographie::index');
 
+// Routes supplémentaires
+$routes->get('cartographie/zones', '\\App\\Modules\\Cartographie\\Controllers\\Cartographie::zones');
+$routes->get('cartographie/map', '\\App\\Modules\\Cartographie\\Controllers\\Cartographie::map');
+$routes->get('cartographie/api/zones', '\\App\\Modules\\Cartographie\\Controllers\\Cartographie::apiGetZones');
+$routes->get('cartographie/export/geojson', '\\App\\Modules\\Cartographie\\Controllers\\Cartographie::exportGeoJson');
 
+////Carto Front
+
+$routes->get('cartograph', '\\App\\Modules\\Cartographie\\Controllers\\Carto::index');
+
+// Routes supplémentaires
+$routes->get('cartograph/zones', '\\App\\Modules\\Cartographie\\Controllers\\Carto::zones');
+$routes->get('cartograph/map', '\\App\\Modules\\Cartographie\\Controllers\\Carto::map');
+$routes->get('cartograph/api/zones', '\\App\\Modules\\Cartographie\\Controllers\\Carto::apiGetZones');
+$routes->get('cartograph/export/geojson', '\\App\\Modules\\Cartograph\\Controllers\\Carto::exportGeoJson');

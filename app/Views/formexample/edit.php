@@ -1,5 +1,9 @@
 <?= view('includes/backend/header') ?>
 
+ <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+    <!--begin::App Wrapper-->
+    <div class="app-wrapper">
+
 <?= view('includes/backend/sidebarmenu') ?>
 
 <?= view('includes/backend/menu') ?>
@@ -20,4 +24,9 @@
 </main>
 
 <?= view('includes/backend/footer') ?>
+</div>
 <?= view('includes/backend/script_back') ?>
+ <!--end::Script-->
+  </body>
+  <!--end::Body-->
+</html>
