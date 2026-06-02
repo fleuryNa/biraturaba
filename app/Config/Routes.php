@@ -13,7 +13,7 @@ $routes->get('logout', 'Login::doLogout');
 $routes->get('checkSession', 'Login::checkSession');
 $routes->get('createPassword/(:any)', 'Login::indexCP/$1');
 $routes->post('savenewpassword', 'Login::createPassWord'); 
-
+ 
 // $routes->get('/', 'Accueil_Backend::index');
 $routes->get('accueil', 'AccueilBackend::index');
 $routes->get('form1', 'FormExample1::index');

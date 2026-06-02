@@ -11,7 +11,7 @@ class Login extends BaseController
     }
     public function doLogin()
     {
-        // code...
+        // code... 
         $statutconnexion = false;
         $USERNAME        = $this->request->getPost('USERNAME');
         $PASSWORD        = md5($this->request->getPost('PASSWORD'));

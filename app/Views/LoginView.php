@@ -1,159 +1,151 @@
-<!doctype html>
-<html lang="en">
-<!--begin::Head-->
-<?= view('includes/backend/header') ?>
-<!--end::Head-->
-<!--begin::Body-->
-<style>
+<!DOCTYPE html>
+<html>
 
-  .login-card-body{
-    border-radius:15px;
-  }
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width initial-scale=1.0">
+    <title>Superbat | Login</title>
+    <!-- GLOBAL MAINLY STYLES-->
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="<?php echo base_url('assets/uploads/superbat.png'); ?>">
+    <link href="<?= base_url()?>/public/assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="<?= base_url()?>/public/assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="<?= base_url()?>/public/assets/vendors/themify-icons/css/themify-icons.css" rel="stylesheet" />
+    <!-- THEME STYLES-->
+    <link href="<?= base_url()?>/public/assets/css/main.css" rel="stylesheet" />
+    <!-- PAGE LEVEL STYLES-->
+    <link href="<?= base_url()?>/public/assets/css/pages/auth-light.css" rel="stylesheet" />
 
-  .card{
-    box-shadow:0 5px 20px rgba(0,0,0,.15);
-  }
+    <style>
+        .brand {
+            text-align: center;
+            display: flex;
+            flex-direction: column;   /* place le texte en haut, logo en bas */
+            align-items: center;      /* centre horizontalement */
+        }
 
-  .profile-image-pic{
-    width:150px;
-    height:150px;
-    object-fit:cover;
-  }
+        .brand .link {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 5px;       /* espace entre texte et logo */
+        }
 
-  .login-logo a{
-    font-weight:bold;
-    color:#0d6efd;
-  }
+        .brand-logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
 
-  .btn-primary{
-    border-radius:10px;
-  }
 
-  .form-control{
-    border-radius:8px;
-  }
-</style>
-<body class="login-page bg-body-secondary">
-  <div class="login-box">
-    <div class="login-logo">
-      <a href="../index2.html"><b></b>BIRATURABA</a>
-    </div>
-    <!-- /.login-logo -->
-    <div class="card">
-      <div class="card-body login-card-body">
-        <p class="login-box-msg">
-          <div class="text-center">
-            <img src="<?php echo base_url('public/assets/logo/biraturaba.png') ?>"
-            class="img-fluid profile-image-pic img-thumbnail rounded-circle my-3" width="200px"
-            alt="profile">
-          </div>
-        </p>
+    </style>
+</head>
 
-        <form id="loginForm" method="post">
+<body class="bg-silver-300">
+    <div class="content">
+       <!-- BEGIN PAGA BACKDROPS-->
+   <!--  <div class="sidenav-backdrop backdrop"></div>
+    <div class="preloader-backdrop">
+        <div class="page-preloader">Loading</div>
+    </div> -->
+    <!-- END PAGA BACKDROPS-->
+        <div class="brand">
+            <a class="link" >BIRATURABA</a>
+            <img src="<?= base_url()?>public/assets/img/logos/biraturaba.png" class="brand-logo">
+        </div>
+       <form id="loginForm" method="post">
+            <h2 class="login-title">Log in</h2>
 
-          <div id="responseMessage"></div>
+           
+         <div class="form-group">
+            <div class="input-group-icon right">
+                <div class="input-icon"><i class="fa fa-envelope"></i></div>
+                <input class="form-control" type="USERNAME" name="USERNAME" placeholder="Email" autocomplete="off">
 
-          <div class="input-group mb-3">
-            <input type="text"
-            class="form-control"
-            name="USERNAME"
-            id="USERNAME"
-            placeholder="Nom d'utilisateur">
-            <div class="input-group-text">
-              <span class="bi bi-person"></span>
             </div>
-          </div>
-
-          <div class="input-group mb-3">
-            <input type="password"
-            class="form-control"
-            name="PASSWORD"
-            id="PASSWORD"
-            placeholder="Mot de passe">
-
-            <span class="input-group-text toggle-password"
-            onclick="togglePassword('PASSWORD')"
-            style="cursor:pointer">
-            <i id="eye_PASSWORD" class="bi bi-eye"></i>
-          </span>
         </div>
-
-        <div class="row">
-          <div class="col-6">
-            <!-- <div class="form-check">
-              <input class="form-check-input"
-              type="checkbox"
-              id="remember">
-              <label class="form-check-label" for="remember">
-                Se souvenir de moi
-              </label>
-            </div> -->
-          </div>
-
-          <div class="col-6">
-            <div class="d-grid">
-              <button type="button"
-              id="btnsb"
-              class="btn btn-primary">
-              Connexion
-            </button>
-          </div>
+        <div class="form-group">
+            <div class="input-group-icon right">
+                <div class="input-icon"><i class="fa fa-lock font-16"></i></div>
+                <input class="form-control" type="password" name="PASSWORD" id="password">
+            </div>
         </div>
-      </div>
+       <label class="ui-checkbox ui-checkbox-info">
+    <input type="checkbox" onclick="togglePassword()">
+    <span class="input-span"></span>Voir le mot de passe
+</label>
+            <div id="responseMessage"></div>
+            <br>
+            <div class="form-group">
+                <button class="btn btn-info btn-block" type="button" id="btnsb">Login</button>
+            </div>
 
-    </form>
-
-    <p class="mb-1">
-      <a href="forgot-password.html">Mot de passe oublie</a>
-    </p>
-
-  </div>
-  <!-- /.login-card-body -->
-</div>
-</div>
-<!-- /.login-box -->
-
-<!--begin::Third Party Plugin(OverlayScrollbars)-->
-<?= view('includes/backend/script_back') ?>
+        </form>
+    </div>
+   
+    <!-- CORE PLUGINS -->
+    <script src="<?= base_url()?>/public/assets/vendors/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="<?= base_url()?>/public/assets/vendors/popper.js/dist/umd/popper.min.js" type="text/javascript"></script>
+    <script src="<?= base_url()?>/public/assets/vendors/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <!-- PAGE LEVEL PLUGINS -->
+    <script src="<?= base_url()?>/public/assets/vendors/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+    <!-- CORE SCRIPTS-->
+    <script src="<?= base_url()?>assets/js/app.js" type="text/javascript"></script>
+    <!-- PAGE LEVEL SCRIPTS-->
 
 
-<script>
- $(document).ready(function () {
+
+   <script>
+$(document).ready(function () {
 
   $("#btnsb").on("click", function (e) {
 
     e.preventDefault();
 
+    // Supprimer les anciens messages d'erreur
     $(".is-invalid").removeClass("is-invalid");
     $(".invalid-feedback").remove();
+    $("#responseMessage").html("");
 
-    let USERNAME = $("#USERNAME").val().trim();
-    let PASSWORD = $("#PASSWORD").val();
+    // Récupérer les valeurs (correction : utiliser l'attribut name ou ajouter des ID)
+    let USERNAME = $("input[name='USERNAME']").val().trim();
+    let PASSWORD = $("input[name='PASSWORD']").val();
 
     let isValid = true;
 
+    // Validation email
     if (USERNAME === "") {
       isValid = false;
-      $("#USERNAME")
-      .addClass("is-invalid")
-      .after('<div class="invalid-feedback">Le nom utilisateur est obligatoire</div>');
+      $("input[name='USERNAME']")
+        .addClass("is-invalid")
+        .after('<div class="invalid-feedback">L\'email est obligatoire</div>');
+    } else if (!isValidEmail(USERNAME)) {
+      isValid = false;
+      $("input[name='USERNAME']")
+        .addClass("is-invalid")
+        .after('<div class="invalid-feedback">Veuillez entrer un email valide</div>');
     }
 
+    // Validation mot de passe
     if (PASSWORD === "") {
       isValid = false;
-      $("#PASSWORD")
-      .addClass("is-invalid")
-      .after('<div class="invalid-feedback">Le mot de passe est obligatoire</div>');
+      $("input[name='PASSWORD']")
+        .addClass("is-invalid")
+        .after('<div class="invalid-feedback">Le mot de passe est obligatoire</div>');
     }
 
     if (!isValid) return;
 
-    // ✅ IMPORTANT: prendre le FORM et pas le bouton
-    let formData = new FormData($("#loginForm")[0]);
+    // Créer le FormData
+    let formData = new FormData();
+    formData.append("USERNAME", USERNAME);
+    formData.append("PASSWORD", PASSWORD);
 
+    // Désactiver le bouton pendant l'envoi
     $("#btnsb")
-    .prop('disabled', true)
-    .html('<i class="spinner-border spinner-border-sm"></i> Connexion...');
+      .prop('disabled', true)
+      .html('<i class="fa fa-spinner fa-spin"></i> Connexion...');
 
     $.ajax({
       url: "<?= base_url('login') ?>",
@@ -164,66 +156,121 @@
       dataType: "json",
 
       success: function (response) {
-
         if (response.success) {
-
           $("#responseMessage").html(
-            '<div class="alert alert-success">Connexion réussie...</div>'
-            );
+            '<div class="alert alert-success alert-dismissible fade show" role="alert">' +
+            '<i class="fa fa-check-circle"></i> Connexion réussie, redirection...' +
+            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+            '</div>'
+          );
 
           setTimeout(function () {
             window.location.href = response.redirect_url;
           }, 800);
-
         } else {
-
           $("#responseMessage").html(
-            '<div class="alert alert-danger">' + response.message + '</div>'
-            );
+            '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+            '<i class="fa fa-exclamation-triangle"></i> ' + response.message +
+            '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+            '</div>'
+          );
         }
       },
 
-      error: function () {
+      error: function (xhr, status, error) {
+        console.error("Erreur AJAX:", error);
         $("#responseMessage").html(
-          '<div class="alert alert-danger">Erreur serveur</div>'
-          );
+          '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+          '<i class="fa fa-exclamation-triangle"></i> Erreur serveur. Veuillez réessayer.' +
+          '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
+          '</div>'
+        );
       },
 
       complete: function () {
         $("#btnsb")
-        .prop('disabled', false)
-        .html('Connexion');
+          .prop('disabled', false)
+          .html('Connexion');
       }
     });
-
   });
 
-});
+  // Fonction helper pour valider l'email
+  function isValidEmail(email) {
+    var re = /^[^\s@]+@([^\s@.,]+\.)+[^\s@.,]{2,}$/;
+    return re.test(email);
+  }
 
+  // Soumettre avec la touche Entrée
+  $("input").keypress(function(e) {
+    if (e.which === 13) {
+      e.preventDefault();
+      $("#btnsb").click();
+    }
+  });
+});
 </script>
 <script>
-
- function togglePassword(fieldId)
- {
-  let input = document.getElementById(fieldId);
-  let eye = document.getElementById("eye_" + fieldId);
-
-  if(input.type === "password")
-  {
-    input.type = "text";
-    eye.classList.remove("bi-eye");
-    eye.classList.add("bi-eye-slash");
-  }
-  else
-  {
-    input.type = "password";
-    eye.classList.remove("bi-eye-slash");
-    eye.classList.add("bi-eye");
+function togglePassword() {
+  var x = document.getElementById("password");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
   }
 }
 </script>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+    <script type="text/javascript">
+        $(function() {
+            $('#login-form').validate({
+                errorClass: "help-block",
+                rules: {
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    password: {
+                        required: true
+                    }
+                },
+                highlight: function(e) {
+                    $(e).closest(".form-group").addClass("has-error")
+                },
+                unhighlight: function(e) {
+                    $(e).closest(".form-group").removeClass("has-error")
+                },
+            });
+        });
+
+
+
+        function myPassword() {
+
+          var x = document.getElementById("password");
+          if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    } 
+
+</script> -->
 </body>
-<!--end::Body-->
+
 </html>

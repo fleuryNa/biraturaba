@@ -455,24 +455,32 @@
                         </div>
                         
                         <!-- Liste des groupes -->
-                        <div class="groups-list">
-                            <div class="group-card group1" data-group="group1">
+                       <div class="groups-list">
+                        <?php  foreach ($points as $key => $value) {
+                            # code...
+                        ?>
+                        
+                            <div class="group-card group<?= $value['groupe']; ?>" data-group="group<?= $value['groupe']; ?>">
                                 <div class="group-header">
-                                    <div class="group-icon group1">🏥</div>
+                                    <div class="group-icon group<?= $value['groupe']; ?>"><?= $value['icon']; ?></div>
                                     <div class="group-info">
-                                        <div class="group-name">Santé & Social</div>
-                                        <div class="group-count" id="group1Name">Groupe 1</div>
+                                        <div class="group-name"><?= $value['nom']; ?></div>
+                                        <div class="group-count" id="group1Name">MWARO</div>
                                     </div>
                                 </div>
                                 <div class="group-stats">
                                     <div class="stat-badge">
-                                        <span class="stat-number group1" id="group1Count">0</span>
+                                        <span class="stat-number group1" id="group<?= $value['groupe']; ?>Count">0</span>
                                         <span class="stat-label">Points</span>
                                     </div>
                                 </div>
                             </div>
+
+                            <?php  
+                            # code...
+                        } ?>
                             
-                            <div class="group-card group2" data-group="group2">
+                          <!--   <div class="group-card group2" data-group="group2">
                                 <div class="group-header">
                                     <div class="group-icon group2">🏫</div>
                                     <div class="group-info">
@@ -486,8 +494,8 @@
                                         <span class="stat-label">Points</span>
                                     </div>
                                 </div>
-                            </div>
-                            
+                            </div> -->
+                            <!-- 
                             <div class="group-card group3" data-group="group3">
                                 <div class="group-header">
                                     <div class="group-icon group3">🏛️</div>
@@ -502,8 +510,8 @@
                                         <span class="stat-label">Points</span>
                                     </div>
                                 </div>
-                            </div>
-                            
+                            </div> -->
+                            <!-- 
                             <div class="group-card group4" data-group="group4">
                                 <div class="group-header">
                                     <div class="group-icon group4">🏟️</div>
@@ -518,7 +526,7 @@
                                         <span class="stat-label">Points</span>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         
                         <!-- Liste des points récents -->
@@ -658,7 +666,7 @@
         
         // Stockage des points
         let allPoints = [];
-        let groupCounts = { group1: 0, group2: 0, group3: 0, group4: 0 };
+        let groupCounts = { group1: 0, group2: 0};
         
         // Fonction pour créer un marqueur
         function createMarker(lat, lng, config, id, title, description, extra) {
@@ -713,8 +721,8 @@
         const dataGroups = [
             { raw: mesdonnees, group: 'group1' },
             { raw: mesdonnees2, group: 'group2' },
-            { raw: mesdonnees3, group: 'group3' },
-            { raw: mesdonnees4, group: 'group4' }
+            // { raw: mesdonnees3, group: 'group3' },
+            // { raw: mesdonnees4, group: 'group4' }
         ];
         
         dataGroups.forEach(({ raw, group }) => {
@@ -755,8 +763,8 @@
         document.getElementById('totalPointsDisplay').innerText = totalPoints;
         document.getElementById('group1Count').innerText = groupCounts.group1;
         document.getElementById('group2Count').innerText = groupCounts.group2;
-        document.getElementById('group3Count').innerText = groupCounts.group3;
-        document.getElementById('group4Count').innerText = groupCounts.group4;
+        // document.getElementById('group3Count').innerText = groupCounts.group3;
+        // document.getElementById('group4Count').innerText = groupCounts.group4;
         
         // Liste des points récents (les 10 derniers)
         const recentPoints = allPoints.slice(-10).reverse();

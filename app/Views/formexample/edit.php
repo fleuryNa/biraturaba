@@ -1,4 +1,4 @@
-<?= view('includes/backend/header') ?>
+<?= view('includes/backend/header_new') ?>
 
  <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
     <!--begin::App Wrapper-->
