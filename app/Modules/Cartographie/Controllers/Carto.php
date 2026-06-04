@@ -2,15 +2,23 @@
 
 namespace App\Modules\Cartographie\Controllers;
 
-use CodeIgniter\Controller;
+use App\Controllers\BaseController;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Config\Services;
+use Psr\Log\LoggerInterface;
 
-class Carto extends Controller
+class Carto extends BaseController
 {
     protected $helpers = ['url'];
     
-    public function index()
+    public function mapWithDatabase()
     {
         // Exemple de données - À remplacer par vos vraies données venant de la base
+
+        $connexion = $this->model->getRequete('SELECT * FROM `provinces` JOIN communes ON provinces.PROVINCE_ID=communes.COMMUNE_ID WHERE 1');
+        print_r($connexion);die();
+
         $mesdonnees = "1<>Point A<>-3.3804751<>29.3604533<>Description A<>Info A@2<>Point B<>-3.3904751<>29.3704533<>Description B<>Info B@3<>Point C<>-3.4004751<>29.3804533<>Description C<>Info C";
         
         $mesdonnees2 = "4<>Point D<>-3.4104751<>29.3904533<>Description D<>Info D@5<>Point E<>-3.4204751<>29.4004533<>Description E<>Info E";
@@ -32,22 +40,53 @@ class Carto extends Controller
     }
     
     // Méthode alternative : Récupérer depuis la base de données
-    public function mapWithDatabase()
+    public function index()
     {
         // Exemple avec modèle (à adapter selon votre base)
         // $zoneModel = new \App\Modules\Cartographie\Models\ZoneModel();
-        // $points = $zoneModel->getAllPoints();
+        $donnees1 = $this->model->getRequete('SELECT p.*, 
+       COUNT(DISTINCT c.COMMUNE_ID) AS commune_count, 
+       COUNT(DISTINCT z.ZONE_ID) AS zone_count, 
+       COUNT(DISTINCT co.COLLINE_ID) AS colline_count
+FROM `provinces` AS p
+RIGHT JOIN communes AS c ON p.PROVINCE_ID = c.PROVINCE_ID
+RIGHT JOIN zones AS z ON c.COMMUNE_ID = z.COMMUNE_ID
+RIGHT JOIN collines AS co ON z.ZONE_ID = co.ZONE_ID
+WHERE 1
+GROUP BY p.PROVINCE_ID;');
+        // print_r($points);die();
         
         // Simulation de données venant de la base
+
+        $points="[";
+
+        foreach ($donnees1 as $key => $value) {
+            # code...
+        $points.='['.'"PROVINCE_ID"=>'.$value['PROVINCE_ID'].',' .'"groupe"=>"1",'.'"nom"=>"'.$value['PROVINCE_NAME'].'",'.'"lat"=>'.$value['LATITUDE'].','.'"lng"=>'.$value['LONGITUDE'].','.'"icon"=>"<div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
+                                🏥
+                            </div>",'.'"NB_COMM"=>'.$value['commune_count'].'],';
+
+        }
+        print_r($points);die();
+
+ // $points =[["PROVINCE_ID"=>1,"NOM"=>"Pro","nOM"=>"BUHUMUZA"],["PROVINCE_ID"=>2,"NOM"=>"Pro","nOM"=>"BUJUMBURA"],["PROVINCE_ID"=>3,"NOM"=>"Pro","nOM"=>"BURUNGA"],["PROVINCE_ID"=>4,"NOM"=>"Pro","nOM"=>"BUTANYERERA"],["PROVINCE_ID"=>5,"NOM"=>"Pro","nOM"=>"GITEGA"],
         $points = [
-            ['id' => 1, 'nom' => 'Point A', 'lat' => -3.3804751, 'lng' => 29.3604533, 'description' => 'Description A', 'groupe' => 1],
-            ['id' => 2, 'nom' => 'Point B', 'lat' => -3.3904751, 'lng' => 29.3704533, 'description' => 'Description B', 'groupe' => 1],
-            ['id' => 3, 'nom' => 'Point C', 'lat' => -3.4004751, 'lng' => 29.3804533, 'description' => 'Description C', 'groupe' => 1],
-            ['id' => 4, 'nom' => 'Point D', 'lat' => -3.4104751, 'lng' => 29.3904533, 'description' => 'Description D', 'groupe' => 2],
-            ['id' => 5, 'nom' => 'Point E', 'lat' => -3.4204751, 'lng' => 29.4004533, 'description' => 'Description E', 'groupe' => 2],
-            ['id' => 6, 'nom' => 'Point F', 'lat' => -3.4304751, 'lng' => 29.4104533, 'description' => 'Description F', 'groupe' => 3],
-            ['id' => 7, 'nom' => 'Point G', 'lat' => -3.4404751, 'lng' => 29.4204533, 'description' => 'Description G', 'groupe' => 3],
-            ['id' => 8, 'nom' => 'Point H', 'lat' => -3.4504751, 'lng' => 29.4304533, 'description' => 'Description H', 'groupe' => 4],
+            ['id' => 1, 'nom' => 'BURUNGA', 'lat' => -3.3804751, 'lng' => 29.3604533, 'description' => 'TEST1', 'groupe' => 1,'icon' => '<div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
+                                🏥
+                            </div>'],
+            ['id' => 2, 'nom' => 'BUHUMUZA', 'lat' => -3.3904751, 'lng' => 29.3704533, 'description' => 'TEST 2', 'groupe' => 1,'icon' => '<div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
+                                🏥
+                            </div>'],
+            ['id' => 3, 'nom' => 'BUTANYERERA', 'lat' => -3.4004751, 'lng' => 29.3804533, 'description' => 'TEST 3', 'groupe' => 1,'icon' => '<div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
+                                🏥 
+                            </div>'],
+            ['id' => 4, 'nom' => 'TOILLETE1', 'lat' => -3.4104751, 'lng' => 29.3904533, 'description' => 'TEST', 'groupe' => 2,'icon' => '<div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
+                                🏫 
+                            </div>'],
+            ['id' => 5, 'nom' => 'Point E', 'lat' => -3.4204751, 'lng' => 29.4004533, 'description' => 'Description E', 'groupe' => 2,'icon' => '<div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
+                                 🏫
+                            </div>'],
+           
         ];
         
         // Convertir les données au format attendu par la vue
@@ -71,12 +110,12 @@ class Carto extends Controller
                 case 2:
                     $mesdonnees2 .= ($mesdonnees2 ? "@" : "") . $formatted;
                     break;
-                case 3:
-                    $mesdonnees3 .= ($mesdonnees3 ? "@" : "") . $formatted;
-                    break;
-                case 4:
-                    $mesdonnees4 .= ($mesdonnees4 ? "@" : "") . $formatted;
-                    break;
+                // case 3:
+                //     $mesdonnees3 .= ($mesdonnees3 ? "@" : "") . $formatted;
+                //     break;
+                // case 4:
+                //     $mesdonnees4 .= ($mesdonnees4 ? "@" : "") . $formatted;
+                //     break;
             }
         }
         
@@ -85,10 +124,12 @@ class Carto extends Controller
             'pageTitle' => 'Carte des zones d intervention',
             'mesdonnees' => $mesdonnees,
             'mesdonnees2' => $mesdonnees2,
-            'mesdonnees3' => $mesdonnees3,
-            'mesdonnees4' => $mesdonnees4
+            // 'mesdonnees3' => $mesdonnees3,
+            // 'mesdonnees4' => $mesdonnees4,
+            'points' => $points,
+
         ];
-        
-        return view('App\Modules\Cartographie\Views\index', $data);
+        // print_r($data);die();
+        return view('App\Modules\Cartographie\Views\CartoFront', $data);
     }
 }
