@@ -23,7 +23,7 @@
         <link rel="stylesheet" href="<?= base_url()?>public/assets/fonts/themify-icons.css">
         <!--- owl carousel Css-->
         <link rel="stylesheet" href="<?= base_url()?>public/assets/owlcarousel/css/owl.carousel.css">
-        <link rel="stylesheet" href="assets/owlcarousel/css/owl.theme.css">
+        <link rel="stylesheet" href="<?= base_url()?>public/assets/owlcarousel/css/owl.theme.css">
         <!--materialdesignicons Css-->
         <link rel="stylesheet" href="<?= base_url()?>public/assets/css/fonts.css">     
         <!-- animate CSS -->
@@ -33,7 +33,7 @@
         <!-- Style CSS -->                      
         <link rel="stylesheet" href="<?= base_url()?>public/assets/css/menu.css">          
         <link rel="stylesheet" href="<?= base_url()?>public/assets/css/style.css">         
-        <link rel="stylesheet" href="assets/css/responsive.css">            
+        <link rel="stylesheet" href="<?= base_url()?>public/assets/css/responsive.css">            
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
