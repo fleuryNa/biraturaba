@@ -3,133 +3,196 @@
 namespace App\Modules\Cartographie\Controllers;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\RequestInterface;
-use CodeIgniter\HTTP\ResponseInterface;
-use Config\Services;
-use Psr\Log\LoggerInterface;
 
 class Carto extends BaseController
 {
     protected $helpers = ['url'];
-    
-    public function mapWithDatabase()
+    protected $db;
+
+    public function __construct()
     {
-        // Exemple de données - À remplacer par vos vraies données venant de la base
+        $this->db = \Config\Database::connect();
+    }
 
-        $connexion = $this->model->getRequete('SELECT * FROM `provinces` JOIN communes ON provinces.PROVINCE_ID=communes.COMMUNE_ID WHERE 1');
-        print_r($connexion);die();
+    public function index()
+    {
+        // ==================== 1. PROVINCES ====================
+        $provinces = $this->db->query("
+            SELECT 
+                p.PROVINCE_ID as id,
+                p.PROVINCE_NAME as nom,
+                p.PROVINCE_LATITUDE as lat,
+                p.PROVINCE_LONGITUDE as lng,
+                COUNT(DISTINCT c.COMMUNE_ID) as nb_communes
+            FROM provinces p
+            LEFT JOIN communes c ON p.PROVINCE_ID = c.PROVINCE_ID
+            GROUP BY p.PROVINCE_ID
+        ")->getResultArray();
 
-        $mesdonnees = "1<>Point A<>-3.3804751<>29.3604533<>Description A<>Info A@2<>Point B<>-3.3904751<>29.3704533<>Description B<>Info B@3<>Point C<>-3.4004751<>29.3804533<>Description C<>Info C";
+        // ==================== 2. COMMUNES ====================
+        $communes = $this->db->query("
+            SELECT DISTINCT 
+                cm.COMMUNE_ID as id,
+                cm.COMMUNE_NAME as nom,
+                cm.COMMUNE_LATITUDE as lat,
+                cm.COMMUNE_LONGITUDE as lng,
+                p.PROVINCE_NAME as province_nom,
+                p.PROVINCE_ID as province_id
+            FROM communes cm
+            JOIN provinces p ON cm.PROVINCE_ID = p.PROVINCE_ID
+            WHERE cm.COMMUNE_LATITUDE != -1 AND cm.COMMUNE_LONGITUDE != -1
+        ")->getResultArray();
+
+        // ==================== 3. ZONES ====================
+        $zones = $this->db->query("
+            SELECT DISTINCT 
+                z.ZONE_ID as id,
+                z.ZONE_NAME as nom,
+                z.LATITUDE as lat,
+                z.LONGITUDE as lng,
+                cm.COMMUNE_NAME as commune_nom,
+                cm.COMMUNE_ID as commune_id
+            FROM zones z
+            JOIN communes cm ON z.COMMUNE_ID = cm.COMMUNE_ID
+            WHERE z.LATITUDE != -1 AND z.LONGITUDE != -1 AND z.LATITUDE != 2
+        ")->getResultArray();
+
+        // ==================== 4. COLLINES avec données membres ====================
+        $collines = $this->db->query("
+            SELECT 
+                mi.ID_MEMBRES as id,
+                mi.COLLINE_ID,
+                mi.NB_GROUPE_FONCTIONNELS,
+                mi.NB_MEMBRE_INSCRITS,
+                mi.NOMBRE_HOMME,
+                mi.NOMBRE_FEMME,
+                c.COLLINE_NAME as nom,
+                c.LATITUDE as lat,
+                c.LONGITUDE as lng,
+                z.ZONE_NAME as zone_nom,
+                z.ZONE_ID as zone_id,
+                cm.COMMUNE_NAME as commune_nom,
+                cm.COMMUNE_ID as commune_id,
+                p.PROVINCE_NAME as province_nom,
+                p.PROVINCE_ID as province_id
+            FROM membres_inscrits mi
+            JOIN collines c ON mi.COLLINE_ID = c.COLLINE_ID
+            JOIN zones z ON c.ZONE_ID = z.ZONE_ID
+            JOIN communes cm ON z.COMMUNE_ID = cm.COMMUNE_ID
+            JOIN provinces p ON cm.PROVINCE_ID = p.PROVINCE_ID
+            WHERE mi.NB_MEMBRE_INSCRITS > 0
+            ORDER BY mi.NB_MEMBRE_INSCRITS DESC
+        ")->getResultArray();
+
+        // ==================== CONSTRUCTION DES DONNEES ====================
+        $mesdonnees = "";   // Groupe 1 - Provinces
+        $mesdonnees2 = "";  // Groupe 2 - Communes
+        $mesdonnees3 = "";  // Groupe 3 - Zones
+        $mesdonnees4 = "";  // Groupe 4 - Collines
+        $points = [];
         
-        $mesdonnees2 = "4<>Point D<>-3.4104751<>29.3904533<>Description D<>Info D@5<>Point E<>-3.4204751<>29.4004533<>Description E<>Info E";
-        
-        $mesdonnees3 = "6<>Point F<>-3.4304751<>29.4104533<>Description F<>Info F@7<>Point G<>-3.4404751<>29.4204533<>Description G<>Info G";
-        
-        $mesdonnees4 = "8<>Point H<>-3.4504751<>29.4304533<>Description H<>Info H@9<>Point I<>-3.4604751<>29.4404533<>Description I<>Info I";
-        
+        $stats = [
+            'total_membres' => 0,
+            'total_hommes' => 0,
+            'total_femmes' => 0,
+            'total_groupes' => 0,
+            'total_sites' => 0
+        ];
+
+        // Groupe 1: Provinces
+        foreach ($provinces as $province) {
+            $lat = ($province['lat'] != -1) ? $province['lat'] : -3.38;
+            $lng = ($province['lng'] != -1) ? $province['lng'] : 29.36;
+            
+            $formatted = $province['id'] . "<>" . $province['nom'] . "<>" . $lat . "<>" . $lng . "<>" . "Nombre de communes: " . ($province['nb_communes'] ?? 0) . "<>" . "🏢 Siège provincial";
+            $mesdonnees .= ($mesdonnees ? "@" : "") . $formatted;
+            
+            $points[] = [
+                'groupe' => 1, 'id' => $province['id'], 'nom' => $province['nom'],
+                'lat' => $lat, 'lng' => $lng, 'icon' => '🏢',
+                'sous_titre' => $province['nb_communes'] . ' communes',
+                'description' => "Nombre de communes: " . ($province['nb_communes'] ?? 0),
+                'extra' => "🏢 Siège provincial"
+            ];
+        }
+
+        // Groupe 2: Communes
+        foreach ($communes as $commune) {
+            $lat = ($commune['lat'] != -1) ? $commune['lat'] : -3.38;
+            $lng = ($commune['lng'] != -1) ? $commune['lng'] : 29.36;
+            
+            $formatted = $commune['id'] . "<>" . $commune['nom'] . "<>" . $lat . "<>" . $lng . "<>" . "Province: " . $commune['province_nom'] . "<>" . "🏛️ Chef-lieu de commune";
+            $mesdonnees2 .= ($mesdonnees2 ? "@" : "") . $formatted;
+            
+            $points[] = [
+                'groupe' => 2, 'id' => $commune['id'], 'nom' => $commune['nom'],
+                'lat' => $lat, 'lng' => $lng, 'icon' => '🏛️',
+                'sous_titre' => $commune['province_nom'],
+                'description' => "Province: " . $commune['province_nom'],
+                'extra' => "🏛️ Chef-lieu de commune",
+                'province_id' => $commune['province_id']
+            ];
+        }
+
+        // Groupe 3: Zones
+        foreach ($zones as $zone) {
+            $lat = ($zone['lat'] != -1 && $zone['lat'] != 2) ? $zone['lat'] : -3.38;
+            $lng = ($zone['lng'] != -1 && $zone['lng'] != 2) ? $zone['lng'] : 29.36;
+            
+            $formatted = $zone['id'] . "<>" . $zone['nom'] . "<>" . $lat . "<>" . $lng . "<>" . "Commune: " . $zone['commune_nom'] . "<>" . "📍 Zone de regroupement";
+            $mesdonnees3 .= ($mesdonnees3 ? "@" : "") . $formatted;
+            
+            $points[] = [
+                'groupe' => 3, 'id' => $zone['id'], 'nom' => $zone['nom'],
+                'lat' => $lat, 'lng' => $lng, 'icon' => '📍',
+                'sous_titre' => $zone['commune_nom'],
+                'description' => "Commune: " . $zone['commune_nom'],
+                'extra' => "📍 Zone de regroupement",
+                'commune_id' => $zone['commune_id']
+            ];
+        }
+
+        // Groupe 4: Collines (Zones d'intervention)
+        foreach ($collines as $colline) {
+            $lat = ($colline['lat'] != -1 && $colline['lat'] != 2) ? $colline['lat'] : -3.38;
+            $lng = ($colline['lng'] != -1 && $colline['lng'] != 2) ? $colline['lng'] : 29.36;
+            
+            $description = "📍 Zone: " . $colline['zone_nom'] . " | Commune: " . $colline['commune_nom'] . " | Province: " . $colline['province_nom'];
+            $extra = "👥 Membres: " . $colline['NB_MEMBRE_INSCRITS'] . " | 👨 Hommes: " . $colline['NOMBRE_HOMME'] . " | 👩 Femmes: " . $colline['NOMBRE_FEMME'] . " | 📊 Groupes: " . $colline['NB_GROUPE_FONCTIONNELS'];
+            
+            $formatted = $colline['id'] . "<>" . $colline['nom'] . "<>" . $lat . "<>" . $lng . "<>" . $description . "<>" . $extra;
+            $mesdonnees4 .= ($mesdonnees4 ? "@" : "") . $formatted;
+            
+            $points[] = [
+                'groupe' => 4, 'id' => $colline['id'], 'colline_id' => $colline['COLLINE_ID'],
+                'nom' => $colline['nom'], 'lat' => $lat, 'lng' => $lng, 'icon' => '🏥',
+                'sous_titre' => $colline['zone_nom'], 'description' => $description, 'extra' => $extra,
+                'zone_id' => $colline['zone_id'], 'commune_id' => $colline['commune_id'],
+                'province_id' => $colline['province_id'],
+                'nb_membres' => $colline['NB_MEMBRE_INSCRITS'],
+                'nb_hommes' => $colline['NOMBRE_HOMME'],
+                'nb_femmes' => $colline['NOMBRE_FEMME'],
+                'nb_groupes' => $colline['NB_GROUPE_FONCTIONNELS']
+            ];
+            
+            $stats['total_membres'] += $colline['NB_MEMBRE_INSCRITS'];
+            $stats['total_hommes'] += $colline['NOMBRE_HOMME'];
+            $stats['total_femmes'] += $colline['NOMBRE_FEMME'];
+            $stats['total_groupes'] += $colline['NB_GROUPE_FONCTIONNELS'];
+            $stats['total_sites']++;
+        }
+
         $data = [
             'title' => 'Cartographie',
             'pageTitle' => 'Carte des zones d intervention',
             'mesdonnees' => $mesdonnees,
             'mesdonnees2' => $mesdonnees2,
             'mesdonnees3' => $mesdonnees3,
-            'mesdonnees4' => $mesdonnees4
-        ];
-        
-        return view('App\Modules\Cartographie\Views\CartoFront', $data);
-    }
-    
-    // Méthode alternative : Récupérer depuis la base de données
-    public function index()
-    {
-        // Exemple avec modèle (à adapter selon votre base)
-        // $zoneModel = new \App\Modules\Cartographie\Models\ZoneModel();
-        $donnees1 = $this->model->getRequete('SELECT p.*, 
-       COUNT(DISTINCT c.COMMUNE_ID) AS commune_count, 
-       COUNT(DISTINCT z.ZONE_ID) AS zone_count, 
-       COUNT(DISTINCT co.COLLINE_ID) AS colline_count
-FROM `provinces` AS p
-RIGHT JOIN communes AS c ON p.PROVINCE_ID = c.PROVINCE_ID
-RIGHT JOIN zones AS z ON c.COMMUNE_ID = z.COMMUNE_ID
-RIGHT JOIN collines AS co ON z.ZONE_ID = co.ZONE_ID
-WHERE 1
-GROUP BY p.PROVINCE_ID;');
-        // print_r($points);die();
-        
-        // Simulation de données venant de la base
-
-        $points="[";
-
-        foreach ($donnees1 as $key => $value) {
-            # code...
-        $points.='['.'"PROVINCE_ID"=>'.$value['PROVINCE_ID'].',' .'"groupe"=>"1",'.'"nom"=>"'.$value['PROVINCE_NAME'].'",'.'"lat"=>'.$value['LATITUDE'].','.'"lng"=>'.$value['LONGITUDE'].','.'"icon"=>"<div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
-                                🏥
-                            </div>",'.'"NB_COMM"=>'.$value['commune_count'].'],';
-
-        }
-        print_r($points);die();
-
- // $points =[["PROVINCE_ID"=>1,"NOM"=>"Pro","nOM"=>"BUHUMUZA"],["PROVINCE_ID"=>2,"NOM"=>"Pro","nOM"=>"BUJUMBURA"],["PROVINCE_ID"=>3,"NOM"=>"Pro","nOM"=>"BURUNGA"],["PROVINCE_ID"=>4,"NOM"=>"Pro","nOM"=>"BUTANYERERA"],["PROVINCE_ID"=>5,"NOM"=>"Pro","nOM"=>"GITEGA"],
-        $points = [
-            ['id' => 1, 'nom' => 'BURUNGA', 'lat' => -3.3804751, 'lng' => 29.3604533, 'description' => 'TEST1', 'groupe' => 1,'icon' => '<div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
-                                🏥
-                            </div>'],
-            ['id' => 2, 'nom' => 'BUHUMUZA', 'lat' => -3.3904751, 'lng' => 29.3704533, 'description' => 'TEST 2', 'groupe' => 1,'icon' => '<div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
-                                🏥
-                            </div>'],
-            ['id' => 3, 'nom' => 'BUTANYERERA', 'lat' => -3.4004751, 'lng' => 29.3804533, 'description' => 'TEST 3', 'groupe' => 1,'icon' => '<div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
-                                🏥 
-                            </div>'],
-            ['id' => 4, 'nom' => 'TOILLETE1', 'lat' => -3.4104751, 'lng' => 29.3904533, 'description' => 'TEST', 'groupe' => 2,'icon' => '<div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
-                                🏫 
-                            </div>'],
-            ['id' => 5, 'nom' => 'Point E', 'lat' => -3.4204751, 'lng' => 29.4004533, 'description' => 'Description E', 'groupe' => 2,'icon' => '<div style="font-size: 12px; opacity: 0.8; margin-top: 5px;">
-                                 🏫
-                            </div>'],
-           
-        ];
-        
-        // Convertir les données au format attendu par la vue
-        $mesdonnees = "";
-        $mesdonnees2 = "";
-        $mesdonnees3 = "";
-        $mesdonnees4 = "";
-        
-        foreach ($points as $point) {
-            $formatted = $point['id'] . "<>" . 
-                         $point['nom'] . "<>" . 
-                         $point['lat'] . "<>" . 
-                         $point['lng'] . "<>" . 
-                         $point['description'] . "<>" . 
-                         "Info " . $point['id'];
-            
-            switch ($point['groupe']) {
-                case 1:
-                    $mesdonnees .= ($mesdonnees ? "@" : "") . $formatted;
-                    break;
-                case 2:
-                    $mesdonnees2 .= ($mesdonnees2 ? "@" : "") . $formatted;
-                    break;
-                // case 3:
-                //     $mesdonnees3 .= ($mesdonnees3 ? "@" : "") . $formatted;
-                //     break;
-                // case 4:
-                //     $mesdonnees4 .= ($mesdonnees4 ? "@" : "") . $formatted;
-                //     break;
-            }
-        }
-        
-        $data = [
-            'title' => 'Cartographie',
-            'pageTitle' => 'Carte des zones d intervention',
-            'mesdonnees' => $mesdonnees,
-            'mesdonnees2' => $mesdonnees2,
-            // 'mesdonnees3' => $mesdonnees3,
-            // 'mesdonnees4' => $mesdonnees4,
+            'mesdonnees4' => $mesdonnees4,
             'points' => $points,
-
+            'stats' => $stats
         ];
-        // print_r($data);die();
+
         return view('App\Modules\Cartographie\Views\CartoFront', $data);
     }
 }
