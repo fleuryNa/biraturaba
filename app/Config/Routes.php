@@ -180,3 +180,25 @@ $routes->post('store', 'VideoForme::save');
 $routes->get('getOne/(:num)', 'VideoForme::getOne/$1');
 $routes->post('delete', 'VideoForme::delete');
 });
+
+// ============================
+// ABOUT MODULE ROUTES
+// ============================
+
+$routes->group('about', ['namespace' => 'App\Modules\Features\Controllers'], function ($routes) {
+
+    // Page principale
+    $routes->get('/', 'About::index');
+
+    // DataTable liste (AJAX)
+    $routes->post('liste', 'About::getList');
+
+    // Save (INSERT + UPDATE)
+    $routes->post('store', 'About::save');
+
+    // Get one record
+    $routes->get('getOne/(:num)', 'About::getOne/$1');
+
+    // Delete
+    $routes->post('delete', 'About::delete');
+});

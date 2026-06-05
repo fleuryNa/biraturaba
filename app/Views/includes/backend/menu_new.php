@@ -19,7 +19,7 @@
             <li>
                 <a href="javascript:;">
                     <i class="sidebar-item-icon fa fa-users"></i>
-                    <span class="nav-label">Site</span><i class="fa fa-angle-left arrow"></i></a>
+                    <span class="nav-label">Admnistration</span><i class="fa fa-angle-left arrow"></i></a>
                 <ul class="nav-2-level collapse">
                     <li>
                         <a href="<?= base_url()?>administration/Profil_Droit">Accès</a>
@@ -48,7 +48,7 @@
                     <span class="nav-label">Site</span><i class="fa fa-angle-left arrow"></i></a>
                 <ul class="nav-2-level collapse">
                     <li>
-                        <a href="<?= base_url('Projet')?>">Projets</a>
+                        <a href="<?= base_url('projet')?>">Projets</a>
                     </li>
                     <li>
                         <a href="<?= base_url('partenaire')?>">Partenaires</a>
@@ -74,66 +74,9 @@
                     <li>
                         <a href="<?= base_url('videos')?>">Vidéos</a>
                     </li>
-                </ul>
-            </li>
-
-            <li>
-                <a href="javascript:;"><i class="sidebar-item-icon fa fa-bookmark"></i>
-                    <span class="nav-label">Matieres pemieres </span><i class="fa fa-angle-left arrow"></i></a>
-                <ul class="nav-2-level collapse">
-                    <li>
-                        <a href="<?= base_url()?>stock_matieres/Stock_Matieres_New/liste_reception"> Reception matières
-                            Locales</a>
-                    </li>
 
                     <li>
-                        <a href="<?= base_url()?>stock_matieres/Stock_Matieres_New/liste_reception2"> Reception matières
-                            internationales</a>
-                    </li>
-                    <li>
-                        <a href="<?= base_url()?>stock_matieres/Commande_production">Commande production</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="javascript:;"><i class="sidebar-item-icon fa fa-edit"></i>
-                    <span class="nav-label">Production</span><i class="fa fa-angle-left arrow"></i></a>
-                <ul class="nav-2-level collapse">
-                    <li>
-                        <a href="<?= base_url()?>production/Commander">Commander</a>
-                    </li>
-                    <li>
-                        <a href="<?= base_url()?>production/Consommation_Matieres_Premieres">Consommation MP</a>
-                    </li>
-                    <li>
-                        <a href="<?= base_url()?>production/Production/ajouter">Production</a>
-                    </li>
-                    <li>
-                        <a href="<?= base_url()?>production/Transferer">Transferer</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="javascript:;"><i class="sidebar-item-icon fa fa-edit"></i>
-                    <span class="nav-label">Stock produits finis</span><i class="fa fa-angle-left arrow"></i></a>
-                <ul class="nav-2-level collapse">
-                    <li>
-                        <a href="<?= base_url()?>produit_finis/Produits_Finis">Produits finis</a>
-                    </li>
-                    <li>
-                        <a href="<?= base_url()?>produit_finis/Produits_Finis/sortant">Sortie des produits</a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="javascript:;"><i class="sidebar-item-icon fa fa-table"></i>
-                    <span class="nav-label">Vente</span><i class="fa fa-angle-left arrow"></i></a>
-                <ul class="nav-2-level collapse">
-                    <li>
-                        <a href="<?= base_url()?>vente/Vente_Produits">Vente</a>
-                    </li>
-                    <li>
-                        <a href="#">Commande special</a>
+                        <a href="<?= base_url('about')?>">À propos</a>
                     </li>
                 </ul>
             </li>

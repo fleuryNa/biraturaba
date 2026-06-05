@@ -12,26 +12,26 @@
     <title>Biraturaba</title>
     <!-- Latest Bootstrap min CSS -->
     <link rel="icon" type="image/x-icon" href="<?= base_url('public/assetsfront/logo/favicon.ico') ?>">
-    <link rel="stylesheet" href="<?= base_url()?>public/assetsfront/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= base_url('public/assetsfront/bootstrap/css/bootstrap.min.css')?>">
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:300,400,500,600">
     <!-- Font Awesome CSS -->
-    <link rel="stylesheet" href="<?= base_url()?>public/assetsfront/fonts/font-awesome.min.css">
-    <link rel="stylesheet" href="<?= base_url()?>public/assetsfront/fonts/themify-icons.css">
+    <link rel="stylesheet" href="<?= base_url('public/assetsfront/fonts/font-awesome.min.css')?>">
+    <link rel="stylesheet" href="<?= base_url('public/assetsfront/fonts/themify-icons.css')?>">
     <!--- owl carousel Css-->
-    <link rel="stylesheet" href="<?= base_url()?>public/assetsfront/owlcarousel/css/owl.carousel.css">
-    <link rel="stylesheet" href="<?= base_url()?>public/assetsfront/owlcarousel/css/owl.theme.css">
+    <link rel="stylesheet" href="<?= base_url('public/assetsfront/owlcarousel/css/owl.carousel.css')?>">
+    <link rel="stylesheet" href="<?= base_url('public/assetsfront/owlcarousel/css/owl.theme.css')?>">
     <!--materialdesignicons Css-->
-    <link rel="stylesheet" href="<?= base_url()?>public/assetsfront/css/fonts.css">
+    <link rel="stylesheet" href="<?= base_url('public/assetsfront/css/fonts.css')?>">
     <!-- animate CSS -->
-    <link rel="stylesheet" href="<?= base_url()?>public/assetsfront/css/animate.css">
+    <link rel="stylesheet" href="<?= base_url('public/assetsfront/css/animate.css')?>">
     <!-- MAGNIFIC CSS -->
-    <link rel="stylesheet" href="<?= base_url()?>public/assetsfront/css/magnific-popup.css">
+    <link rel="stylesheet" href="<?= base_url('public/assetsfront/css/magnific-popup.css')?>">
     <!-- Style CSS -->
-    <link rel="stylesheet" href="<?= base_url()?>public/assetsfront/css/menu.css">
-    <link rel="stylesheet" href="<?= base_url()?>public/assetsfront/css/style.css">
-    <link rel="stylesheet" href="<?= base_url()?>public/assetsfront/css/responsive.css">
+    <link rel="stylesheet" href="<?= base_url('public/assetsfront/css/menu.css')?>">
+    <link rel="stylesheet" href="<?= base_url('public/assetsfront/css/style.css')?>">
+    <link rel="stylesheet" href="<?= base_url('public/assetsfront/css/responsive.css')?>">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>

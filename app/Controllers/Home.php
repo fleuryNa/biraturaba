@@ -26,35 +26,39 @@ class Home extends BaseController
           $data['video'] =$this->model->getRequeteOne("SELECT p.*FROM video_home p
         GROUP BY p.ID_VIDEO 
         LIMIT 1");
-        $data['nb_projets'] = $this->model->getRequeteOne("
-    SELECT COUNT(*) AS TOTAL
-    FROM projet
-");
 
-$data['nb_services'] = $this->model->getRequeteOne("
-    SELECT COUNT(*) AS TOTAL
-    FROM service
-");
+                        $data['hero'] = $this->model->getRequeteOne("
+                    SELECT * FROM about ORDER BY ID_ABOUT DESC LIMIT 1
+                ");
+                        $data['nb_projets'] = $this->model->getRequeteOne("
+                    SELECT COUNT(*) AS TOTAL
+                    FROM projet
+                ");
 
-$data['nb_testimonials'] = $this->model->getRequeteOne("
-    SELECT COUNT(*) AS TOTAL
-    FROM testimonials
-");
+                $data['nb_services'] = $this->model->getRequeteOne("
+                    SELECT COUNT(*) AS TOTAL
+                    FROM service
+                ");
 
-$data['nb_partenaires'] = $this->model->getRequeteOne("
-    SELECT COUNT(*) AS TOTAL
-    FROM partners
-");
+                $data['nb_testimonials'] = $this->model->getRequeteOne("
+                    SELECT COUNT(*) AS TOTAL
+                    FROM testimonials
+                ");
 
-$data['nb_blogs'] = $this->model->getRequeteOne("
-    SELECT COUNT(*) AS TOTAL
-    FROM blogs
-");
+                $data['nb_partenaires'] = $this->model->getRequeteOne("
+                    SELECT COUNT(*) AS TOTAL
+                    FROM partners
+                ");
 
-$data['nb_videos'] = $this->model->getRequeteOne("
-    SELECT COUNT(*) AS TOTAL
-    FROM video_home
-");
+                $data['nb_blogs'] = $this->model->getRequeteOne("
+                    SELECT COUNT(*) AS TOTAL
+                    FROM blogs
+                ");
+
+                $data['nb_videos'] = $this->model->getRequeteOne("
+                    SELECT COUNT(*) AS TOTAL
+                    FROM video_home
+                ");
 
 
 

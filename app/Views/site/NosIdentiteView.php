@@ -41,68 +41,58 @@
     <!-- END SECTION TOP -->
 
     <!-- SETVICE -->
-    <section class="service_area section-padding">
+    <section class="why_choose_area section-padding">
         <div class="container">
-            <div class="row text-center">
-                <div class="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s"
+            <div class="row">
+                <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s"
                     data-wow-offset="0">
-                    <div class="single_service">
-                        <img src="<?= base_url()?>public/assetsfront/img/icon/research.png" alt="icon" />
-                        <h4>Email Marketing</h4>
-                        <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur elit.</p>
-                        <a class="btn_one" href="single_service.html">More Info</a>
+                    <div class="single_why_choose">
+                        <h2>Notre Vision <br /> <br /> </h2>
+                        <p>Un Burundi uni et paisible où chaque acteur comprend et joue pleinement son rôle pour un
+                            développement intégral et durable.</p>
+                        <a class="btn_one" href="<?= base_url('about') ?>">En savoir plus</a>
                     </div>
-                </div><!-- END COL -->
-                <div class="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s"
+                </div>
+                <!--- END COL -->
+                <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s"
                     data-wow-offset="0">
-                    <div class="single_service">
-                        <img src="<?= base_url()?>public/assetsfront/img/icon/brand.png" alt="icon" />
-                        <h4>Offline SEO</h4>
-                        <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur elit.</p>
-                        <a class="btn_one" href="single_service.html">More Info</a>
+                    <div class="single_why_choose_img">
+                        <img src="<?= base_url()?>public/assetsfront/img/valeurintegritehistoire.jpg" class="img-fluid"
+                            alt="about-image" />
                     </div>
-                </div><!-- END COL -->
-                <div class="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s"
+                </div>
+                <!--- END COL -->
+            </div>
+            <!--- END ROW -->
+        </div>
+        <!--- END CONTAINER -->
+    </section>
+    <!-- END SETVICE -->
+
+
+
+    <section class="skills_area section-padding"
+        style="background-image: url(public/assetsfront/img/competence.jpeg);  background-size:cover;background-position:center;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 col-sm-8 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s"
                     data-wow-offset="0">
-                    <div class="single_service">
-                        <img src="<?= base_url()?>public/assetsfront/img/icon/web.png" alt="icon" />
-                        <h4>Social media marketing</h4>
-                        <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur elit.</p>
-                        <a class="btn_one" href="single_service.html">More Info</a>
-                    </div>
-                </div><!-- END COL -->
-                <div class="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s"
-                    data-wow-offset="0">
-                    <div class="single_service">
-                        <img src="<?= base_url()?>public/assetsfront/img/icon/strategy.png" alt="icon" />
-                        <h4>Lead Generation</h4>
-                        <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur elit.</p>
-                        <a class="btn_one" href="single_service.html">More Info</a>
-                    </div>
-                </div><!-- END COL -->
-                <div class="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.4s"
-                    data-wow-offset="0">
-                    <div class="single_service">
-                        <img src="<?= base_url()?>public/assetsfront/img/icon/design.png" alt="icon" />
-                        <h4>Web Design</h4>
-                        <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur elit.</p>
-                        <a class="btn_one" href="single_service.html">More Info</a>
-                    </div>
-                </div><!-- END COL -->
-                <div class="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.5s"
-                    data-wow-offset="0">
-                    <div class="single_service">
-                        <img src="<?= base_url()?>public/assetsfront/img/icon/photo.png" alt="icon" />
-                        <h4>Search Engine optimization</h4>
-                        <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur elit.</p>
-                        <a class="btn_one" href="single_service.html">More Info</a>
+                    <div class="skill_bg">
+                        <div class="skill_content">
+                            <h2>Notre Mission</h2>
+                            <p>Promouvoir des mécanismes communautaires de résilience économique, sociale et
+                                environnementale au Burundi, notamment à travers le changement positif des mentalités,
+                                la lutte contre l’ignorance et l’indifférence ainsi que l’implication et de mieux en
+                                synergie des différents acteurs (le pouvoir public, les organisations de la société
+                                civile et les titulaires des droits que sont les citoyens)</p>
+                        </div>
+
                     </div>
                 </div><!-- END COL -->
             </div><!-- END ROW -->
         </div>
         <!--- END CONTAINER -->
     </section>
-    <!-- END SETVICE -->
 
     <!-- START PRICING TABLE -->
     <div class="pricing-table-area section-padding"
@@ -200,61 +190,7 @@
     <!-- END PRICING TABLE -->
 
     <!-- START PARTNER LOGO -->
-    <div class="partner-logo section-padding">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.1s" data-wow-offset="0">
-                    <div class="single_logo single_logo_bm">
-                        <a href="#"><img style="height: 50px;width: 50px;"
-                                src="<?= base_url()?>public/assetsfront/img/partner/1.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.2s" data-wow-offset="0">
-                    <div class="single_logo">
-                        <a href="#"><img src="assetsfront/img/partner/2.png" alt="" class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.3s" data-wow-offset="0">
-                    <div class="single_logo single_logo_bm">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/3.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.4s" data-wow-offset="0">
-                    <div class="single_logo">
-                        <a href="#"><img src="assetsfront/img/partner/4.png" alt="" class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.5s" data-wow-offset="0">
-                    <div class="single_logo">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/5.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.6s" data-wow-offset="0">
-                    <div class="single_logo">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/6.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-            </div>
-            <!--- END ROW -->
-        </div>
-        <!--- END CONTAINER -->
-    </div>
+
     <!-- END PARTNER LOGO -->
 
     <?php echo view('includes/frontend/footer') ?>

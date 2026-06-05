@@ -23,22 +23,32 @@ echo view('includes/frontend/header');
     <!-- END NAVBAR-->
     <?php helper('text'); ?>
     <!-- START HOME -->
-    <section data-stellar-background-ratio="0.3" id="home" class="home_bg"
-        style="background-image: url(public/assetsfront/img/group.jpeg);  background-size:cover; background-position: center center;">
+
+    <section data-stellar-background-ratio="0.3" id="home" class="home_bg" style="background-image: url(<?= base_url('uploads/about/' . $hero['IMAGE']) ?>); 
+           background-size: cover; 
+           background-position: center center;">
+
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 col-sm-12 col-xs-12 text-center">
+
                     <div class="hero-text">
-                        <h2>BIRATURABA</h2>
-                        <p>Biraturaba est une organisation burundaise</p>
-                        <a href="<?= base_url('about') ?>">En savoir plus</a>
+
+                        <h2><?= esc($hero['TITRE']) ?></h2>
+
+                        <p><?= esc($hero['DESCRIPTION']) ?></p>
+
+                        <a
+                            href="<?= !empty($hero['LIEN_BOUTON']) ? base_url($hero['LIEN_BOUTON']) : base_url('about') ?>">
+                            <?= esc($hero['TEXTE_BOUTON'] ?? 'En savoir plus') ?>
+                        </a>
+
                     </div>
+
                 </div>
-                <!--- END COL -->
             </div>
-            <!--- END ROW -->
         </div>
-        <!--- END CONTAINER -->
+
     </section>
     <!-- END  HOME -->
 
@@ -234,7 +244,8 @@ echo view('includes/frontend/header');
                     </div>
                 </div><!-- END Col -->
             </div>
-        </div><!-- END CONTAINER -->
+        </div>
+        <!-- END CONTAINER -->
     </section>
     <!-- END PORTFOLIO -->
 
