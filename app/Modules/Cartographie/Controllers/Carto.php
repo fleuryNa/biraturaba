@@ -63,10 +63,8 @@ class Carto extends BaseController
         $membres_data = $this->db->query($sql)->getResultArray();
 
         // ==================== RÉCUPÉRATION DU NOMBRE DE COMMUNES PAR PROVINCE ====================
-        // MAINTENANT : seulement pour les provinces qui ont des collines avec membres
         $province_ids_with_data = array_unique(array_column($membres_data, 'PROVINCE_ID'));
-        $commune_ids_with_data = array_unique(array_column($membres_data, 'COMMUNE_ID'));
-        $zone_ids_with_data = array_unique(array_column($membres_data, 'ZONE_ID'));
+        $nb_communes_par_province = [];
         
         if (!empty($province_ids_with_data)) {
             $province_ids_str = implode(',', $province_ids_with_data);
@@ -83,13 +81,11 @@ class Carto extends BaseController
             foreach ($communes_counts as $count) {
                 $nb_communes_par_province[$count['PROVINCE_ID']] = $count['nb_communes'];
             }
-        } else {
-            $nb_communes_par_province = [];
         }
 
         // ==================== EXTRACTION ET DÉDUPLICATION DES DONNÉES ====================
         
-        // 1. Extraction des provinces (uniquement celles qui ont des données)
+        // 1. Extraction des provinces
         $provinces_temp = [];
         foreach ($membres_data as $row) {
             $province_id = $row['PROVINCE_ID'];
@@ -105,7 +101,7 @@ class Carto extends BaseController
         }
         $provinces = array_values($provinces_temp);
         
-        // 2. Extraction des communes (uniquement celles qui ont des données)
+        // 2. Extraction des communes
         $communes_temp = [];
         foreach ($membres_data as $row) {
             $commune_id = $row['COMMUNE_ID'];
@@ -122,7 +118,7 @@ class Carto extends BaseController
         }
         $communes = array_values($communes_temp);
         
-        // 3. Extraction des zones (uniquement celles qui ont des données)
+        // 3. Extraction des zones
         $zones_temp = [];
         foreach ($membres_data as $row) {
             $zone_id = $row['ZONE_ID'];
@@ -139,14 +135,39 @@ class Carto extends BaseController
         }
         $zones = array_values($zones_temp);
         
-        // 4. Données des collines avec membres
+        // 4. Données des collines avec membres - GESTION DES COORDONNÉES INVALIDES
         $collines = [];
         foreach ($membres_data as $row) {
-            // Filtrer les coordonnées invalides pour les collines
             $lat = $row['colline_lat'];
             $lng = $row['colline_lng'];
-            if (($lat == -1 || $lat == 2 || empty($lat)) || ($lng == -1 || $lng == 2 || empty($lng))) {
-                continue; // Ne pas inclure les collines avec coordonnées invalides
+            $coord_modifiee = false;
+            
+            // Vérifier si les coordonnées sont invalides (2, -1, ou vides)
+            if ($lat == -1 || $lat == 2 || empty($lat) || $lng == -1 || $lng == 2 || empty($lng)) {
+                $coord_modifiee = true;
+                // Utiliser les coordonnées de la zone si disponibles
+                if ($row['zone_lat'] != -1 && $row['zone_lat'] != 2 && !empty($row['zone_lat']) &&
+                    $row['zone_lng'] != -1 && $row['zone_lng'] != 2 && !empty($row['zone_lng'])) {
+                    $lat = $row['zone_lat'];
+                    $lng = $row['zone_lng'];
+                }
+                // Sinon utiliser les coordonnées de la commune
+                elseif ($row['commune_lat'] != -1 && $row['commune_lat'] != 2 && !empty($row['commune_lat']) &&
+                        $row['commune_lng'] != -1 && $row['commune_lng'] != 2 && !empty($row['commune_lng'])) {
+                    $lat = $row['commune_lat'];
+                    $lng = $row['commune_lng'];
+                }
+                // Sinon utiliser les coordonnées de la province
+                elseif ($row['province_lat'] != -1 && $row['province_lat'] != 2 && !empty($row['province_lat']) &&
+                        $row['province_lng'] != -1 && $row['province_lng'] != 2 && !empty($row['province_lng'])) {
+                    $lat = $row['province_lat'];
+                    $lng = $row['province_lng'];
+                }
+                // Dernier recours : coordonnées par défaut du Burundi
+                else {
+                    $lat = -3.3804751;
+                    $lng = 29.3604533;
+                }
             }
             
             $collines[] = [
@@ -155,6 +176,7 @@ class Carto extends BaseController
                 'nom' => $row['colline_nom'],
                 'lat' => $lat,
                 'lng' => $lng,
+                'coord_modifiee' => $coord_modifiee, // Indique si les coordonnées ont été modifiées
                 'zone_nom' => $row['zone_nom'],
                 'zone_id' => $row['ZONE_ID'],
                 'commune_nom' => $row['commune_nom'],
@@ -180,6 +202,7 @@ class Carto extends BaseController
         $total_femmes = 0;
         $total_groupes = 0;
         $total_sites = count($collines);
+        $total_coords_modifiees = 0;
 
         // Construction du message pour les provinces (groupe 1)
         foreach ($provinces as $province) {
@@ -254,10 +277,15 @@ class Carto extends BaseController
 
         // Construction du message pour les collines avec membres (groupe 4)
         foreach ($collines as $colline) {
-            $lat = ($colline['lat'] != -1 && $colline['lat'] != 2 && !empty($colline['lat'])) ? floatval($colline['lat']) : -3.38;
-            $lng = ($colline['lng'] != -1 && $colline['lng'] != 2 && !empty($colline['lng'])) ? floatval($colline['lng']) : 29.36;
+            $lat = floatval($colline['lat']);
+            $lng = floatval($colline['lng']);
             
             $info = "🏥 " . $colline['zone_nom'] . " | " . $colline['commune_nom'] . " | " . $colline['province_nom'];
+            // Ajouter un indicateur si les coordonnées ont été modifiées
+            if ($colline['coord_modifiee']) {
+                $info .= " | ⚠️ Position estimée";
+                $total_coords_modifiees++;
+            }
             $detail = "👥 " . $colline['nb_membres'] . " membres | 👨 " . $colline['nb_hommes'] . " H | 👩 " . $colline['nb_femmes'] . " F | 📊 " . $colline['nb_groupes_fonctionnels'] . " groupes";
             
             $formatted = $colline['id'] . "<>" . $colline['nom'] . "<>" . $lat . "<>" . $lng . "<>" . $info . "<>" . $detail;
@@ -273,6 +301,7 @@ class Carto extends BaseController
                 'icon' => '🏥',
                 'info' => $info,
                 'detail' => $detail,
+                'coord_modifiee' => $colline['coord_modifiee'],
                 'zone_id' => $colline['zone_id'],
                 'commune_id' => $colline['commune_id'],
                 'province_id' => $colline['province_id'],
@@ -301,15 +330,17 @@ class Carto extends BaseController
                 'total_membres' => $total_membres,
                 'total_hommes' => $total_hommes,
                 'total_femmes' => $total_femmes,
-                'total_groupes' => $total_groupes
+                'total_groupes' => $total_groupes,
+                'total_coords_modifiees' => $total_coords_modifiees
             ]
         ];
 
-        // Debug - Afficher le nombre de points chargés
-        log_message('info', 'Cartographie - Provinces (avec données): ' . count($provinces));
-        log_message('info', 'Cartographie - Communes (avec données): ' . count($communes));
-        log_message('info', 'Cartographie - Zones (avec données): ' . count($zones));
+        // Debug
+        log_message('info', 'Cartographie - Provinces: ' . count($provinces));
+        log_message('info', 'Cartographie - Communes: ' . count($communes));
+        log_message('info', 'Cartographie - Zones: ' . count($zones));
         log_message('info', 'Cartographie - Collines avec membres: ' . $total_sites);
+        log_message('info', 'Cartographie - Collines avec coordonnées estimées: ' . $total_coords_modifiees);
         log_message('info', 'Cartographie - Total points: ' . (count($provinces) + count($communes) + count($zones) + $total_sites));
          $data['partenaires'] =$this->model->getRequete("SELECT p.*FROM partners p
         GROUP BY p.ID_PARTNERS ");
