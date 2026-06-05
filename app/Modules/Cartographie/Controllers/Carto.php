@@ -63,23 +63,33 @@ class Carto extends BaseController
         $membres_data = $this->db->query($sql)->getResultArray();
 
         // ==================== RÉCUPÉRATION DU NOMBRE DE COMMUNES PAR PROVINCE ====================
-        $nb_communes_par_province = [];
-        $sql_communes_count = "
-            SELECT 
-                p.PROVINCE_ID,
-                COUNT(DISTINCT c.COMMUNE_ID) as nb_communes
-            FROM provinces p
-            LEFT JOIN communes c ON p.PROVINCE_ID = c.PROVINCE_ID
-            GROUP BY p.PROVINCE_ID
-        ";
-        $communes_counts = $this->db->query($sql_communes_count)->getResultArray();
-        foreach ($communes_counts as $count) {
-            $nb_communes_par_province[$count['PROVINCE_ID']] = $count['nb_communes'];
+        // MAINTENANT : seulement pour les provinces qui ont des collines avec membres
+        $province_ids_with_data = array_unique(array_column($membres_data, 'PROVINCE_ID'));
+        $commune_ids_with_data = array_unique(array_column($membres_data, 'COMMUNE_ID'));
+        $zone_ids_with_data = array_unique(array_column($membres_data, 'ZONE_ID'));
+        
+        if (!empty($province_ids_with_data)) {
+            $province_ids_str = implode(',', $province_ids_with_data);
+            $sql_communes_count = "
+                SELECT 
+                    p.PROVINCE_ID,
+                    COUNT(DISTINCT c.COMMUNE_ID) as nb_communes
+                FROM provinces p
+                LEFT JOIN communes c ON p.PROVINCE_ID = c.PROVINCE_ID
+                WHERE p.PROVINCE_ID IN ($province_ids_str)
+                GROUP BY p.PROVINCE_ID
+            ";
+            $communes_counts = $this->db->query($sql_communes_count)->getResultArray();
+            foreach ($communes_counts as $count) {
+                $nb_communes_par_province[$count['PROVINCE_ID']] = $count['nb_communes'];
+            }
+        } else {
+            $nb_communes_par_province = [];
         }
 
         // ==================== EXTRACTION ET DÉDUPLICATION DES DONNÉES ====================
         
-        // 1. Extraction des provinces (uniques)
+        // 1. Extraction des provinces (uniquement celles qui ont des données)
         $provinces_temp = [];
         foreach ($membres_data as $row) {
             $province_id = $row['PROVINCE_ID'];
@@ -95,7 +105,7 @@ class Carto extends BaseController
         }
         $provinces = array_values($provinces_temp);
         
-        // 2. Extraction des communes (uniques)
+        // 2. Extraction des communes (uniquement celles qui ont des données)
         $communes_temp = [];
         foreach ($membres_data as $row) {
             $commune_id = $row['COMMUNE_ID'];
@@ -112,7 +122,7 @@ class Carto extends BaseController
         }
         $communes = array_values($communes_temp);
         
-        // 3. Extraction des zones (uniques)
+        // 3. Extraction des zones (uniquement celles qui ont des données)
         $zones_temp = [];
         foreach ($membres_data as $row) {
             $zone_id = $row['ZONE_ID'];
@@ -129,15 +139,22 @@ class Carto extends BaseController
         }
         $zones = array_values($zones_temp);
         
-        // 4. Données des collines avec membres (déjà dans $membres_data)
+        // 4. Données des collines avec membres
         $collines = [];
         foreach ($membres_data as $row) {
+            // Filtrer les coordonnées invalides pour les collines
+            $lat = $row['colline_lat'];
+            $lng = $row['colline_lng'];
+            if (($lat == -1 || $lat == 2 || empty($lat)) || ($lng == -1 || $lng == 2 || empty($lng))) {
+                continue; // Ne pas inclure les collines avec coordonnées invalides
+            }
+            
             $collines[] = [
                 'id' => $row['membres_id'],
                 'COLLINE_ID' => $row['COLLINE_ID'],
                 'nom' => $row['colline_nom'],
-                'lat' => $row['colline_lat'],
-                'lng' => $row['colline_lng'],
+                'lat' => $lat,
+                'lng' => $lng,
                 'zone_nom' => $row['zone_nom'],
                 'zone_id' => $row['ZONE_ID'],
                 'commune_nom' => $row['commune_nom'],
@@ -289,12 +306,11 @@ class Carto extends BaseController
         ];
 
         // Debug - Afficher le nombre de points chargés
-        log_message('info', 'Cartographie - Provinces: ' . count($provinces));
-        log_message('info', 'Cartographie - Communes: ' . count($communes));
-        log_message('info', 'Cartographie - Zones: ' . count($zones));
+        log_message('info', 'Cartographie - Provinces (avec données): ' . count($provinces));
+        log_message('info', 'Cartographie - Communes (avec données): ' . count($communes));
+        log_message('info', 'Cartographie - Zones (avec données): ' . count($zones));
         log_message('info', 'Cartographie - Collines avec membres: ' . $total_sites);
         log_message('info', 'Cartographie - Total points: ' . (count($provinces) + count($communes) + count($zones) + $total_sites));
-
          $data['partenaires'] =$this->model->getRequete("SELECT p.*FROM partners p
         GROUP BY p.ID_PARTNERS ");
 

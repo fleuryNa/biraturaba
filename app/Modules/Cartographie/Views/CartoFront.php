@@ -961,402 +961,554 @@
         console.log(`📊 Répartition: G1=${groupCounts.group1}, G2=${groupCounts.group2}, G3=${groupCounts.group3}, G4=${groupCounts.group4}`);
     </script>
 
-    <script type="text/javascript">
-    // ==================== FILTRES HIERARCHIQUES ====================
-// Fichier: CartoFront.php
-// Description: Filtres cascade pour Province → Commune → Zone → Colline
-
-// Récupération des éléments du DOM
-const selectProvince = document.getElementById('filterProvince');
-const selectCommune = document.getElementById('filterCommune');
-const selectZone = document.getElementById('filterZone');
-const selectColline = document.getElementById('filterColline');
-const btnResetFiltres = document.getElementById('resetFilters');
-
-// Structure de données pour la hiérarchie
-let hierarchie = {
-    provinces: [],     // Liste des provinces
-    communes: [],      // Liste des communes avec leur province_id
-    zones: [],         // Liste des zones avec leur commune_id
-    collines: []       // Liste des collines avec leur zone_id
-};
-
-// ------------------------------------------------------------------
-// FONCTION 1 : Construire la hiérarchie à partir des points chargés
-// ------------------------------------------------------------------
-function construireHierarchie() {
-    // Réinitialisation
-    hierarchie = { provinces: [], communes: [], zones: [], collines: [] };
+   <script type="text/javascript">
+    // ==================== SYSTÈME DE FILTRES HIÉRARCHIQUES CORRIGÉ ====================
     
-    // Niveau 1 : Extraction des PROVINCES (groupe 1)
-    allPoints.filter(p => p.group === 'group1').forEach(province => {
-        hierarchie.provinces.push({
-            id: province.id,
-            nom: province.title,
-            latitude: province.lat,
-            longitude: province.lng
-        });
-    });
+    // Variables globales
+    let markersLayer = null;
+    let allMarkersList = [];
     
-    // Niveau 2 : Extraction des COMMUNES (groupe 2) avec lien vers province
-    allPoints.filter(p => p.group === 'group2').forEach(commune => {
-        let provinceId = null;
-        if (commune.info) {
-            const match = commune.info.match(/Province: (.+)/);
-            if (match) {
-                const nomProvince = match[1];
-                const provinceTrouvee = hierarchie.provinces.find(p => p.nom === nomProvince);
-                if (provinceTrouvee) provinceId = provinceTrouvee.id;
+    // Éléments DOM
+    const selectProvince = document.getElementById('filterProvince');
+    const selectCommune = document.getElementById('filterCommune');
+    const selectZone = document.getElementById('filterZone');
+    const selectColline = document.getElementById('filterColline');
+    const btnResetFiltres = document.getElementById('resetFilters');
+    
+    // Données hiérarchiques
+    let hierarchieData = {
+        provinces: [],
+        communes: [],
+        zones: [],
+        collines: []
+    };
+    
+    // Mapper les IDs des points pour les relations
+    let pointsMap = {
+        byProvinceId: {},
+        byCommuneId: {},
+        byZoneId: {},
+        byCollineId: {}
+    };
+    
+    // ------------------------------------------------------------------
+    // FONCTION 1 : Extraire les données hiérarchiques depuis les points
+    // ------------------------------------------------------------------
+    function extraireHierarchie() {
+        console.log('Extraction de la hiérarchie depuis', allPoints.length, 'points');
+        
+        // Réinitialisation
+        hierarchieData = {
+            provinces: [],
+            communes: [],
+            zones: [],
+            collines: []
+        };
+        
+        pointsMap = {
+            byProvinceId: {},
+            byCommuneId: {},
+            byZoneId: {},
+            byCollineId: {}
+        };
+        
+        // Extraire les provinces (groupe 1)
+        const provincesUniques = new Map();
+        allPoints.filter(p => p.group === 'group1').forEach(point => {
+            if (!provincesUniques.has(point.id)) {
+                const province = {
+                    id: point.id,
+                    nom: point.title,
+                    lat: point.lat,
+                    lng: point.lng
+                };
+                provincesUniques.set(point.id, province);
+                hierarchieData.provinces.push(province);
             }
-        }
-        hierarchie.communes.push({
-            id: commune.id,
-            nom: commune.title,
-            province_id: provinceId,
-            latitude: commune.lat,
-            longitude: commune.lng
+            pointsMap.byProvinceId[point.id] = point;
         });
-    });
-    
-    // Niveau 3 : Extraction des ZONES (groupe 3) avec lien vers commune
-    allPoints.filter(p => p.group === 'group3').forEach(zone => {
-        let communeId = null;
-        if (zone.info) {
-            const match = zone.info.match(/Commune: (.+)/);
-            if (match) {
-                const nomCommune = match[1];
-                const communeTrouvee = hierarchie.communes.find(c => c.nom === nomCommune);
-                if (communeTrouvee) communeId = communeTrouvee.id;
+        
+        // Extraire les communes (groupe 2) et les lier aux provinces via les points de zone et colline
+        const communesUniques = new Map();
+        allPoints.filter(p => p.group === 'group2').forEach(point => {
+            if (!communesUniques.has(point.id)) {
+                let provinceId = null;
+                // Chercher la province associée via le nom dans l'info
+                if (point.info) {
+                    const match = point.info.match(/🏛️ (.+)/);
+                    if (match) {
+                        const provinceNom = match[1];
+                        const provinceTrouvee = hierarchieData.provinces.find(p => p.nom === provinceNom);
+                        if (provinceTrouvee) provinceId = provinceTrouvee.id;
+                    }
+                }
+                const commune = {
+                    id: point.id,
+                    nom: point.title,
+                    province_id: provinceId,
+                    lat: point.lat,
+                    lng: point.lng
+                };
+                communesUniques.set(point.id, commune);
+                hierarchieData.communes.push(commune);
             }
-        }
-        hierarchie.zones.push({
-            id: zone.id,
-            nom: zone.title,
-            commune_id: communeId,
-            latitude: zone.lat,
-            longitude: zone.lng
+            pointsMap.byCommuneId[point.id] = point;
         });
-    });
-    
-    // Niveau 4 : Extraction des COLLINES (groupe 4) avec lien vers zone
-    allPoints.filter(p => p.group === 'group4').forEach(colline => {
-        let zoneId = null;
-        if (colline.info) {
-            const match = colline.info.match(/Zone: ([^|]+)/);
-            if (match) {
-                const nomZone = match[1].trim();
-                const zoneTrouvee = hierarchie.zones.find(z => z.nom === nomZone);
-                if (zoneTrouvee) zoneId = zoneTrouvee.id;
+        
+        // Extraire les zones (groupe 3)
+        const zonesUniques = new Map();
+        allPoints.filter(p => p.group === 'group3').forEach(point => {
+            if (!zonesUniques.has(point.id)) {
+                let communeId = null;
+                // Chercher la commune associée via l'info
+                if (point.info) {
+                    const match = point.info.match(/📍 (.+)/);
+                    if (match) {
+                        const communeNom = match[1];
+                        const communeTrouvee = hierarchieData.communes.find(c => c.nom === communeNom);
+                        if (communeTrouvee) communeId = communeTrouvee.id;
+                    }
+                }
+                const zone = {
+                    id: point.id,
+                    nom: point.title,
+                    commune_id: communeId,
+                    lat: point.lat,
+                    lng: point.lng
+                };
+                zonesUniques.set(point.id, zone);
+                hierarchieData.zones.push(zone);
             }
-        }
-        hierarchie.collines.push({
-            id: colline.id,
-            nom: colline.title,
-            zone_id: zoneId,
-            latitude: colline.lat,
-            longitude: colline.lng,
-            description: colline.info,
-            nbMembres: colline.nb_membres || 0
+            pointsMap.byZoneId[point.id] = point;
         });
-    });
-    
-    console.log('✅ Hiérarchie construite:', hierarchie);
-}
-
-// ------------------------------------------------------------------
-// FONCTION 2 : Remplir la liste déroulante des provinces
-// ------------------------------------------------------------------
-function remplirSelectProvinces() {
-    selectProvince.innerHTML = '<option value="all">🌍 Toutes les provinces</option>';
-    hierarchie.provinces.forEach(province => {
-        selectProvince.innerHTML += `<option value="${province.id}">🏢 ${province.nom}</option>`;
-    });
-    selectProvince.disabled = false;
-}
-
-// ------------------------------------------------------------------
-// FONCTION 3 : Mettre à jour les communes selon la province choisie
-// ------------------------------------------------------------------
-function mettreAJourCommunes(idProvince) {
-    selectCommune.innerHTML = '<option value="all">🏛️ Toutes les communes</option>';
-    selectCommune.disabled = false;
-    
-    let communesFiltrees = hierarchie.communes;
-    if (idProvince !== 'all') {
-        communesFiltrees = hierarchie.communes.filter(c => c.province_id == idProvince);
+        
+        // Extraire les collines (groupe 4)
+        const collinesUniques = new Map();
+        allPoints.filter(p => p.group === 'group4').forEach(point => {
+            if (!collinesUniques.has(point.id)) {
+                let zoneId = null;
+                let nbMembres = 0;
+                // Extraire le nombre de membres du detail
+                if (point.detail) {
+                    const match = point.detail.match(/👥 (\d+) membres/);
+                    if (match) nbMembres = parseInt(match[1]) || 0;
+                }
+                // Chercher la zone associée via l'info
+                if (point.info) {
+                    const match = point.info.match(/🏥 (.+?) \|/);
+                    if (match) {
+                        const zoneNom = match[1];
+                        const zoneTrouvee = hierarchieData.zones.find(z => z.nom === zoneNom);
+                        if (zoneTrouvee) zoneId = zoneTrouvee.id;
+                    }
+                }
+                const colline = {
+                    id: point.id,
+                    nom: point.title,
+                    zone_id: zoneId,
+                    nb_membres: nbMembres,
+                    lat: point.lat,
+                    lng: point.lng,
+                    detail: point.detail
+                };
+                collinesUniques.set(point.id, colline);
+                hierarchieData.collines.push(colline);
+            }
+            pointsMap.byCollineId[point.id] = point;
+        });
+        
+        console.log('Hiérarchie extraite:', {
+            provinces: hierarchieData.provinces.length,
+            communes: hierarchieData.communes.length,
+            zones: hierarchieData.zones.length,
+            collines: hierarchieData.collines.length
+        });
     }
     
-    if (communesFiltrees.length === 0) {
-        selectCommune.innerHTML = '<option value="all">❌ Aucune commune trouvée</option>';
+    // ------------------------------------------------------------------
+    // FONCTION 2 : Remplir le select des provinces
+    // ------------------------------------------------------------------
+    function remplirProvinces() {
+        selectProvince.innerHTML = '<option value="all">🌍 Toutes les provinces</option>';
+        hierarchieData.provinces.forEach(province => {
+            selectProvince.innerHTML += `<option value="${province.id}">🏢 ${province.nom}</option>`;
+        });
+        selectProvince.disabled = false;
+    }
+    
+    // ------------------------------------------------------------------
+    // FONCTION 3 : Mettre à jour les communes selon la province
+    // ------------------------------------------------------------------
+    function mettreAJourCommunes(provinceId) {
+        selectCommune.innerHTML = '<option value="all">🏛️ Toutes les communes</option>';
         selectCommune.disabled = true;
-    } else {
-        communesFiltrees.forEach(commune => {
-            selectCommune.innerHTML += `<option value="${commune.id}">🏛️ ${commune.nom}</option>`;
-        });
-    }
-    
-    // Réinitialiser les niveaux inférieurs
-    reinitialiserZones();
-    reinitialiserCollines();
-}
-
-// ------------------------------------------------------------------
-// FONCTION 4 : Mettre à jour les zones selon la commune choisie
-// ------------------------------------------------------------------
-function mettreAJourZones(idCommune) {
-    selectZone.innerHTML = '<option value="all">📍 Toutes les zones</option>';
-    selectZone.disabled = false;
-    
-    let zonesFiltrees = hierarchie.zones;
-    if (idCommune !== 'all') {
-        zonesFiltrees = hierarchie.zones.filter(z => z.commune_id == idCommune);
-    }
-    
-    if (zonesFiltrees.length === 0) {
-        selectZone.innerHTML = '<option value="all">❌ Aucune zone trouvée</option>';
+        selectZone.innerHTML = '<option value="all">📍 Toutes les zones</option>';
         selectZone.disabled = true;
-    } else {
-        zonesFiltrees.forEach(zone => {
-            selectZone.innerHTML += `<option value="${zone.id}">📍 ${zone.nom}</option>`;
-        });
-    }
-    
-    // Réinitialiser le niveau inférieur
-    reinitialiserCollines();
-}
-
-// ------------------------------------------------------------------
-// FONCTION 5 : Mettre à jour les collines selon la zone choisie
-// ------------------------------------------------------------------
-function mettreAJourCollines(idZone) {
-    selectColline.innerHTML = '<option value="all">🏥 Toutes les collines</option>';
-    selectColline.disabled = false;
-    
-    let collinesFiltrees = hierarchie.collines;
-    if (idZone !== 'all') {
-        collinesFiltrees = hierarchie.collines.filter(c => c.zone_id == idZone);
-    }
-    
-    if (collinesFiltrees.length === 0) {
-        selectColline.innerHTML = '<option value="all">❌ Aucune colline trouvée</option>';
+        selectColline.innerHTML = '<option value="all">🏥 Toutes les collines</option>';
         selectColline.disabled = true;
-    } else {
-        // Tri par nombre de membres (les plus importants d'abord)
-        collinesFiltrees.sort((a, b) => b.nbMembres - a.nbMembres);
-        collinesFiltrees.forEach(colline => {
-            let badgeMembres = colline.nbMembres > 0 ? ` (${colline.nbMembres} membres)` : '';
-            selectColline.innerHTML += `<option value="${colline.id}">🏥 ${colline.nom}${badgeMembres}</option>`;
-        });
-    }
-}
-
-// ------------------------------------------------------------------
-// FONCTION 6 : Réinitialiser le select des zones
-// ------------------------------------------------------------------
-function reinitialiserZones() {
-    selectZone.innerHTML = '<option value="all">📍 Toutes les zones</option>';
-    selectZone.disabled = true;
-}
-
-// ------------------------------------------------------------------
-// FONCTION 7 : Réinitialiser le select des collines
-// ------------------------------------------------------------------
-function reinitialiserCollines() {
-    selectColline.innerHTML = '<option value="all">🏥 Toutes les collines</option>';
-    selectColline.disabled = true;
-}
-
-// ------------------------------------------------------------------
-// FONCTION 8 : Appliquer les filtres sur la carte
-// ------------------------------------------------------------------
-function appliquerFiltresCarte() {
-    const idProvince = selectProvince.value;
-    const idCommune = selectCommune.value;
-    const idZone = selectZone.value;
-    const idColline = selectColline.value;
-    
-    // Nettoyer les marqueurs existants
-    markers.clearLayers();
-    
-    let pointsFiltres = [...allPoints];
-    
-    // Application des filtres en cascade
-    if (idColline !== 'all') {
-        // Cas 1: Filtre par colline spécifique
-        pointsFiltres = pointsFiltres.filter(p => p.id == idColline && p.group === 'group4');
-    } 
-    else if (idZone !== 'all') {
-        // Cas 2: Filtre par zone (zone + ses collines)
-        const idsCollines = hierarchie.collines.filter(c => c.zone_id == idZone).map(c => c.id);
-        pointsFiltres = pointsFiltres.filter(p => 
-            (p.group === 'group4' && idsCollines.includes(p.id)) ||
-            (p.group === 'group3' && p.id == idZone)
-        );
-    } 
-    else if (idCommune !== 'all') {
-        // Cas 3: Filtre par commune (commune + ses zones + ses collines)
-        const idsZones = hierarchie.zones.filter(z => z.commune_id == idCommune).map(z => z.id);
-        const idsCollines = hierarchie.collines.filter(c => idsZones.includes(c.zone_id)).map(c => c.id);
-        pointsFiltres = pointsFiltres.filter(p => 
-            (p.group === 'group4' && idsCollines.includes(p.id)) ||
-            (p.group === 'group3' && idsZones.includes(p.id)) ||
-            (p.group === 'group2' && p.id == idCommune)
-        );
-    } 
-    else if (idProvince !== 'all') {
-        // Cas 4: Filtre par province (province + ses communes + ses zones + ses collines)
-        const idsCommunes = hierarchie.communes.filter(c => c.province_id == idProvince).map(c => c.id);
-        const idsZones = hierarchie.zones.filter(z => idsCommunes.includes(z.commune_id)).map(z => z.id);
-        const idsCollines = hierarchie.collines.filter(c => idsZones.includes(c.zone_id)).map(c => c.id);
-        pointsFiltres = pointsFiltres.filter(p => 
-            (p.group === 'group4' && idsCollines.includes(p.id)) ||
-            (p.group === 'group3' && idsZones.includes(p.id)) ||
-            (p.group === 'group2' && idsCommunes.includes(p.id)) ||
-            (p.group === 'group1' && p.id == idProvince)
-        );
-    }
-    
-    // Ajouter les points filtrés à la carte
-    pointsFiltres.forEach(p => {
-        const config = groupConfig[p.group];
-        const marqueur = creerMarqueur(p.lat, p.lng, config, p.id, p.title, p.info || '', p.group);
-        markers.addLayer(marqueur);
-    });
-    
-    map.addLayer(markers);
-    
-    // Mettre à jour l'affichage
-    mettreAJourCompteurs(pointsFiltres);
-    mettreAJourListePoints(pointsFiltres);
-    
-    // Ajuster la vue
-    if (pointsFiltres.length > 0) {
-        const limites = L.latLngBounds(pointsFiltres.map(p => [p.lat, p.lng]));
-        if (limites.isValid()) {
-            map.fitBounds(limites, { padding: [50, 50] });
+        
+        if (provinceId === 'all') {
+            selectCommune.disabled = false;
+            hierarchieData.communes.forEach(commune => {
+                selectCommune.innerHTML += `<option value="${commune.id}">🏛️ ${commune.nom}</option>`;
+            });
+        } else {
+            const communesFiltrees = hierarchieData.communes.filter(c => c.province_id == provinceId);
+            if (communesFiltrees.length > 0) {
+                selectCommune.disabled = false;
+                communesFiltrees.forEach(commune => {
+                    selectCommune.innerHTML += `<option value="${commune.id}">🏛️ ${commune.nom}</option>`;
+                });
+            } else {
+                selectCommune.innerHTML = '<option value="all">❌ Aucune commune</option>';
+            }
         }
     }
-}
-
-// ------------------------------------------------------------------
-// FONCTION 9 : Mettre à jour les compteurs des groupes
-// ------------------------------------------------------------------
-function mettreAJourCompteurs(pointsFiltres) {
-    // Total des points
-    document.getElementById('totalPoints').innerText = pointsFiltres.length;
     
-    // Compteurs par groupe
-    const nouveauxCompteurs = { group1: 0, group2: 0, group3: 0, group4: 0 };
-    pointsFiltres.forEach(p => {
-        if (nouveauxCompteurs[p.group] !== undefined) nouveauxCompteurs[p.group]++;
-    });
-    
-    for (let i = 1; i <= 4; i++) {
-        const element = document.getElementById(`group${i}Count`);
-        if (element) element.innerText = nouveauxCompteurs[`group${i}`];
-    }
-}
-
-// ------------------------------------------------------------------
-// FONCTION 10 : Mettre à jour la liste des points affichés
-// ------------------------------------------------------------------
-function mettreAJourListePoints(pointsFiltres) {
-    const conteneurListe = document.getElementById('pointsList');
-    
-    if (pointsFiltres.length === 0) {
-        conteneurListe.innerHTML = '<div style="text-align:center;color:#999;padding:20px;">📍 Aucun point trouvé</div>';
-        return;
+    // ------------------------------------------------------------------
+    // FONCTION 4 : Mettre à jour les zones selon la commune
+    // ------------------------------------------------------------------
+    function mettreAJourZones(communeId) {
+        selectZone.innerHTML = '<option value="all">📍 Toutes les zones</option>';
+        selectZone.disabled = true;
+        selectColline.innerHTML = '<option value="all">🏥 Toutes les collines</option>';
+        selectColline.disabled = true;
+        
+        if (communeId === 'all') {
+            selectZone.disabled = false;
+            hierarchieData.zones.forEach(zone => {
+                selectZone.innerHTML += `<option value="${zone.id}">📍 ${zone.nom}</option>`;
+            });
+        } else {
+            const zonesFiltrees = hierarchieData.zones.filter(z => z.commune_id == communeId);
+            if (zonesFiltrees.length > 0) {
+                selectZone.disabled = false;
+                zonesFiltrees.forEach(zone => {
+                    selectZone.innerHTML += `<option value="${zone.id}">📍 ${zone.nom}</option>`;
+                });
+            } else {
+                selectZone.innerHTML = '<option value="all">❌ Aucune zone</option>';
+            }
+        }
     }
     
-    // Afficher les 15 derniers points
-    const pointsRecents = pointsFiltres.slice(-15).reverse();
-    conteneurListe.innerHTML = pointsRecents.map(p => `
-        <div class="point-item ${p.group}" onclick="volerVersPoint(${p.lat}, ${p.lng})">
-            <div class="point-name">${groupConfig[p.group].icon} ${p.title}</div>
-            <div class="point-info">${(p.info || '').substring(0, 60)}${(p.info || '').length > 60 ? '...' : ''}</div>
-        </div>
-    `).join('');
-}
-
-// ------------------------------------------------------------------
-// FONCTION 11 : Réinitialiser tous les filtres
-// ------------------------------------------------------------------
-function reinitialiserTousFiltres() {
-    selectProvince.value = 'all';
-    mettreAJourCommunes('all');
-    reinitialiserZones();
-    reinitialiserCollines();
-    appliquerFiltresCarte();
-}
-
-// ------------------------------------------------------------------
-// FONCTION 12 : Initialiser le système de filtres
-// ------------------------------------------------------------------
-function initialiserFiltres() {
-    // Attendre que les points soient chargés
-    if (allPoints.length === 0) {
-        setTimeout(initialiserFiltres, 500);
-        return;
+    // ------------------------------------------------------------------
+    // FONCTION 5 : Mettre à jour les collines selon la zone
+    // ------------------------------------------------------------------
+    function mettreAJourCollines(zoneId) {
+        selectColline.innerHTML = '<option value="all">🏥 Toutes les collines</option>';
+        selectColline.disabled = true;
+        
+        if (zoneId === 'all') {
+            selectColline.disabled = false;
+            hierarchieData.collines.forEach(colline => {
+                let badge = colline.nb_membres > 0 ? ` (${colline.nb_membres} membres)` : '';
+                selectColline.innerHTML += `<option value="${colline.id}">🏥 ${colline.nom}${badge}</option>`;
+            });
+        } else {
+            const collinesFiltrees = hierarchieData.collines.filter(c => c.zone_id == zoneId);
+            if (collinesFiltrees.length > 0) {
+                selectColline.disabled = false;
+                collinesFiltrees.sort((a, b) => b.nb_membres - a.nb_membres);
+                collinesFiltrees.forEach(colline => {
+                    let badge = colline.nb_membres > 0 ? ` (${colline.nb_membres} membres)` : '';
+                    selectColline.innerHTML += `<option value="${colline.id}">🏥 ${colline.nom}${badge}</option>`;
+                });
+            } else {
+                selectColline.innerHTML = '<option value="all">❌ Aucune colline</option>';
+            }
+        }
     }
     
-    console.log('🚀 Initialisation des filtres avec', allPoints.length, 'points');
-    
-    // Étape 1: Construire la hiérarchie
-    construireHierarchie();
-    
-    // Étape 2: Remplir les listes déroulantes
-    remplirSelectProvinces();
-    
-    // Étape 3: Attacher les événements
-    selectProvince.addEventListener('change', function() {
-        mettreAJourCommunes(this.value);
-        appliquerFiltresCarte();
-    });
-    
-    selectCommune.addEventListener('change', function() {
-        mettreAJourZones(this.value);
-        appliquerFiltresCarte();
-    });
-    
-    selectZone.addEventListener('change', function() {
-        mettreAJourCollines(this.value);
-        appliquerFiltresCarte();
-    });
-    
-    selectColline.addEventListener('change', function() {
-        appliquerFiltresCarte();
-    });
-    
-    if (btnResetFiltres) {
-        btnResetFiltres.addEventListener('click', reinitialiserTousFiltres);
+    // ------------------------------------------------------------------
+    // FONCTION 6 : Appliquer les filtres sur la carte
+    // ------------------------------------------------------------------
+    function appliquerFiltres() {
+        const provinceId = selectProvince.value;
+        const communeId = selectCommune.value;
+        const zoneId = selectZone.value;
+        const collineId = selectColline.value;
+        
+        // Récupérer les IDs à afficher
+        let idsToShow = new Set();
+        
+        if (collineId !== 'all') {
+            // Filtre par colline spécifique
+            idsToShow.add(parseInt(collineId));
+        } 
+        else if (zoneId !== 'all') {
+            // Filtre par zone - afficher la zone et toutes ses collines
+            idsToShow.add(parseInt(zoneId));
+            hierarchieData.collines.filter(c => c.zone_id == zoneId).forEach(c => {
+                idsToShow.add(c.id);
+            });
+        } 
+        else if (communeId !== 'all') {
+            // Filtre par commune - afficher la commune, ses zones et ses collines
+            idsToShow.add(parseInt(communeId));
+            hierarchieData.zones.filter(z => z.commune_id == communeId).forEach(z => {
+                idsToShow.add(z.id);
+                hierarchieData.collines.filter(c => c.zone_id == z.id).forEach(c => {
+                    idsToShow.add(c.id);
+                });
+            });
+        } 
+        else if (provinceId !== 'all') {
+            // Filtre par province - afficher la province, ses communes, zones et collines
+            idsToShow.add(parseInt(provinceId));
+            hierarchieData.communes.filter(c => c.province_id == provinceId).forEach(c => {
+                idsToShow.add(c.id);
+                hierarchieData.zones.filter(z => z.commune_id == c.id).forEach(z => {
+                    idsToShow.add(z.id);
+                    hierarchieData.collines.filter(cl => cl.zone_id == z.id).forEach(cl => {
+                        idsToShow.add(cl.id);
+                    });
+                });
+            });
+        } 
+        else {
+            // Aucun filtre - afficher tout
+            allPoints.forEach(point => {
+                idsToShow.add(point.id);
+            });
+        }
+        
+        // Rafraîchir la carte
+        refresherCarte(idsToShow);
+        
+        // Mettre à jour les compteurs
+        mettreAJourCompteurs(idsToShow);
+        
+        // Mettre à jour la liste des points
+        mettreAJourListePoints(idsToShow);
     }
     
-    console.log('✅ Système de filtres initialisé avec succès');
-}
-
-// ------------------------------------------------------------------
-// FONCTION ANNEXE : Voler vers un point sur la carte
-// ------------------------------------------------------------------
-window.volerVersPoint = function(latitude, longitude) {
-    map.flyTo([latitude, longitude], 15, { duration: 1.2 });
-    setTimeout(() => {
-        L.popup()
-            .setLatLng([latitude, longitude])
-            .setContent('📍 Point sélectionné')
-            .openOn(map);
-        setTimeout(() => map.closePopup(), 2000);
-    }, 1200);
-};
-
-// ------------------------------------------------------------------
-// LANCEMENT DE L'INITIALISATION
-// ------------------------------------------------------------------
-// Appeler cette fonction APRÈS que tous les points sont chargés
-// Exemple: initialiserFiltres();
-
-// Appeler initFilters après que allPoints soit rempli
-// À placer après le chargement des données
-    </script>
+    // ------------------------------------------------------------------
+    // FONCTION 7 : Rafraîchir la carte avec les points filtrés
+    // ------------------------------------------------------------------
+    function refresherCarte(idsToShow) {
+        // Supprimer les anciens marqueurs
+        if (markersLayer) {
+            map.removeLayer(markersLayer);
+        }
+        
+        // Créer un nouveau groupe de marqueurs
+        markersLayer = L.markerClusterGroup({
+            spiderfyOnMaxZoom: true,
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: true,
+            maxClusterRadius: 60,
+            iconCreateFunction: function(cluster) {
+                const count = cluster.getChildCount();
+                let className = 'cluster-circle small';
+                let size = 32;
+                if (count >= 5 && count < 15) { 
+                    className = 'cluster-circle medium'; 
+                    size = 42; 
+                } else if (count >= 15) { 
+                    className = 'cluster-circle large'; 
+                    size = 52; 
+                }
+                return L.divIcon({
+                    html: `<div class="${className}" style="display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;">${count}</div>`,
+                    className: 'custom-marker',
+                    iconSize: L.point(size, size),
+                    iconAnchor: L.point(size/2, size/2)
+                });
+            }
+        });
+        
+        // Ajouter les points filtrés
+        allPoints.forEach(point => {
+            if (idsToShow.has(point.id)) {
+                const config = groupConfig[point.group];
+                if (config) {
+                    const marker = creerMarqueur(point.lat, point.lng, config, point.id, point.title, point.info || '', point.group);
+                    markersLayer.addLayer(marker);
+                }
+            }
+        });
+        
+        map.addLayer(markersLayer);
+        
+        // Ajuster la vue si des points sont visibles
+        if (idsToShow.size > 0 && idsToShow.size !== 1) {
+            try {
+                const bounds = markersLayer.getBounds();
+                if (bounds.isValid()) {
+                    map.fitBounds(bounds, { padding: [50, 50] });
+                }
+            } catch(e) {
+                console.log('Erreur ajustement vue:', e);
+            }
+        }
+    }
+    
+    // ------------------------------------------------------------------
+    // FONCTION 8 : Mettre à jour les compteurs
+    // ------------------------------------------------------------------
+    function mettreAJourCompteurs(idsToShow) {
+        let counts = { group1: 0, group2: 0, group3: 0, group4: 0 };
+        
+        allPoints.forEach(point => {
+            if (idsToShow.has(point.id)) {
+                if (counts[point.group] !== undefined) {
+                    counts[point.group]++;
+                }
+            }
+        });
+        
+        // Mettre à jour l'affichage
+        for (let i = 1; i <= 4; i++) {
+            const element = document.getElementById(`group${i}Count`);
+            if (element) element.innerText = counts[`group${i}`];
+        }
+        
+        const totalPointsDisplay = document.getElementById('totalPointsDisplay');
+        if (totalPointsDisplay) {
+            const total = counts.group1 + counts.group2 + counts.group3 + counts.group4;
+            totalPointsDisplay.innerText = total;
+        }
+    }
+    
+    // ------------------------------------------------------------------
+    // FONCTION 9 : Mettre à jour la liste des points
+    // ------------------------------------------------------------------
+    function mettreAJourListePoints(idsToShow) {
+        const pointsListDiv = document.getElementById('pointsList');
+        if (!pointsListDiv) return;
+        
+        const pointsFiltres = allPoints.filter(p => idsToShow.has(p.id));
+        const pointsRecents = pointsFiltres.slice(-15).reverse();
+        
+        if (pointsRecents.length === 0) {
+            pointsListDiv.innerHTML = '<div style="text-align:center;color:#999;padding:20px;">📍 Aucun point trouvé</div>';
+            return;
+        }
+        
+        pointsListDiv.innerHTML = pointsRecents.map(point => `
+            <div class="point-item ${point.group}" onclick="volerVersPoint(${point.lat}, ${point.lng})">
+                <div class="point-name">${groupConfig[point.group]?.icon || '📍'} ${point.title}</div>
+                <div class="point-coord">📌 ${point.lat.toFixed(5)}, ${point.lng.toFixed(5)}</div>
+                <div class="point-info" style="font-size:11px;color:#777;margin-top:5px;">${(point.info || '').substring(0, 50)}${(point.info || '').length > 50 ? '...' : ''}</div>
+            </div>
+        `).join('');
+    }
+    
+    // ------------------------------------------------------------------
+    // FONCTION 10 : Réinitialiser tous les filtres
+    // ------------------------------------------------------------------
+    function reinitialiserFiltres() {
+        selectProvince.value = 'all';
+        mettreAJourCommunes('all');
+        mettreAJourZones('all');
+        mettreAJourCollines('all');
+        appliquerFiltres();
+    }
+    
+    // ------------------------------------------------------------------
+    // FONCTION 11 : Fonction pour voler vers un point
+    // ------------------------------------------------------------------
+    window.volerVersPoint = function(lat, lng) {
+        map.flyTo([lat, lng], 16, { duration: 1.2 });
+        setTimeout(() => {
+            L.popup()
+                .setLatLng([lat, lng])
+                .setContent('📍 Point sélectionné')
+                .openOn(map);
+            setTimeout(() => map.closePopup(), 2000);
+        }, 1200);
+    };
+    
+    // ------------------------------------------------------------------
+    // FONCTION 12 : Créer un marqueur
+    // ------------------------------------------------------------------
+    function creerMarqueur(lat, lng, config, id, title, info, group) {
+        const iconHtml = `<div style="background: ${config.gradient}; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px ${config.color}; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer;">${config.icon}</div>`;
+        const icon = L.divIcon({ 
+            html: iconHtml, 
+            className: 'custom-marker', 
+            iconSize: [30, 30], 
+            popupAnchor: [0, -15] 
+        });
+        const marker = L.marker([lat, lng], { icon: icon });
+        
+        const popupContent = `
+            <div style="min-width: 250px;">
+                <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; padding: 10px 12px; border-radius: 12px 12px 0 0;">
+                    ${config.icon} ${title}
+                </div>
+                <div style="padding: 12px;">
+                    <p><strong>🏷️ ID:</strong> ${id}</p>
+                    <p><strong>📝 Description:</strong> ${info || 'Non renseignée'}</p>
+                </div>
+                <div style="background: #f8f9fa; padding: 8px 12px; border-radius: 0 0 12px 12px; font-size: 11px; color: #666;">
+                    📍 ${typeof lat === 'number' ? lat.toFixed(6) : lat}, ${typeof lng === 'number' ? lng.toFixed(6) : lng}
+                </div>
+            </div>
+        `;
+        marker.bindPopup(popupContent);
+        return marker;
+    }
+    
+    // ------------------------------------------------------------------
+    // INITIALISATION
+    // ------------------------------------------------------------------
+    function initialiserFiltres() {
+        if (allPoints.length === 0) {
+            setTimeout(initialiserFiltres, 500);
+            return;
+        }
+        
+        console.log('🚀 Initialisation des filtres avec', allPoints.length, 'points');
+        
+        // Extraire la hiérarchie depuis les points
+        extraireHierarchie();
+        
+        // Remplir les selects
+        remplirProvinces();
+        mettreAJourCommunes('all');
+        mettreAJourZones('all');
+        mettreAJourCollines('all');
+        
+        // Attacher les événements
+        selectProvince.addEventListener('change', function() {
+            mettreAJourCommunes(this.value);
+            appliquerFiltres();
+        });
+        
+        selectCommune.addEventListener('change', function() {
+            mettreAJourZones(this.value);
+            appliquerFiltres();
+        });
+        
+        selectZone.addEventListener('change', function() {
+            mettreAJourCollines(this.value);
+            appliquerFiltres();
+        });
+        
+        selectColline.addEventListener('change', function() {
+            appliquerFiltres();
+        });
+        
+        if (btnResetFiltres) {
+            btnResetFiltres.addEventListener('click', reinitialiserFiltres);
+        }
+        
+        // Initialiser le layer des marqueurs
+        markersLayer = L.markerClusterGroup({
+            spiderfyOnMaxZoom: true,
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: true,
+            maxClusterRadius: 60
+        });
+        
+        console.log('✅ Système de filtres initialisé');
+    }
+    
+    // Lancer l'initialisation après un court délai
+    setTimeout(initialiserFiltres, 1000);
+</script>
 </body>
 
 </html>
