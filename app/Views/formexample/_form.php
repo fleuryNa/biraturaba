@@ -74,10 +74,23 @@
         </div>
     </div>
 
-    <div class="form-group col-md-12">
-        <label class="form-label">Nombre de groupes</label>
-        <input type="number" min="0" name="nb_groupe" class="form-control" value="<?= set_value('nb_groupe', $membre['NB_GROUPE'] ?? '') ?>">
-        <?php if (isset($errors['nb_groupe'])): ?><div class="text-danger"><?= $errors['nb_groupe'] ?></div><?php endif ?>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label class="form-label">Nombre de groupes</label>
+            <input type="number" min="0" name="nb_groupe" class="form-control" value="<?= set_value('nb_groupe', $membre['NB_GROUPE'] ?? '') ?>">
+            <?php if (isset($errors['nb_groupe'])): ?><div class="text-danger"><?= $errors['nb_groupe'] ?></div><?php endif ?>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label class="form-label">Type de groupe</label>
+            <select name="id_type_groupe" id="id_type_groupe" class="form-control">
+                <option value="">-- Sélectionner --</option>
+                <?php if (! empty($typeGroupes ?? null)): foreach($typeGroupes as $tg): ?>
+                    <option value="<?= $tg['ID_TYPE_GROUPE'] ?>" <?= set_select('id_type_groupe', $tg['ID_TYPE_GROUPE'], (isset($membre) && ($membre['ID_TYPE_GROUPE'] ?? '') == $tg['ID_TYPE_GROUPE'])) ?>><?= esc($tg['DESC_GROUPE']) ?></option>
+                <?php endforeach; endif ?>
+            </select>
+            <?php if (isset($errors['id_type_groupe'])): ?><div class="text-danger"><?= $errors['id_type_groupe'] ?></div><?php endif ?>
+        </div>
     </div>
 
     <div class="form-group col-md-12">

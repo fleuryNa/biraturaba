@@ -35,6 +35,7 @@
                                 'action' => site_url('formexample/store'), 
                                 'buttonText' => 'Créer',
                                 'provinces' => $provinces,
+                                'typeGroupes' => $typeGroupes,
                                 'errors' => $errors
                             ]) ?>
                         </div>
@@ -57,9 +58,7 @@
 
     <?= view('includes/backend/script_back_new') ?>
 
-    <!-- CSS de correction pour le footer et la hauteur de page -->
     <style>
-        /* Correction structurelle globale */
         html, body {
             height: 100%;
             margin: 0;
@@ -81,7 +80,6 @@
             padding-bottom: 20px;
         }
         
-        /* Correction spécifique pour page-footer */
         .page-footer {
             flex-shrink: 0;
             margin-top: auto;
@@ -93,53 +91,43 @@
             clear: both;
         }
         
-        /* Éviter que le formulaire soit trop long */
         .ibox-body {
             max-width: 800px;
             margin: 0 auto;
         }
         
-        /* Ajuster la hauteur du contenu */
         .page-content {
             min-height: calc(100vh - 350px);
         }
         
-        /* Pour les écrans très petits, réduire le padding */
         @media (max-width: 768px) {
             .page-footer {
                 padding: 8px 15px;
                 font-size: 12px;
             }
-            
             .page-content {
                 min-height: calc(100vh - 300px);
             }
         }
     </style>
 
-    <!-- JavaScript pour ajuster dynamiquement la hauteur -->
     <script>
     $(document).ready(function() {
         adjustLayout();
-        
-        // Réajuster au redimensionnement
         $(window).on('resize', function() {
             adjustLayout();
         });
     });
     
     function adjustLayout() {
-        // S'assurer que le footer est bien à la fin
         var footer = $('.page-footer');
         var appWrapper = $('.App-wrapper');
         
         if (footer.length && appWrapper.length) {
-            // Si le footer est dans content-wrapper, le déplacer
             if (footer.parents('.content-wrapper').length) {
                 footer.detach().appendTo(appWrapper);
             }
             
-            // Appliquer les styles nécessaires
             appWrapper.css({
                 'display': 'flex',
                 'flex-direction': 'column',
@@ -154,10 +142,8 @@
             });
         }
         
-        // Ajuster le content-wrapper
         $('.content-wrapper').css('flex', '1 0 auto');
         
-        // Calculer la hauteur disponible pour éviter un footer flottant
         var windowHeight = $(window).height();
         var headerHeight = $('.page-heading').outerHeight() || 100;
         var footerHeight = $('.page-footer').outerHeight() || 50;
@@ -169,55 +155,6 @@
             $('.page-content').css('min-height', 'auto');
         }
     }
-    </script>
-
-    <!-- Si votre formulaire utilise des selects dynamiques (province -> zone -> colline) -->
-    <script>
-    $(document).ready(function() {
-        // Gestion des dépendances Province -> Zone
-        $('#province_id').on('change', function() {
-            var provinceId = $(this).val();
-            if (provinceId) {
-                $.ajax({
-                    url: '<?= site_url('formexample/getZonesByProvince') ?>/' + provinceId,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#zone_id').empty();
-                        $('#zone_id').append('<option value="">Sélectionner une zone</option>');
-                        $.each(data, function(key, value) {
-                            $('#zone_id').append('<option value="' + value.id + '">' + value.name + '</option>');
-                        });
-                        $('#colline_id').empty().append('<option value="">Sélectionner d\'abord une zone</option>');
-                    }
-                });
-            } else {
-                $('#zone_id').empty().append('<option value="">Sélectionner une province d\'abord</option>');
-                $('#colline_id').empty().append('<option value="">Sélectionner une zone d\'abord</option>');
-            }
-        });
-        
-        // Gestion des dépendances Zone -> Colline
-        $('#zone_id').on('change', function() {
-            var zoneId = $(this).val();
-            if (zoneId) {
-                $.ajax({
-                    url: '<?= site_url('formexample/getCollinesByZone') ?>/' + zoneId,
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        $('#colline_id').empty();
-                        $('#colline_id').append('<option value="">Sélectionner une colline</option>');
-                        $.each(data, function(key, value) {
-                            $('#colline_id').append('<option value="' + value.id + '">' + value.name + '</option>');
-                        });
-                    }
-                });
-            } else {
-                $('#colline_id').empty().append('<option value="">Sélectionner une zone d\'abord</option>');
-            }
-        });
-    });
     </script>
 
 </body>
