@@ -6,7 +6,14 @@ class Home extends BaseController
 {
     public function index(): string
     {
-         $data['title'] = 'Home';
+        
+        $data['projets'] =$this->model->getRequete("SELECT p.*FROM projet p
+        GROUP BY p.ID_PROJET");
+
+
+       $data['services'] =$this->model->getRequete("SELECT p.*FROM service p
+        GROUP BY p.ID_SERVICE ");
+
         return view('welcome_message',$data);
     }
 

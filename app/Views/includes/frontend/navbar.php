@@ -12,7 +12,7 @@
         <div class="row align-items-center">
             <div class="col-6 col-xl-2">
                 <h1 class="mb-0 site-logo"><a href="index.html"><img style="width:65px;height:auto;"
-                            src="<?= base_url()?>public/assets/logo/biraturaba.png" alt=""></a></h1>
+                            src="<?= base_url()?>public/assetsfront/logo/biraturaba.png" alt=""></a></h1>
             </div>
             <div class="col-12 col-md-10 d-none d-xl-block">
                 <nav class="site-navigation position-relative text-right" role="navigation">

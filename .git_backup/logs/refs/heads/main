@@ -1,0 +1,6 @@
+0000000000000000000000000000000000000000 a02586f989e7b699cd807d280778768b39bab075 Ir NTWARI Raoul <Dodi boss Mtoto@DESKTOP-KGALI1D.(none)> 1780136139 +0200	clone: from https://github.com/fleuryNa/biraturaba.git
+a02586f989e7b699cd807d280778768b39bab075 f092f1931cf73c4cfa9986d69dd651e74a10473f Ir NTWARI Raoul <Dodi boss Mtoto@DESKTOP-KGALI1D.(none)> 1780139284 +0200	pull origin main: Fast-forward
+f092f1931cf73c4cfa9986d69dd651e74a10473f 0f9379bc1ad60da7ad7e24ceb0d5e7a2b1572943 Ir NTWARI Raoul <Dodi boss Mtoto@DESKTOP-KGALI1D.(none)> 1780139802 +0200	pull origin main: Fast-forward
+0f9379bc1ad60da7ad7e24ceb0d5e7a2b1572943 3657f1434611f7d1b6527cacff4d6bb5ec190454 gazos-one <rantwari@gmail.com> 1780156389 +0200	commit: Premiers elements du template backend
+3657f1434611f7d1b6527cacff4d6bb5ec190454 18a3e2d69eca06a6a05791b8720e9ddfd4063c96 gazos-one <rantwari@gmail.com> 1780227855 +0200	commit: receuil avant
+18a3e2d69eca06a6a05791b8720e9ddfd4063c96 e205c5e2c05955e46bb9c55bb441950196303e05 gazos-one <rantwari@gmail.com> 1780238430 +0200	commit: crud membres
