@@ -24,14 +24,14 @@ echo view('includes/frontend/header');
     <?php helper('text'); ?>
     <!-- START HOME -->
     <section data-stellar-background-ratio="0.3" id="home" class="home_bg"
-        style="background-image: url(public/assetsfront/img/bg/home-bg.jpg);  background-size:cover; background-position: center center;">
+        style="background-image: url(public/assetsfront/img/group.jpeg);  background-size:cover; background-position: center center;">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 col-sm-12 col-xs-12 text-center">
                     <div class="hero-text">
-                        <h2>We are a full service digital company</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-                        <a href="about.html">Learn More</a>
+                        <h2>BIRATURABA</h2>
+                        <p>Biraturaba est une organisation burundaise</p>
+                        <a href="<?= base_url('about') ?>">En savoir plus</a>
                     </div>
                 </div>
                 <!--- END COL -->
@@ -47,9 +47,11 @@ echo view('includes/frontend/header');
         <div class="container">
             <div class="row feature_bg">
                 <div class="section-title text-center">
-                    <h2>What we do</h2>
-                    <p>It is a long established fact that a reader will be distracted by the readable content of a page
-                        when looking at its layout.</p>
+                    <h2>A propos de nous</h2>
+                    <p>Biraturaba est une organisation burundaise qui promeut la réalisation des droits citoyens,
+                        commençant par l’autonomisation des familles pauvres (droits économiques, sociaux et
+                        culturels) et évoluant vers la participation citoyenne et la redevabilité (droits civils et
+                        politiques).</p>
                 </div>
                 <?php foreach($services as $service): ?>
 
@@ -83,32 +85,32 @@ echo view('includes/frontend/header');
                     data-wow-delay="0.1s" data-wow-offset="0">
                     <div class="single-project">
                         <img src="<?= base_url()?>public/assetsfront/img/icon/counter-1.png" alt="icon" />
-                        <h2 class="counter-num">32652</h2>
-                        <h4>Happy Customers</h4>
+                        <h2 class="counter-num"><?= $nb_testimonials['TOTAL'] ?></h2>
+                        <h4>Temoignages</h4>
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-6 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
                     data-wow-delay="0.2s" data-wow-offset="0">
                     <div class="single-project">
                         <img src="<?= base_url()?>public/assetsfront/img/icon/counter-2.png" alt="icon" />
-                        <h2 class="counter-num">21821</h2>
-                        <h4>Project Done</h4>
+                        <h2 class="counter-num"><?= $nb_projets['TOTAL'] ?></h2>
+                        <h4>Projects </h4>
                     </div>
                 </div><!-- END COL -->
                 <div class="col-lg-3 col-sm-6 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
                     data-wow-delay="0.3s" data-wow-offset="0">
                     <div class="single-project">
                         <img src="<?= base_url()?>public/assetsfront/img/icon/counter-3.png" alt="icon" />
-                        <h2 class="counter-num">5660</h2>
-                        <h4>In Business</h4>
+                        <h2 class="counter-num"><?= $nb_services['TOTAL'] ?></h2>
+                        <h4>Services</h4>
                     </div>
                 </div><!-- END COL -->
                 <div class="col-lg-3 col-sm-6 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
                     data-wow-delay="0.4s" data-wow-offset="0">
                     <div class="single-project single-project-mrnone">
                         <img src="<?= base_url()?>public/assetsfront/img/icon/counter-4.png" alt="icon" />
-                        <h2 class="counter-num">11859</h2>
-                        <h4>Support Cases</h4>
+                        <h2 class="counter-num"><?= $nb_blogs['TOTAL'] ?></h2>
+                        <h4>Blogs</h4>
                     </div>
                 </div><!-- END COL -->
             </div>
@@ -116,10 +118,18 @@ echo view('includes/frontend/header');
             <div class="row text-center">
                 <div class="col-lg-8 offset-lg-2 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s"
                     data-wow-delay="0.3s" data-wow-offset="0">
-                    <div class="video_btn"
-                        style="background-image: url(public/assetsfront/img/bg/video-bg.jpg);  background-size:cover; background-position: center center;">
-                        <a class="video-play" href="https://www.youtube.com/watch?v=alswD2tCc_Q"><i
-                                class="ti-video-clapper"></i></a>
+
+
+                    <div class="video_btn" style="background-image:url('<?= base_url('uploads/video/'.$video['IMAGE_FOND']) ?>');
+           background-size:cover;
+           background-position:center;">
+
+                        <a class="video-play" href="<?= esc($video['URL_VIDEO']) ?>">
+
+                            <i class="ti-video-clapper"></i>
+
+                        </a>
+
                     </div>
                 </div>
             </div>
@@ -136,19 +146,19 @@ echo view('includes/frontend/header');
                 <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s"
                     data-wow-offset="0">
                     <div class="single_why_choose">
-                        <h2>We create <br /> amazing digital <br /> products</h2>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                            been the industry standard dummy text ever since the when an unknown printer took a galley
-                            of type and scrambled it to make a type specimen book. It is a long established fact that a
-                            reader. It was popularised in the with the release.</p>
-                        <a class="btn_one" href="about.html">Learn More</a>
+                        <h2>Notre Impact <br /> <br /> </h2>
+                        <p>« Nous avions l’habitude de recevoir de l’assistance de la part des organisations
+                            humanitaires, et maintenant nous nous sommes substiués à l’Unicef en pourvoyant le matériel
+                            scolaire aux enfants vulnérables de notre communauté, grâce aux groupes d’épargne et crédit
+                            encadrés par Biraturaba », Adèle IRANKUNDA, Kinama-Bujumbura</p>
+                        <a class="btn_one" href="<?= base_url('about') ?>">En savoir plus</a>
                     </div>
                 </div>
                 <!--- END COL -->
                 <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s"
                     data-wow-offset="0">
                     <div class="single_why_choose_img">
-                        <img src="<?= base_url()?>public/assetsfront/img/home-office.png" class="img-fluid"
+                        <img src="<?= base_url()?>public/assetsfront/img/impact.jpeg" class="img-fluid"
                             alt="about-image" />
                     </div>
                 </div>
@@ -164,18 +174,19 @@ echo view('includes/frontend/header');
     <section id="portfolio" class="portfolio_area section-padding">
         <div class="container-fluid">
             <div class="section-title text-center">
-                <h2>Latest Works</h2>
-                <p>It is a long established fact that a reader will be distracted by the readable content of a page when
-                    looking at its layout.</p>
+                <h2>Nos Projets</h2>
+                <p>Biraturaba renforce les capacités des acteurs locaux (communautés, OSC et autorités locales) leur
+                    permettant de jouer pleinement leurs rôles et facilite la création des cadres d’échange permettant
+                    leur collaboration et leur travail en synergie.</p>
             </div>
             <div class="col-lg-12 text-center">
                 <div class="portfolio_filter">
                     <ul>
-                        <li class="active filter" data-filter="all">All</li>
-                        <li class="filter" data-filter=".branding">Branding</li>
-                        <li class="filter" data-filter=".webtemplate">Web Template</li>
-                        <li class="filter" data-filter=".seo">SEO</li>
-                        <li class="filter" data-filter=".digital">Digital Marketing</li>
+                        <li class="active filter" data-filter="all">Tous</li>
+                        <li class="filter" data-filter=".branding">SILC</li>
+                        <li class="filter" data-filter=".webtemplate">Reseaux</li>
+                        <li class="filter" data-filter=".seo">CGE</li>
+                        <li class="filter" data-filter=".digital">Club scolaire</li>
                     </ul>
                 </div>
             </div>
@@ -219,7 +230,7 @@ echo view('includes/frontend/header');
                 </div><!-- END ROW -->
                 <div class="col-lg-12 text-center">
                     <div class="portfolio_btn">
-                        <a class="btn_one" href="portfolio.html">View More</a>
+                        <a class="btn_one" href="<?= base_url('portfolio') ?>">En savoir plus</a>
                     </div>
                 </div><!-- END Col -->
             </div>
@@ -229,20 +240,20 @@ echo view('includes/frontend/header');
 
     <!-- SKILLS -->
     <section class="skills_area section-padding"
-        style="background-image: url(public/assetsfront/img/bg/skill-bg.jpg);  background-size:cover;background-position:center;">
+        style="background-image: url(public/assetsfront/img/competence.jpeg);  background-size:cover;background-position:center;">
         <div class="container">
             <div class="row">
                 <div class="col-lg-5 col-sm-8 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s"
                     data-wow-offset="0">
                     <div class="skill_bg">
                         <div class="skill_content">
-                            <h2>Generating New Ideas. Solving Big Problems</h2>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
-                                has been the industry standard ever since the when an unknown printer.</p>
+                            <h2>Notre Particularité</h2>
+                            <p>Pour 1$ investit dans les SILC, Biraturaba permet à un bénéficiaire d’accéder à 3.6$
+                                (1.2$ de fonds propre et 2.4$ de crédit).</p>
                         </div>
                         <div class="skill_bar">
                             <div class="progress-bar-linear">
-                                <p class="progress-bar-text">Web Design
+                                <p class="progress-bar-text">SILC
                                     <span>85%</span>
                                 </p>
                                 <div class="progress-bar">
@@ -250,7 +261,7 @@ echo view('includes/frontend/header');
                                 </div>
                             </div>
                             <div class="progress-bar-linear">
-                                <p class="progress-bar-text">Branding
+                                <p class="progress-bar-text">Scolaire
                                     <span>70%</span>
                                 </p>
                                 <div class="progress-bar">
@@ -258,7 +269,7 @@ echo view('includes/frontend/header');
                                 </div>
                             </div>
                             <div class="progress-bar-linear">
-                                <p class="progress-bar-text">Mobile App
+                                <p class="progress-bar-text">SGE
                                     <span>60%</span>
                                 </p>
                                 <div class="progress-bar">
@@ -280,11 +291,11 @@ echo view('includes/frontend/header');
             <div class="row">
                 <div class="col-lg-12 col-sm-12 col-xs-12">
                     <div class="promotional_content">
-                        <img src="<?= base_url()?>public/assetsfront/img/team-image.jpg" class="img-fluid"
+                        <img src="<?= base_url()?>public/assetsfront/img/promotion.jpeg" class="img-fluid"
                             alt="team-image" />
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                            been the industry standard dummy text ever since the when an unknown printer took a galley
-                            of type and scrambled it to make a type specimen book.</p>
+                        <p>Biraturaba renforce les capacités des acteurs locaux (communautés, OSC et autorités locales)
+                            leur permettant de jouer pleinement leurs rôles et facilite la création des cadres d’échange
+                            permettant leur collaboration et leur travail en synergie.</p>
                     </div>
                 </div><!-- END COL -->
             </div><!-- END ROW -->
@@ -294,139 +305,134 @@ echo view('includes/frontend/header');
     <!-- END PROMOTIONAL AREA -->
 
     <!-- TESTIMONIALS -->
+
     <div class="testimonial_area section-padding">
+
         <div class="container">
+
             <div class="section-title text-center">
-                <h2>From Our client</h2>
-                <p>It is a long established fact that a reader will be distracted by the readable content of a page when
-                    looking at its layout.</p>
+
+                <h2>
+                    Temoignages
+                </h2>
+
+                <p>
+                    Temoignages
+                </p>
+
             </div>
+
             <div class="row">
+
                 <div class="col-lg-10 offset-lg-1 col-sm-12 col-xs-12">
+
                     <div class="row">
-                        <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s"
-                            data-wow-delay="0.1s" data-wow-offset="0">
+
+                        <?php
+                        //  print_r($testimonials);
+                        
+                        foreach($testimonials as $item): ?>
+
+                        <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp">
+
                             <div class="single_testimonial">
+
                                 <div class="testimonial_img">
-                                    <img src="<?= base_url()?>public/assetsfront/img/testimonial/1.jpg"
-                                        alt="testimonial-image" />
+
+                                    <img src="<?= base_url('uploads/testimonials/'.$item['IMAGE_TESTIMONIAL']) ?>"
+                                        alt="<?= esc($item['NAME']) ?>">
+
                                 </div>
-                                <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit, sed do eiusmod tempor ut labore.</p>
-                                <h4>Alex Chohan</h4>
-                                <h5>Director, Accurate themes</h5>
+
+                                <p>
+                                    <?= esc($item['MESSAGE']) ?>
+                                </p>
+
+                                <h4>
+                                    <?= esc($item['NAME']) ?>
+                                </h4>
+
+                                <h5>
+                                    <?= esc($item['ROLE']) ?>
+                                </h5>
+
                             </div>
-                        </div><!-- END COL  -->
-                        <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s"
-                            data-wow-delay="0.2s" data-wow-offset="0">
-                            <div class="single_testimonial">
-                                <div class="testimonial_img">
-                                    <img src="<?= base_url()?>public/assetsfront/img/testimonial/2.jpg"
-                                        alt="testimonial-image" />
-                                </div>
-                                <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit, sed do eiusmod tempor ut labore.</p>
-                                <h4>Johnson Brown</h4>
-                                <h5>Marketing Head, Spyro themes</h5>
-                            </div>
-                        </div><!-- END COL  -->
-                        <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s"
-                            data-wow-delay="0.3s" data-wow-offset="0">
-                            <div class="single_testimonial">
-                                <div class="testimonial_img">
-                                    <img src="<?= base_url()?>public/assetsfront/img/testimonial/3.jpg"
-                                        alt="testimonial-image" />
-                                </div>
-                                <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit, sed do eiusmod tempor ut labore.</p>
-                                <h4>Devid Miller</h4>
-                                <h5>Founder, theme ocean</h5>
-                            </div>
-                        </div><!-- END COL  -->
-                        <div class="col-lg-6 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s"
-                            data-wow-delay="0.4s" data-wow-offset="0">
-                            <div class="single_testimonial">
-                                <div class="testimonial_img">
-                                    <img src="<?= base_url()?>public/assetsfront/img/testimonial/4.jpg"
-                                        alt="testimonial-image" />
-                                </div>
-                                <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit, sed do eiusmod tempor ut labore.</p>
-                                <h4>Maya Khan</h4>
-                                <h5>Chairman, Web template</h5>
-                            </div>
-                        </div><!-- END COL  -->
+
+                        </div>
+
+                        <?php endforeach; ?>
+
                     </div>
+
                 </div>
-            </div><!-- END ROW -->
+
+            </div>
+
         </div>
-        <!--- END CONTAINER -->
+
     </div>
     <!-- END TESTIMONIALS -->
 
     <!-- BLOG -->
+
     <section class="blog_area section-padding">
         <div class="container">
+
             <div class="section-title text-center">
-                <h2>Latest Blog</h2>
-                <p>It is a long established fact that a reader will be distracted by the readable content of a page when
-                    looking at its layout.</p>
+                <h2>Actualités</h2>
+                <p>Découvrez nos dernières publications et informations.</p>
             </div>
+
             <div class="row text-center">
-                <div class="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s"
-                    data-wow-offset="0">
+
+                <?php foreach($blogs as $blog): ?>
+
+                <div class="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp">
+
                     <div class="home_single_blog">
-                        <img src="<?= base_url()?>public/assetsfront/img/blog/1.jpg" class="img-fluid"
-                            alt="blog-image" />
+
+                        <img src="<?= base_url('uploads/blogs/'.$blog['IMAGE_BLOG']) ?>" class="img-fluid"
+                            alt="<?= esc($blog['TITLE']) ?>" />
+
                         <div class="home_blog_content">
+
                             <div class="blog_title_info">
-                                <h2><a href="blog_single.html">Tiktok Illegally collecting data sharing</a></h2>
-                                <span>August 31, 2026</span>
-                                <span><a href="blog_single.html">Marketing</a></span>
+
+                                <h2>
+                                    <a href="<?= base_url('blog/detail/'.$blog['ID_BLOG']) ?>">
+                                        <?= esc($blog['TITLE']) ?>
+                                    </a>
+                                </h2>
+
+                                <span>
+                                    <?= date('d/m/Y', strtotime($blog['DATE_INSERTION'])) ?>
+                                </span>
+
+                                <span>
+                                    <?= esc($blog['CATEGORIE_BLOG']) ?>
+                                </span>
+
                             </div>
-                            <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur elit.
+
+                            <p>
+                                <?= substr(strip_tags($blog['CONTENT']), 0, 120) ?>...
                             </p>
-                            <a class="home_b_btn" href="blog_single.html">Read More</a>
+
+                            <a class="home_b_btn" href="<?= base_url('blog/detail/'.$blog['ID_BLOG']) ?>">
+                                En savoir plus
+                            </a>
+
                         </div>
+
                     </div>
-                </div><!-- END COL -->
-                <div class="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s"
-                    data-wow-offset="0">
-                    <div class="home_single_blog">
-                        <img src="<?= base_url()?>public/assetsfront/img/blog/2.jpg" class="img-fluid"
-                            alt="blog-image" />
-                        <div class="home_blog_content">
-                            <div class="blog_title_info">
-                                <h2><a href="blog_single.html">How can use our latest news by Monoline</a></h2>
-                                <span>Sep 01, 2026</span>
-                                <span><a href="blog_single.html">Design</a></span>
-                            </div>
-                            <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur elit.
-                            </p>
-                            <a class="home_b_btn" href="blog_single.html">Read More</a>
-                        </div>
-                    </div>
-                </div><!-- END COL -->
-                <div class="col-lg-4 col-sm-4 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s"
-                    data-wow-offset="0">
-                    <div class="home_single_blog">
-                        <img src="<?= base_url()?>public/assetsfront/img/blog/3.jpg" class="img-fluid"
-                            alt="blog-image" />
-                        <div class="home_blog_content">
-                            <div class="blog_title_info">
-                                <h2><a href="blog_single.html">Learning and growing in the first year</a></h2>
-                                <span>Sep 02, 2026</span>
-                                <span><a href="blog_single.html">Agency</a></span>
-                            </div>
-                            <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur elit.
-                            </p>
-                            <a class="home_b_btn" href="blog_single.html">Read More</a>
-                        </div>
-                    </div>
-                </div><!-- END COL -->
-            </div><!-- END ROW -->
+
+                </div>
+
+                <?php endforeach; ?>
+
+            </div>
+
         </div>
-        <!--- END CONTAINER -->
     </section>
     <!-- END BLOG -->
 
@@ -434,9 +440,8 @@ echo view('includes/frontend/header');
     <div id="contact" class="contact_area section-padding">
         <div class="container">
             <div class="section-title text-center">
-                <h2 class="section-title-white">Say Hello, Let’s Start Something new</h2>
-                <p class="section-title-white">It is a long established fact that a reader will be distracted by the
-                    readable content of a page when looking at its layout.</p>
+                <h2 class="section-title-white">Dites bonjour, commençons quelque chose de nouveau</h2>
+                <p class="section-title-white"></p>
             </div>
             <div class="row">
                 <div class="offset-lg-1 col-lg-10 col-sm-12 col-xs-12 text-center wow fadeInUp" data-wow-duration="1s"
@@ -475,64 +480,7 @@ echo view('includes/frontend/header');
     </div>
     <!-- END CONTACT -->
 
-    <!-- START PARTNER LOGO -->
-    <div class="partner-logo section-padding">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.1s" data-wow-offset="0">
-                    <div class="single_logo single_logo_bm">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/1.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.2s" data-wow-offset="0">
-                    <div class="single_logo">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/2.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.3s" data-wow-offset="0">
-                    <div class="single_logo single_logo_bm">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/3.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.4s" data-wow-offset="0">
-                    <div class="single_logo">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/4.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.5s" data-wow-offset="0">
-                    <div class="single_logo">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/5.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.6s" data-wow-offset="0">
-                    <div class="single_logo">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/6.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-            </div>
-            <!--- END ROW -->
-        </div>
-        <!--- END CONTAINER -->
-    </div>
-    <!-- END PARTNER LOGO -->
+
 
     <?php echo view('includes/frontend/footer') ?>
 </body>

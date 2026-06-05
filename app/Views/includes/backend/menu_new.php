@@ -71,6 +71,9 @@
                     <li>
                         <a href="<?= base_url('blogs')?>">Blogs</a>
                     </li>
+                    <li>
+                        <a href="<?= base_url('videos')?>">Vidéos</a>
+                    </li>
                 </ul>
             </li>
 

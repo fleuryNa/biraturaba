@@ -170,3 +170,13 @@ $routes->post('store', 'Blogs::save');
 $routes->get('getOne/(:num)', 'Blogs::getOne/$1');
 $routes->post('delete', 'Blogs::delete');
 });
+
+
+
+$routes->group('videos', ['namespace' => '\App\Modules\Features\Controllers'],static function ($routes) {
+$routes->get('/', 'VideoForme::index');
+$routes->post('liste', 'VideoForme::getList');
+$routes->post('store', 'VideoForme::save');
+$routes->get('getOne/(:num)', 'VideoForme::getOne/$1');
+$routes->post('delete', 'VideoForme::delete');
+});
