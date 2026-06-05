@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <?php
 	echo view('includes/frontend/header');
 ?>
@@ -21,6 +22,7 @@
 	?>
     <!-- END NAVBAR-->
 
+
     <!-- START SECTION TOP -->
     <section class="section-top"
         style="background-image: url(public/assetsfront/img/bg/section-top.png);background-size:cover; background-position: center center;">
@@ -28,7 +30,7 @@
             <div class="row">
                 <div class="col-lg-12 col-sm-12 col-xs-12 text-center">
                     <div class="section-top-title">
-                        <h1><?= $title; ?></h1>
+                        <h1>Notre Equipe</h1>
                     </div>
                 </div>
                 <!--- END COL -->
@@ -43,7 +45,7 @@
     <section id="team" class="team_area section-padding">
         <div class="container">
             <div class="section-title text-center">
-                <h2>Brilliant team</h2>
+                <h2>Notre Équipe</h2>
                 <p>It is a long established fact that a reader will be distracted by the readable content of a page when
                     looking at its layout.</p>
             </div>
@@ -52,7 +54,7 @@
                     data-wow-offset="0">
                     <div class="our-team">
                         <div class="single-team">
-                            <img src="<?= base_url()?>public/assetsfront/img/team/1.jpg" class="img-fluid" alt="" />
+                            <img src="<?= base_url('public/assetsfront/img/team/1.jpg') ?>" class="img-fluid" alt="" />
                             <h3>Gary Hunt</h3>
                             <p>Marketer</p>
                         </div>
@@ -69,7 +71,7 @@
                     data-wow-offset="0">
                     <div class="our-team">
                         <div class="single-team">
-                            <img src="<?= base_url()?>public/assetsfront/img/team/2.jpg" class="img-fluid" alt="" />
+                            <img src="<?= base_url('public/assetsfront/img/team/2.jpg') ?>" class="img-fluid" alt="" />
                             <h3>Ayoub Fennouni</h3>
                             <p>Manager</p>
                         </div>
@@ -86,7 +88,7 @@
                     data-wow-offset="0">
                     <div class="our-team">
                         <div class="single-team">
-                            <img src="<?= base_url()?>public/assetsfront/img/team/3.jpg" class="img-fluid" alt="" />
+                            <img src="<?= base_url('public/assetsfront/img/team/3.jpg') ?>" class="img-fluid" alt="" />
                             <h3>Mark Linomit</h3>
                             <p>Python Developer</p>
                         </div>
@@ -103,7 +105,7 @@
                     data-wow-offset="0">
                     <div class="our-team">
                         <div class="single-team">
-                            <img src="<?= base_url()?>public/assetsfront/img/team/4.jpg" class="img-fluid" alt="" />
+                            <img src="<?= base_url('public/assetsfront/img/team/4.jpg') ?>" class="img-fluid" alt="" />
                             <h3>Thompson Luis</h3>
                             <p>Developer</p>
                         </div>
@@ -120,7 +122,7 @@
                     data-wow-offset="0">
                     <div class="our-team">
                         <div class="single-team">
-                            <img src="<?= base_url()?>public/assetsfront/img/team/5.jpg" class="img-fluid" alt="" />
+                            <img src="<?= base_url('public/assetsfront/img/team/5.jpg') ?>" class="img-fluid" alt="" />
                             <h3>Gary Hunt</h3>
                             <p>Marketer</p>
                         </div>
@@ -137,7 +139,7 @@
                     data-wow-offset="0">
                     <div class="our-team">
                         <div class="single-team">
-                            <img src="<?= base_url()?>public/assetsfront/img/team/6.jpg" class="img-fluid" alt="" />
+                            <img src="<?= base_url('public/assetsfront/img/team/6.jpg') ?>" class="img-fluid" alt="" />
                             <h3>Ayoub Fennouni</h3>
                             <p>Manager</p>
                         </div>
@@ -154,7 +156,7 @@
                     data-wow-offset="0">
                     <div class="our-team">
                         <div class="single-team">
-                            <img src="<?= base_url()?>public/assetsfront/img/team/7.jpg" class="img-fluid" alt="" />
+                            <img src="<?= base_url('public/assetsfront/img/team/7.jpg') ?>" class="img-fluid" alt="" />
                             <h3>Mark Linomit</h3>
                             <p>Python Developer</p>
                         </div>
@@ -171,7 +173,7 @@
                     data-wow-offset="0">
                     <div class="our-team">
                         <div class="single-team">
-                            <img src="<?= base_url()?>public/assetsfront/img/team/8.jpg" class="img-fluid" alt="" />
+                            <img src="<?= base_url('public/assetsfront/img/team/8.jpg') ?>" class="img-fluid" alt="" />
                             <h3>Thompson Luis</h3>
                             <p>Developer</p>
                         </div>
@@ -200,7 +202,7 @@
                     <div class="row">
                         <div class="col-lg-4 col-sm-6 col-xs-12">
                             <div class="hire_img">
-                                <img src="<?= base_url()?>public/assetsfront/img/icon/search.png" class="img-fluid"
+                                <img src="<?= base_url('public/assetsfront/img/icon/search.png') ?>" class="img-fluid"
                                     alt="" />
                             </div>
                         </div><!-- END COL  -->
@@ -220,7 +222,7 @@
     </div>
     <!-- END HIRE US -->
 
-
+    <?php echo view('includes/frontend/footer') ?>
 </body>
 
 </html>

@@ -16,16 +16,12 @@ class Service extends BaseController
         return view('App\Modules\Features\Views\ServiceView', $data);
     }
 
-
 public function getList(): mixed
 {
     $var_search = !empty($_POST['search']['value']) ? $_POST['search']['value'] : null;
     $var_search = str_replace("'", "\'", $var_search);
 
-    // =========================
-    // TABLE SERVICE
-    // =========================
-    $query_principal = "SELECT * FROM service WHERE 1";
+    $query_principal = "SELECT * FROM team WHERE 1";
 
     $group = "";
     $critaire = "";
@@ -36,15 +32,14 @@ public function getList(): mixed
         $limit = 'LIMIT ' . $_POST["start"] . ',' . $_POST["length"];
     }
 
-    // =========================
     // ORDER
-    // =========================
     $order_column = [
-        'ID_SERVICE',
+        'ID_TEAM',
         'NOM',
-        'DESCRIPTION',
-        'ICONE',
-        'ID_SERVICE'
+        'POSTE',
+        'NIVEAU',
+        'ORDRE',
+        'IS_ACTIF'
     ];
 
     if (isset($_POST['order'][0]['column']) && isset($_POST['order'][0]['dir'])) {
@@ -54,45 +49,49 @@ public function getList(): mixed
         if (isset($order_column[$colIndex])) {
             $order_by = ' ORDER BY ' . $order_column[$colIndex] . ' ' . $_POST['order'][0]['dir'];
         } else {
-            $order_by = ' ORDER BY ID_SERVICE DESC';
+            $order_by = ' ORDER BY ORDRE ASC';
         }
 
     } else {
-        $order_by = ' ORDER BY ID_SERVICE DESC';
+        $order_by = ' ORDER BY ORDRE ASC';
     }
 
-    // =========================
     // SEARCH
-    // =========================
     $search = !empty($var_search)
-        ? " AND (NOM LIKE '%$var_search%' OR DESCRIPTION LIKE '%$var_search%')"
+        ? " AND (
+                NOM LIKE '%$var_search%'
+                OR POSTE LIKE '%$var_search%'
+                OR NIVEAU LIKE '%$var_search%'
+            )"
         : "";
 
-    // =========================
-    // QUERY FINAL
-    // =========================
-    $query_secondaire = $query_principal . ' ' . $critaire . ' ' . $search . ' ' . $group . ' ' . $order_by . ' ' . $limit;
-    $query_filter     = $query_principal . ' ' . $critaire . ' ' . $search . ' ' . $group;
+    $query_secondaire = $query_principal . $critaire . $search . $group . $order_by . ' ' . $limit;
+    $query_filter = $query_principal . $critaire . $search . $group;
 
     $fetch_data = $this->model->datatable($query_secondaire);
 
     $data = [];
     $i = $_POST['start'] + 1;
 
-    // =========================
-    // LOOP DATA
-    // =========================
     foreach ($fetch_data as $row) {
 
-        $icon = !empty($row->ICONE)
-            ? '<img src="' . base_url('uploads/service/' . $row->ICONE) . '" width="50">'
-            : '';
+        $photo = !empty($row->PHOTO)
+            ? '<img src="' . base_url('uploads/team/' . $row->PHOTO) . '" width="60" height="60" style="border-radius:50%">'
+            : '<span class="badge badge-secondary">Aucune</span>';
+
+        $statut = $row->IS_ACTIF == 1
+            ? '<span class="badge badge-success">Actif</span>'
+            : '<span class="badge badge-danger">Inactif</span>';
 
         $sub = [];
+
         $sub[] = $i++;
+        $sub[] = $photo;
         $sub[] = $row->NOM;
-        $sub[] = $row->DESCRIPTION;
-        $sub[] = $icon;
+        $sub[] = $row->POSTE;
+        $sub[] = $row->NIVEAU;
+        $sub[] = $row->ORDRE;
+        $sub[] = $statut;
 
         $sub[] = '
         <div class="btn-group">
@@ -100,10 +99,13 @@ public function getList(): mixed
                 <i class="fa fa-cogs"></i> Actions
             </button>
             <div class="dropdown-menu">
-                <a class="dropdown-item" onclick="editService(' . $row->ID_SERVICE . ')">
+                <a class="dropdown-item" href="javascript:void(0)"
+                    onclick="editTeam(' . $row->ID_TEAM . ')">
                     <i class="fa fa-edit"></i> Modifier
                 </a>
-                <a class="dropdown-item" onclick="deleteService(' . $row->ID_SERVICE . ')">
+
+                <a class="dropdown-item" href="javascript:void(0)"
+                    onclick="deleteTeam(' . $row->ID_TEAM . ')">
                     <i class="fa fa-trash"></i> Supprimer
                 </a>
             </div>
@@ -112,9 +114,6 @@ public function getList(): mixed
         $data[] = $sub;
     }
 
-    // =========================
-    // OUTPUT
-    // =========================
     $output = [
         "draw" => intval($_POST['draw']),
         "recordsTotal" => $this->model->all_data($query_principal),
@@ -134,96 +133,111 @@ public function save()
         ]);
     }
 
-    // =========================
-    // VALIDATION
-    // =========================
     $rules = [
-        'NOM' => 'required|min_length[3]',
-        'DESCRIPTION' => 'permit_empty|min_length[3]'
+        'NOM'       => 'required|min_length[2]',
+        'POSTE'     => 'required',
+        'NIVEAU'    => 'permit_empty',
+        'ORDRE'     => 'required|integer',
+        'IS_ACTIF'  => 'required'
     ];
 
     if (!$this->validate($rules)) {
         return $this->response->setJSON([
             'success' => false,
-            'message' => 'Erreur de validation',
             'errors' => $this->validator->getErrors()
         ]);
     }
 
-    $id = $this->request->getPost('ID_SERVICE');
+    $id = $this->request->getPost('ID_TEAM');
 
     $db = \Config\Database::connect();
     $db->transStart();
 
     try {
 
-        $icon = $this->request->getFile('ICONE');
+        $photo = $this->request->getFile('PHOTO');
         $fileName = null;
 
-        // =========================
-        // UPLOAD ICON
-        // =========================
-        if ($icon && $icon->isValid() && !$icon->hasMoved()) {
+        // =====================
+        // UPLOAD PHOTO
+        // =====================
+        if ($photo && $photo->isValid() && !$photo->hasMoved()) {
 
-            if (!in_array($icon->getMimeType(), [
+            $mimeAllowed = [
                 'image/jpeg',
-                'image/png',
                 'image/jpg',
+                'image/png',
                 'image/webp'
-            ])) {
+            ];
+
+            if (!in_array($photo->getMimeType(), $mimeAllowed)) {
                 return $this->response->setJSON([
                     'success' => false,
                     'message' => 'Format image invalide'
                 ]);
             }
 
-            $fileName = $icon->getRandomName();
-            $icon->move('uploads/service', $fileName);
+            $fileName = $photo->getRandomName();
+            $photo->move(FCPATH . 'uploads/team', $fileName);
         }
 
-        // =========================
+        // =====================
         // DATA
-        // =========================
+        // =====================
         $data = [
-            'NOM' => trim($this->request->getPost('NOM')),
-            'DESCRIPTION' => trim($this->request->getPost('DESCRIPTION'))
+            'NOM'       => trim($this->request->getPost('NOM')),
+            'POSTE'     => trim($this->request->getPost('POSTE')),
+            'NIVEAU'    => trim($this->request->getPost('NIVEAU')),
+            'FACEBOOK'  => trim($this->request->getPost('FACEBOOK')),
+            'TWITTER'   => trim($this->request->getPost('TWITTER')),
+            'GMAIL'     => trim($this->request->getPost('GMAIL')),
+            'ORDRE'     => (int)$this->request->getPost('ORDRE'),
+            'IS_ACTIF'  => (int)$this->request->getPost('IS_ACTIF')
         ];
 
         if ($fileName) {
-            $data['ICONE'] = $fileName;
+            $data['PHOTO'] = $fileName;
         }
 
-        $builder = $db->table('service');
+        $builder = $db->table('team');
 
-        // =========================
-        // INSERT / UPDATE
-        // =========================
+        // =====================
+        // UPDATE
+        // =====================
         if (!empty($id)) {
 
-            // supprimer ancien icon
-            $old = $builder->where('ID_SERVICE', $id)->get()->getRow();
+            $old = $builder
+                ->where('ID_TEAM', $id)
+                ->get()
+                ->getRow();
 
-            if ($old && !empty($fileName) && !empty($old->ICONE)) {
-                $oldPath = FCPATH . 'uploads/service/' . $old->ICONE;
+            if ($old && !empty($fileName) && !empty($old->PHOTO)) {
 
-                if (file_exists($oldPath)) {
-                    unlink($oldPath);
+                $oldPhoto = FCPATH . 'uploads/team/' . $old->PHOTO;
+
+                if (file_exists($oldPhoto)) {
+                    unlink($oldPhoto);
                 }
             }
 
-            $builder->where('ID_SERVICE', $id)->update($data);
-            $message = "Service modifié avec succès";
+            $builder->where('ID_TEAM', $id)->update($data);
 
-        } else {
+            $message = "Membre modifié avec succès";
+        }
+        // =====================
+        // INSERT
+        // =====================
+        else {
 
             $builder->insert($data);
-            $message = "Service ajouté avec succès";
+
+            $message = "Membre ajouté avec succès";
         }
 
         $db->transComplete();
 
-        if ($db->transStatus() === false) {
-            throw new \Exception("Erreur transaction");
+        if (!$db->transStatus()) {
+            throw new \Exception('Erreur transaction');
         }
 
         return $this->response->setJSON([
@@ -235,22 +249,22 @@ public function save()
 
         return $this->response->setJSON([
             'success' => false,
-            'message' => 'Erreur serveur',
-            'debug' => $e->getMessage()
+            'message' => $e->getMessage()
         ]);
     }
 }
+
 public function getOne($id)
 {
-    $data = $this->db->table('service')
-        ->where('ID_SERVICE', $id)
+    $data = $this->db->table('team')
+        ->where('ID_TEAM', $id)
         ->get()
         ->getRow();
 
     if (!$data) {
         return $this->response->setJSON([
             'success' => false,
-            'message' => 'Service introuvable'
+            'message' => 'Membre introuvable'
         ]);
     }
 
@@ -259,28 +273,30 @@ public function getOne($id)
         'data' => $data
     ]);
 }
-    // Suppression
+
+ // Suppression
 public function delete()
 {
-    $id = $this->request->getPost('ID_SERVICE');
+    $id = $this->request->getPost('ID_TEAM');
 
-    $service = $this->db->table('service')
-        ->where('ID_SERVICE', $id)
+    $team = $this->db->table('team')
+        ->where('ID_TEAM', $id)
         ->get()
         ->getRow();
 
-    if (!$service) {
+    if (!$team) {
         return $this->response->setJSON([
             'success' => false,
-            'message' => 'Service introuvable'
+            'message' => 'Membre introuvable'
         ]);
     }
 
     // =========================
-    // SUPPRESSION ICONE
+    // SUPPRESSION PHOTO
     // =========================
-    if (!empty($service->ICONE)) {
-        $path = FCPATH . 'uploads/service/' . $service->ICONE;
+    if (!empty($team->PHOTO)) {
+
+        $path = FCPATH . 'uploads/team/' . $team->PHOTO;
 
         if (file_exists($path)) {
             unlink($path);
@@ -290,19 +306,19 @@ public function delete()
     // =========================
     // DELETE DB
     // =========================
-    $this->db->table('service')
-        ->where('ID_SERVICE', $id)
+    $this->db->table('team')
+        ->where('ID_TEAM', $id)
         ->delete();
 
     return $this->response->setJSON([
         'success' => true,
-        'message' => 'Service supprimé avec succès'
+        'message' => 'Membre supprimé avec succès'
     ]);
 }
 
 private function countAll()
 {
-    return $this->db->table('service')
+    return $this->db->table('team')
         ->countAllResults();
 }
 
@@ -310,7 +326,7 @@ private function countFiltered($search)
 {
     $sql = "
         SELECT COUNT(*) AS total
-        FROM service
+        FROM team
         WHERE 1=1
         $search
     ";

@@ -202,3 +202,24 @@ $routes->group('about', ['namespace' => 'App\Modules\Features\Controllers'], fun
     // Delete
     $routes->post('delete', 'About::delete');
 });
+
+// =========================
+// TEAM
+// =========================
+
+$routes->group('team', ['namespace' => 'App\Modules\Features\Controllers'], static function ($routes) {
+
+    $routes->get('/', 'Team::index');
+
+    // DataTable
+    $routes->post('liste', 'Team::getList');
+
+    // Insert / Update
+    $routes->post('store', 'Team::save');
+
+    // Récupérer un membre
+    $routes->get('getOne/(:num)', 'Team::getOne/$1');
+
+    // Suppression
+    $routes->post('delete', 'Team::delete');
+});
