@@ -14,6 +14,54 @@ class Home extends BaseController
        $data['services'] =$this->model->getRequete("SELECT p.*FROM service p
         GROUP BY p.ID_SERVICE ");
 
+        $data['testimonials'] =$this->model->getRequete("SELECT p.*FROM testimonials p
+        GROUP BY p.ID_TESTMONIAL ");
+
+        $data['partenaires'] =$this->model->getRequete("SELECT p.*FROM partners p
+        GROUP BY p.ID_PARTNERS ");
+
+        $data['blogs'] =$this->model->getRequete("SELECT p.*FROM blogs p
+        GROUP BY p.ID_BLOG ");
+
+          $data['video'] =$this->model->getRequeteOne("SELECT p.*FROM video_home p
+        GROUP BY p.ID_VIDEO 
+        LIMIT 1");
+        $data['nb_projets'] = $this->model->getRequeteOne("
+    SELECT COUNT(*) AS TOTAL
+    FROM projet
+");
+
+$data['nb_services'] = $this->model->getRequeteOne("
+    SELECT COUNT(*) AS TOTAL
+    FROM service
+");
+
+$data['nb_testimonials'] = $this->model->getRequeteOne("
+    SELECT COUNT(*) AS TOTAL
+    FROM testimonials
+");
+
+$data['nb_partenaires'] = $this->model->getRequeteOne("
+    SELECT COUNT(*) AS TOTAL
+    FROM partners
+");
+
+$data['nb_blogs'] = $this->model->getRequeteOne("
+    SELECT COUNT(*) AS TOTAL
+    FROM blogs
+");
+
+$data['nb_videos'] = $this->model->getRequeteOne("
+    SELECT COUNT(*) AS TOTAL
+    FROM video_home
+");
+
+
+
+
+        
+
+
         return view('welcome_message',$data);
     }
 

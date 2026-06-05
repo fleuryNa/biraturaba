@@ -295,6 +295,9 @@ class Carto extends BaseController
         log_message('info', 'Cartographie - Collines avec membres: ' . $total_sites);
         log_message('info', 'Cartographie - Total points: ' . (count($provinces) + count($communes) + count($zones) + $total_sites));
 
+         $data['partenaires'] =$this->model->getRequete("SELECT p.*FROM partners p
+        GROUP BY p.ID_PARTNERS ");
+
         return view('App\Modules\Cartographie\Views\CartoFront', $data);
     }
 }
