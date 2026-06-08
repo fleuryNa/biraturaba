@@ -5,15 +5,22 @@ namespace App\Modules\Features\Controllers;
 use App\Controllers\BaseController;
 
 
-class Service extends BaseController
+class Team extends BaseController
 {
+
+    protected $db;
+
+    public function __construct()
+    {
+        $this->db = \Config\Database::connect();
+    }
 
 
     public function index()
     {
-        $data['title'] = 'Liste de caracteritique';
+        $data['title'] = 'Liste de membres de l\'équipe';
 
-        return view('App\Modules\Features\Views\ServiceView', $data);
+        return view('App\Modules\Features\Views\TeamView', $data);
     }
 
 public function getList(): mixed
@@ -39,6 +46,7 @@ public function getList(): mixed
         'POSTE',
         'NIVEAU',
         'ORDRE',
+        'GMAIL',
         'IS_ACTIF'
     ];
 
@@ -91,6 +99,7 @@ public function getList(): mixed
         $sub[] = $row->POSTE;
         $sub[] = $row->NIVEAU;
         $sub[] = $row->ORDRE;
+        $sub[] = $row->GMAIL;
         $sub[] = $statut;
 
         $sub[] = '
@@ -190,7 +199,7 @@ public function save()
             'NIVEAU'    => trim($this->request->getPost('NIVEAU')),
             'FACEBOOK'  => trim($this->request->getPost('FACEBOOK')),
             'TWITTER'   => trim($this->request->getPost('TWITTER')),
-            'GMAIL'     => trim($this->request->getPost('GMAIL')),
+            'GMAIL'     => trim($this->request->getPost('EMAIL')),
             'ORDRE'     => (int)$this->request->getPost('ORDRE'),
             'IS_ACTIF'  => (int)$this->request->getPost('IS_ACTIF')
         ];
@@ -256,6 +265,8 @@ public function save()
 
 public function getOne($id)
 {
+
+    $db = \Config\Database::connect();
     $data = $this->db->table('team')
         ->where('ID_TEAM', $id)
         ->get()

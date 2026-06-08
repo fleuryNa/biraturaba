@@ -48,6 +48,9 @@
                     <span class="nav-label">Site</span><i class="fa fa-angle-left arrow"></i></a>
                 <ul class="nav-2-level collapse">
                     <li>
+                        <a href="<?= base_url('formexample')?>">Membres</a>
+                    </li>
+                    <li>
                         <a href="<?= base_url('projet')?>">Projets</a>
                     </li>
                     <li>
@@ -77,6 +80,10 @@
 
                     <li>
                         <a href="<?= base_url('about')?>">À propos</a>
+                    </li>
+
+                    <li>
+                        <a href="<?= base_url('team')?>">Équipe</a>
                     </li>
                 </ul>
             </li>

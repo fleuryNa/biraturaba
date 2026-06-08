@@ -7,15 +7,18 @@ use App\Models\ProvinceModel;
 use App\Models\CommuneModel;
 use App\Models\ZoneModel;
 use App\Models\CollineModel;
+use App\Models\TypeGroupeModel; // Nouveau modèle
 
 class FormExample extends BaseController
 {
     protected $membreModel;
+    protected $typeGroupeModel;
 
     public function __construct()
     {
         helper('form');
         $this->membreModel = new MembreModel();
+        $this->typeGroupeModel = new TypeGroupeModel();
     }
 
     // List all membres
@@ -24,10 +27,11 @@ class FormExample extends BaseController
         $db = \Config\Database::connect();
         
         $membres = $db->table('membres_inscrits m')
-            ->select('m.ID_MEMBRES, c.COMMUNE_NAME, z.ZONE_NAME, col.COLLINE_NAME, m.NB_GROUPE_FONCTIONNELS, m.NB_MEMBRE_INSCRITS, m.NOMBRE_HOMME, m.NOMBRE_FEMME')
+            ->select('m.ID_MEMBRES, c.COMMUNE_NAME, z.ZONE_NAME, col.COLLINE_NAME, m.NB_GROUPE_FONCTIONNELS, m.NB_MEMBRE_INSCRITS, m.NOMBRE_HOMME, m.NOMBRE_FEMME, m.ID_TYPE_GROUPE, tg.DESC_GROUPE as TYPE_GROUPE')
             ->join('collines col', 'col.COLLINE_ID = m.COLLINE_ID', 'left')
             ->join('zones z', 'z.ZONE_ID = col.ZONE_ID', 'left')
             ->join('communes c', 'c.COMMUNE_ID = z.COMMUNE_ID', 'left')
+            ->join('type_groupes tg', 'tg.ID_TYPE_GROUPE = m.ID_TYPE_GROUPE', 'left')
             ->orderBy('m.ID_MEMBRES', 'DESC')
             ->get()
             ->getResultArray();
@@ -39,10 +43,11 @@ class FormExample extends BaseController
     {
         $db = \Config\Database::connect();
         $membres = $db->table('membres_inscrits m')
-            ->select('c.COMMUNE_NAME, z.ZONE_NAME, col.COLLINE_NAME, m.NB_GROUPE_FONCTIONNELS, m.NB_MEMBRE_INSCRITS, m.NOMBRE_HOMME, m.NOMBRE_FEMME')
+            ->select('c.COMMUNE_NAME, z.ZONE_NAME, col.COLLINE_NAME, m.NB_GROUPE_FONCTIONNELS, m.NB_MEMBRE_INSCRITS, m.NOMBRE_HOMME, m.NOMBRE_FEMME, tg.DESC_GROUPE as TYPE_GROUPE')
             ->join('collines col', 'col.COLLINE_ID = m.COLLINE_ID', 'left')
             ->join('zones z', 'z.ZONE_ID = col.ZONE_ID', 'left')
             ->join('communes c', 'c.COMMUNE_ID = z.COMMUNE_ID', 'left')
+            ->join('type_groupes tg', 'tg.ID_TYPE_GROUPE = m.ID_TYPE_GROUPE', 'left')
             ->orderBy('m.ID_MEMBRES', 'DESC')
             ->get()
             ->getResultArray();
@@ -54,7 +59,7 @@ class FormExample extends BaseController
         ];
 
         $csv = fopen('php://temp', 'r+');
-        fputcsv($csv, ['Commune', 'Zone', 'Colline', 'Groupes fonctionnels', 'Membres inscrits', 'Hommes', 'Femmes']);
+        fputcsv($csv, ['Commune', 'Zone', 'Colline', 'Groupes fonctionnels', 'Membres inscrits', 'Hommes', 'Femmes', 'Type de groupe']);
 
         foreach ($membres as $membre) {
             fputcsv($csv, [
@@ -65,6 +70,7 @@ class FormExample extends BaseController
                 $membre['NB_MEMBRE_INSCRITS'],
                 $membre['NOMBRE_HOMME'],
                 $membre['NOMBRE_FEMME'],
+                $membre['TYPE_GROUPE'] ?? '',
             ]);
         }
 
@@ -80,8 +86,13 @@ class FormExample extends BaseController
     {
         $provinceModel = new ProvinceModel();
         $provinces = $provinceModel->findAll();
+        
+        $typeGroupes = $this->typeGroupeModel->findAll();
 
-        return view('formexample/create', ['provinces' => $provinces]);
+        return view('formexample/create', [
+            'provinces' => $provinces,
+            'typeGroupes' => $typeGroupes
+        ]);
     }
 
     // Store new membre
@@ -97,6 +108,7 @@ class FormExample extends BaseController
             'nombre_homme'           => 'required|integer',
             'nombre_femme'           => 'required|integer',
             'nb_groupe'              => 'required|integer',
+            'id_type_groupe'         => 'required|integer',
         ];
 
         if (! $this->validate($rules)) {
@@ -110,6 +122,7 @@ class FormExample extends BaseController
             'NOMBRE_HOMME' => $this->request->getPost('nombre_homme'),
             'NOMBRE_FEMME' => $this->request->getPost('nombre_femme'),
             'NB_GROUPE' => $this->request->getPost('nb_groupe'),
+            'ID_TYPE_GROUPE' => $this->request->getPost('id_type_groupe'),
         ];
 
         $this->membreModel->insert($data);
@@ -131,6 +144,7 @@ class FormExample extends BaseController
         $collineModel = new CollineModel();
 
         $provinces = $provinceModel->findAll();
+        $typeGroupes = $this->typeGroupeModel->findAll();
         $communes = [];
         $zones = [];
         $collines = [];
@@ -154,7 +168,7 @@ class FormExample extends BaseController
             }
         }
 
-        return view('formexample/edit', compact('membre','provinces','communes','zones','collines'));
+        return view('formexample/edit', compact('membre','provinces','communes','zones','collines','typeGroupes'));
     }
 
     // Update membre
@@ -170,6 +184,7 @@ class FormExample extends BaseController
             'nombre_homme'           => 'required|integer',
             'nombre_femme'           => 'required|integer',
             'nb_groupe'              => 'required|integer',
+            'id_type_groupe'         => 'required|integer',
         ];
 
         if (! $this->validate($rules)) {
@@ -183,6 +198,7 @@ class FormExample extends BaseController
             'NOMBRE_HOMME' => $this->request->getPost('nombre_homme'),
             'NOMBRE_FEMME' => $this->request->getPost('nombre_femme'),
             'NB_GROUPE' => $this->request->getPost('nb_groupe'),
+            'ID_TYPE_GROUPE' => $this->request->getPost('id_type_groupe'),
         ];
 
         $this->membreModel->update($id, $data);
@@ -222,5 +238,11 @@ class FormExample extends BaseController
         $collines = $collineModel->where('ZONE_ID', $zoneId)->findAll();
         return $this->response->setJSON($collines);
     }
+    
+    // Nouvelle méthode pour les types de groupe
+    public function getTypeGroupes()
+    {
+        $typeGroupes = $this->typeGroupeModel->findAll();
+        return $this->response->setJSON($typeGroupes);
+    }
 }
- 

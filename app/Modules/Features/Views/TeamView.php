@@ -48,10 +48,8 @@
                                             <th>Nom</th>
                                             <th>Poste</th>
                                             <th>Niveau</th>
-                                            <th>Facebook</th>
-                                            <th>Twitter</th>
-                                            <th>Email</th>
                                             <th>Ordre</th>
+                                            <th>Email</th>
                                             <th>Statut</th>
                                             <th>Actions</th>
                                         </tr>
@@ -109,19 +107,10 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label>Facebook</label>
-                                <input type="text" name="FACEBOOK" id="FACEBOOK" class="form-control">
+                                <label>Email</label>
+                                <input type="email" name="EMAIL" id="EMAIL" class="form-control">
                             </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label>Twitter</label>
-                                <input type="text" name="TWITTER" id="TWITTER" class="form-control">
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label>Gmail</label>
-                                <input type="email" name="GMAIL" id="GMAIL" class="form-control">
-                            </div>
 
                             <div class="col-md-6 mb-3">
                                 <label>Photo</label>
@@ -189,7 +178,7 @@
                 [4, 'desc']
             ], // Order by date
             "ajax": {
-                url: "<?php echo base_url('teams/liste') ?>",
+                url: "<?php echo base_url('team/liste') ?>",
                 type: "POST",
                 data: {}
             },
@@ -238,7 +227,7 @@
         let id = $('#ID_TEAM').val();
 
         // Même endpoint pour insert + update
-        let url = "<?= base_url('teams/store') ?>";
+        let url = "<?= base_url('team/store') ?>";
 
         $.ajax({
             url: url,
