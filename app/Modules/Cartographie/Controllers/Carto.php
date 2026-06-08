@@ -25,6 +25,8 @@ class Carto extends BaseController
                 mi.NB_MEMBRE_INSCRITS as nb_membres,
                 mi.NOMBRE_HOMME as nb_hommes,
                 mi.NOMBRE_FEMME as nb_femmes,
+                mi.ID_TYPE_GROUPE,
+                tg.DESC_GROUPE as type_groupe_nom,
                 
                 -- Infos collines
                 c.COLLINE_ID,
@@ -55,6 +57,7 @@ class Carto extends BaseController
             JOIN zones z ON c.ZONE_ID = z.ZONE_ID
             JOIN communes cm ON z.COMMUNE_ID = cm.COMMUNE_ID
             JOIN provinces p ON cm.PROVINCE_ID = p.PROVINCE_ID
+            LEFT JOIN type_groupes tg ON mi.ID_TYPE_GROUPE = tg.ID_TYPE_GROUPE
             WHERE mi.NB_MEMBRE_INSCRITS > 0
             GROUP BY mi.ID_MEMBRES
             ORDER BY mi.NB_MEMBRE_INSCRITS DESC
@@ -137,6 +140,8 @@ class Carto extends BaseController
         
         // 4. Données des collines avec membres - GESTION DES COORDONNÉES INVALIDES
         $collines = [];
+        $type_groupes_stats = []; // Pour les statistiques par type de groupe
+        
         foreach ($membres_data as $row) {
             $lat = $row['colline_lat'];
             $lng = $row['colline_lng'];
@@ -170,13 +175,36 @@ class Carto extends BaseController
                 }
             }
             
+            $type_groupe_nom = $row['type_groupe_nom'] ?? 'Non défini';
+            
+            // Statistiques par type de groupe
+            $id_type = $row['ID_TYPE_GROUPE'] ?? 0;
+            if (!isset($type_groupes_stats[$id_type])) {
+                $type_groupes_stats[$id_type] = [
+                    'id' => $id_type,
+                    'nom' => $type_groupe_nom,
+                    'nb_sites' => 0,
+                    'nb_membres' => 0,
+                    'nb_hommes' => 0,
+                    'nb_femmes' => 0,
+                    'nb_groupes' => 0
+                ];
+            }
+            $type_groupes_stats[$id_type]['nb_sites']++;
+            $type_groupes_stats[$id_type]['nb_membres'] += $row['nb_membres'];
+            $type_groupes_stats[$id_type]['nb_hommes'] += $row['nb_hommes'];
+            $type_groupes_stats[$id_type]['nb_femmes'] += $row['nb_femmes'];
+            $type_groupes_stats[$id_type]['nb_groupes'] += $row['nb_groupes_fonctionnels'];
+            
             $collines[] = [
                 'id' => $row['membres_id'],
                 'COLLINE_ID' => $row['COLLINE_ID'],
                 'nom' => $row['colline_nom'],
                 'lat' => $lat,
                 'lng' => $lng,
-                'coord_modifiee' => $coord_modifiee, // Indique si les coordonnées ont été modifiées
+                'coord_modifiee' => $coord_modifiee,
+                'id_type_groupe' => $row['ID_TYPE_GROUPE'] ?? 0,
+                'type_groupe_nom' => $type_groupe_nom,
                 'zone_nom' => $row['zone_nom'],
                 'zone_id' => $row['ZONE_ID'],
                 'commune_nom' => $row['commune_nom'],
@@ -281,6 +309,15 @@ class Carto extends BaseController
             $lng = floatval($colline['lng']);
             
             $info = "🏥 " . $colline['zone_nom'] . " | " . $colline['commune_nom'] . " | " . $colline['province_nom'];
+            // Ajouter l'icône du type de groupe dans l'info
+            $type_icon = "";
+            if ($colline['type_groupe_nom'] == 'SLC') {
+                $type_icon = " 🏪";
+            } elseif ($colline['type_groupe_nom'] == 'Fonctionnels') {
+                $type_icon = " ⚙️";
+            }
+            $info .= " | 📌 Type: " . $colline['type_groupe_nom'] . $type_icon;
+            
             // Ajouter un indicateur si les coordonnées ont été modifiées
             if ($colline['coord_modifiee']) {
                 $info .= " | ⚠️ Position estimée";
@@ -302,6 +339,8 @@ class Carto extends BaseController
                 'info' => $info,
                 'detail' => $detail,
                 'coord_modifiee' => $colline['coord_modifiee'],
+                'id_type_groupe' => $colline['id_type_groupe'],
+                'type_groupe_nom' => $colline['type_groupe_nom'],
                 'zone_id' => $colline['zone_id'],
                 'commune_id' => $colline['commune_id'],
                 'province_id' => $colline['province_id'],
@@ -315,6 +354,14 @@ class Carto extends BaseController
             $total_hommes += $colline['nb_hommes'];
             $total_femmes += $colline['nb_femmes'];
             $total_groupes += $colline['nb_groupes_fonctionnels'];
+        }
+
+        // Nettoyer les statistiques des types de groupe (enlever l'index 0 si pas de type)
+        $type_groupes_stats_clean = [];
+        foreach ($type_groupes_stats as $tg) {
+            if ($tg['id'] > 0) {
+                $type_groupes_stats_clean[] = $tg;
+            }
         }
 
         $data = [
@@ -332,7 +379,8 @@ class Carto extends BaseController
                 'total_femmes' => $total_femmes,
                 'total_groupes' => $total_groupes,
                 'total_coords_modifiees' => $total_coords_modifiees
-            ]
+            ],
+            'type_groupes_stats' => $type_groupes_stats_clean
         ];
 
         // Debug
@@ -342,8 +390,8 @@ class Carto extends BaseController
         log_message('info', 'Cartographie - Collines avec membres: ' . $total_sites);
         log_message('info', 'Cartographie - Collines avec coordonnées estimées: ' . $total_coords_modifiees);
         log_message('info', 'Cartographie - Total points: ' . (count($provinces) + count($communes) + count($zones) + $total_sites));
-         $data['partenaires'] =$this->model->getRequete("SELECT p.*FROM partners p
-        GROUP BY p.ID_PARTNERS ");
+        
+        $data['partenaires'] = $this->model->getRequete("SELECT p.* FROM partners p GROUP BY p.ID_PARTNERS");
 
         return view('App\Modules\Cartographie\Views\CartoFront', $data);
     }
