@@ -108,6 +108,56 @@
         overflow-y: auto;
     }
     
+    /* Légende des niveaux */
+    .legend-levels {
+        background: #f0f2f5;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .legend-levels h4 {
+        font-size: 13px;
+        margin-bottom: 12px;
+        color: #1a1a2e;
+        font-weight: 600;
+    }
+    
+    .legend-level-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .legend-level-item:last-child {
+        border-bottom: none;
+    }
+    
+    .legend-color {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .legend-info {
+        flex: 1;
+    }
+    
+    .legend-info strong {
+        display: block;
+        font-size: 13px;
+        color: #1a1a2e;
+    }
+    
+    .legend-info span {
+        font-size: 11px;
+        color: #888;
+    }
+    
     .groups-list {
         display: flex;
         flex-direction: column;
@@ -396,6 +446,28 @@
         font-weight: 600;
     }
     
+    /* Style pour le select du type de groupe */
+    #typeGroupeSelect {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 13px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    #typeGroupeSelect:hover {
+        border-color: #667eea;
+    }
+    
+    #typeGroupeSelect:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+    }
+    
     .type-badge {
         display: inline-block;
         padding: 6px 14px;
@@ -662,10 +734,48 @@
                                 <div>Points d'intervention</div>
                             </div>
 
+                            <!-- NOUVELLE LÉGENDE DES NIVEAUX -->
+                            <div class="legend-levels">
+                                <h4><i class="fa fa-layer-group"></i> Légende des niveaux</h4>
+                                <div class="legend-level-item province">
+                                    <div class="legend-color" style="background: #FF0000;"></div>
+                                    <div class="legend-info">
+                                        <strong>🏢 Provinces</strong>
+                                        <span>Sites provinciaux</span>
+                                    </div>
+                                </div>
+                                <div class="legend-level-item commune">
+                                    <div class="legend-color" style="background: #00FF00;"></div>
+                                    <div class="legend-info">
+                                        <strong>🏛️ Communes</strong>
+                                        <span>Chefs-lieux de commune</span>
+                                    </div>
+                                </div>
+                                <div class="legend-level-item zone">
+                                    <div class="legend-color" style="background: #0000FF;"></div>
+                                    <div class="legend-info">
+                                        <strong>📍 Zones</strong>
+                                        <span>Zones de regroupement</span>
+                                    </div>
+                                </div>
+                                <div class="legend-level-item colline">
+                                    <div class="legend-color" style="background: #800080;"></div>
+                                    <div class="legend-info">
+                                        <strong>🏥 Collines</strong>
+                                        <span>Sites d'intervention</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FILTRE TYPE DE GROUPE - EN SELECT -->
                             <div class="type-groupes-filters">
                                 <h4><i class="fa fa-tags"></i> Filtrer par type de groupement</h4>
-                                <div id="typeGroupesFilters" style="display: flex; flex-wrap: wrap; gap: 8px;">
-                                    <button class="type-badge all active" data-type="all">📋 Tous</button>
+                                <div class="filter-group">
+                                    <select id="typeGroupeSelect" class="form-control">
+                                        <option value="all">📋 Tous les types</option>
+                                        <option value="SLC">🏪 SLC (SILC)</option>
+                                        <option value="Fonctionnels">⚙️ Groupes Fonctionnels</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -703,23 +813,23 @@
                                 <button id="resetFilters">🔄 Réinitialiser</button>
                             </div>
                             
-                            <div class="type-groupes-stats">
+                            <!-- <div class="type-groupes-stats">
                                 <h4><i class="fa fa-pie-chart"></i> Statistiques par type</h4>
                                 <div id="typeGroupesStats" style="display: flex; flex-direction: column; gap: 10px;">
                                     <div style="text-align: center; color: #999; padding: 10px;">Chargement...</div>
                                 </div>
-                            </div>
+                            </div> -->
                             
-                            <div class="groups-list" id="groupsList">
+                            <!-- <div class="groups-list" id="groupsList">
                                 <div style="text-align: center; color: #999; padding: 20px;">Chargement des groupes...</div>
-                            </div>
+                            </div> -->
                             
-                            <div class="points-section">
+                            <!-- <div class="points-section">
                                 <div class="points-title"><span>📍</span> Points récents</div>
                                 <div class="points-list" id="pointsList">
                                     <div style="text-align: center; color: #999; padding: 20px;">Chargement...</div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -1365,19 +1475,20 @@
             
             let filteredPoints = [...allPoints];
             
+            // Filtre par type de groupe
             if (currentTypeFilter !== 'all') {
                 filteredPoints = filteredPoints.filter(p => {
                     if (p.group === 'group4') {
                         return p.typeGroupe === currentTypeFilter;
                     }
                     if (p.group === 'group1') {
-                        return allPoints.some(c => c.group === 'group4' && c.info.includes(p.title) && c.typeGroupe === currentTypeFilter);
+                        return allPoints.some(c => c.group === 'group4' && c.info && c.info.includes(p.title) && c.typeGroupe === currentTypeFilter);
                     }
                     if (p.group === 'group2') {
-                        return allPoints.some(c => c.group === 'group4' && c.info.includes(p.title) && c.typeGroupe === currentTypeFilter);
+                        return allPoints.some(c => c.group === 'group4' && c.info && c.info.includes(p.title) && c.typeGroupe === currentTypeFilter);
                     }
                     if (p.group === 'group3') {
-                        return allPoints.some(c => c.group === 'group4' && c.info.includes(p.title) && c.typeGroupe === currentTypeFilter);
+                        return allPoints.some(c => c.group === 'group4' && c.info && c.info.includes(p.title) && c.typeGroupe === currentTypeFilter);
                     }
                     return true;
                 });
@@ -1391,7 +1502,7 @@
                 if (zone) {
                     filteredPoints = filteredPoints.filter(p => 
                         (p.group === 'group3' && p.id == zoneId) ||
-                        (p.group === 'group4' && p.info.includes(zone.title))
+                        (p.group === 'group4' && p.info && p.info.includes(zone.title))
                     );
                 }
             }
@@ -1400,8 +1511,8 @@
                 if (commune) {
                     filteredPoints = filteredPoints.filter(p => 
                         (p.group === 'group2' && p.id == communeId) ||
-                        (p.group === 'group3' && p.info.includes(commune.title)) ||
-                        (p.group === 'group4' && p.info.includes(commune.title))
+                        (p.group === 'group3' && p.info && p.info.includes(commune.title)) ||
+                        (p.group === 'group4' && p.info && p.info.includes(commune.title))
                     );
                 }
             }
@@ -1410,7 +1521,7 @@
                 if (province) {
                     filteredPoints = filteredPoints.filter(p => 
                         (p.group === 'group1' && p.id == provinceId) ||
-                        (p.group === 'group4' && p.info.includes(province.title))
+                        (p.group === 'group4' && p.info && p.info.includes(province.title))
                     );
                 }
             }
@@ -1452,19 +1563,21 @@
             const newCounts = { group1: 0, group2: 0, group3: 0, group4: 0 };
             filteredPoints.forEach(p => { if (newCounts[p.group] !== undefined) newCounts[p.group]++; });
             
-            document.getElementById('group1Count').innerText = newCounts.group1;
-            document.getElementById('group2Count').innerText = newCounts.group2;
-            document.getElementById('group3Count').innerText = newCounts.group3;
-            document.getElementById('group4Count').innerText = newCounts.group4;
+            if (document.getElementById('group1Count')) document.getElementById('group1Count').innerText = newCounts.group1;
+            if (document.getElementById('group2Count')) document.getElementById('group2Count').innerText = newCounts.group2;
+            if (document.getElementById('group3Count')) document.getElementById('group3Count').innerText = newCounts.group3;
+            if (document.getElementById('group4Count')) document.getElementById('group4Count').innerText = newCounts.group4;
             document.getElementById('totalPointsDisplay').innerText = filteredPoints.length;
             
             const pointsRecents = filteredPoints.slice(-10).reverse();
-            pointsListDiv.innerHTML = pointsRecents.map(point => `
-                <div class="point-item ${point.group}" onclick="flyToPoint(${point.lat}, ${point.lng})">
-                    <div class="point-name">${point.groupIcon} ${point.title}</div>
-                    <div class="point-coord">📌 ${point.lat.toFixed(5)}, ${point.lng.toFixed(5)}</div>
-                </div>
-            `).join('');
+            if (pointsListDiv) {
+                pointsListDiv.innerHTML = pointsRecents.map(point => `
+                    <div class="point-item ${point.group}" onclick="flyToPoint(${point.lat}, ${point.lng})">
+                        <div class="point-name">${point.groupIcon} ${point.title}</div>
+                        <div class="point-coord">📌 ${point.lat.toFixed(5)}, ${point.lng.toFixed(5)}</div>
+                    </div>
+                `).join('');
+            }
         }
         
         function resetAllFilters() {
@@ -1476,79 +1589,46 @@
             selectZone.disabled = true;
             selectColline.disabled = true;
             currentTypeFilter = 'all';
-            const allBtn = document.querySelector('.type-badge.all');
-            if (allBtn) {
-                document.querySelectorAll('.type-badge').forEach(b => b.classList.remove('active'));
-                allBtn.classList.add('active');
+            
+            // Réinitialiser le select type groupe
+            const typeSelect = document.getElementById('typeGroupeSelect');
+            if (typeSelect) {
+                typeSelect.value = 'all';
             }
+            
             applyFilters();
         }
         
-        function displayTypeGroupesFilters() {
-            const container = document.getElementById('typeGroupesFilters');
-            if (!container) return;
+        // Initialisation du select pour le filtre type de groupe
+        function initTypeGroupeSelect() {
+            const select = document.getElementById('typeGroupeSelect');
+            if (!select) return;
             
-            const types = new Set();
+            // Vérifier quels types existent dans les données
+            const typesExistants = new Set();
             allPoints.filter(p => p.group === 'group4').forEach(p => {
                 if (p.typeGroupe) {
-                    types.add(p.typeGroupe);
-                    availableTypes[p.typeGroupe] = true;
+                    typesExistants.add(p.typeGroupe);
                 }
             });
             
-            if (typeGroupesStats.length > 0) {
-                typeGroupesStats.forEach(tg => {
-                    types.add(tg.nom);
-                    availableTypes[tg.nom] = true;
-                });
+            // Activer/désactiver les options selon les données
+            const slcOption = select.querySelector('option[value="SLC"]');
+            const fonctionnelsOption = select.querySelector('option[value="Fonctionnels"]');
+            
+            if (slcOption && !typesExistants.has('SLC')) {
+                slcOption.disabled = true;
+                slcOption.textContent = '🏪 SLC (aucune donnée)';
+            }
+            if (fonctionnelsOption && !typesExistants.has('Fonctionnels')) {
+                fonctionnelsOption.disabled = true;
+                fonctionnelsOption.textContent = '⚙️ Fonctionnels (aucune donnée)';
             }
             
-            let html = '<button class="type-badge all active" data-type="all">📋 Tous</button>';
-            if (types.has('SLC')) {
-                html += '<button class="type-badge slc" data-type="SLC">🏪 SLC</button>';
-            }
-            if (types.has('Fonctionnels')) {
-                html += '<button class="type-badge fonctionnels" data-type="Fonctionnels">⚙️ Fonctionnels</button>';
-            }
-            
-            container.innerHTML = html;
-            
-            document.querySelectorAll('.type-badge').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelectorAll('.type-badge').forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    currentTypeFilter = this.getAttribute('data-type');
-                    applyFilters();
-                });
+            select.addEventListener('change', function() {
+                currentTypeFilter = this.value;
+                applyFilters();
             });
-        }
-        
-        function displayTypeGroupesStats() {
-            const container = document.getElementById('typeGroupesStats');
-            if (!container) return;
-            
-            if (typeGroupesStats.length === 0) {
-                container.innerHTML = '<div style="text-align: center; color: #999; padding: 10px;">Aucune donnée</div>';
-                return;
-            }
-            
-            const typeColors = { 'SLC': '#3498db', 'Fonctionnels': '#e67e22' };
-            const typeIcons = { 'SLC': '🏪', 'Fonctionnels': '⚙️' };
-            
-            container.innerHTML = typeGroupesStats.map(tg => `
-                <div style="background: white; border-radius: 10px; padding: 10px; border-left: 4px solid ${typeColors[tg.nom] || '#95a5a6'};">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                        <span style="font-weight: 600; font-size: 13px;">${typeIcons[tg.nom] || '📌'} ${tg.nom}</span>
-                        <span style="font-size: 16px; font-weight: 700; color: ${typeColors[tg.nom] || '#95a5a6'};">${tg.nb_sites} sites</span>
-                    </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 10px; color: #666;">
-                        <span>👥 ${tg.nb_membres.toLocaleString()} membres</span>
-                        <span>👨 ${tg.nb_hommes.toLocaleString()} H</span>
-                        <span>👩 ${tg.nb_femmes.toLocaleString()} F</span>
-                        <span>📊 ${tg.nb_groupes} groupes</span>
-                    </div>
-                </div>
-            `).join('');
         }
         
         fillProvinces();
@@ -1592,8 +1672,8 @@
             }, 1500);
         };
         
-        displayTypeGroupesFilters();
-        displayTypeGroupesStats();
+        // Initialiser le filtre type groupe
+        initTypeGroupeSelect();
         
         console.log('✅ Carte initialisée avec', allPoints.length, 'points');
     </script>
