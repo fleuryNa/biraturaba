@@ -468,154 +468,6 @@
         box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
     }
     
-    .type-badge {
-        display: inline-block;
-        padding: 6px 14px;
-        margin: 3px;
-        border-radius: 20px;
-        font-size: 11px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        border: none;
-    }
-    
-    .type-badge:hover {
-        transform: scale(1.05);
-    }
-    
-    .type-badge.active {
-        box-shadow: 0 0 0 2px white, 0 0 0 4px #667eea;
-    }
-    
-    .type-badge.all {
-        background-color: #95a5a6;
-        color: white;
-    }
-    
-    .type-badge.slc {
-        background-color: #3498db;
-        color: white;
-    }
-    
-    .type-badge.fonctionnels {
-        background-color: #e67e22;
-        color: white;
-    }
-    
-    .type-groupes-stats {
-        background: #f8f9fa;
-        border-radius: 12px;
-        padding: 15px;
-        margin-bottom: 20px;
-    }
-    
-    .type-groupes-stats h4 {
-        font-size: 13px;
-        margin-bottom: 12px;
-        color: #1a1a2e;
-        font-weight: 600;
-    }
-    
-    /* Modal Styles */
-    .detail-modal .modal-content {
-        border-radius: 16px;
-        overflow: hidden;
-    }
-    
-    .detail-modal .modal-header {
-        background: linear-gradient(135deg, #1a1a2e, #16213e);
-        color: white;
-        border-bottom: none;
-        padding: 20px 25px;
-    }
-    
-    .detail-modal .modal-header .close {
-        color: white;
-        opacity: 0.8;
-        text-shadow: none;
-    }
-    
-    .detail-modal .modal-header .close:hover {
-        opacity: 1;
-    }
-    
-    .detail-modal .modal-body {
-        padding: 25px;
-        background: #f8f9fa;
-    }
-    
-    .detail-modal .modal-footer {
-        background: white;
-        border-top: 1px solid #e0e0e0;
-        padding: 15px 25px;
-    }
-    
-    .stats-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 13px;
-    }
-    
-    .stats-table th {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 12px 10px;
-        text-align: center;
-        font-weight: 600;
-    }
-    
-    .stats-table td {
-        padding: 10px;
-        text-align: center;
-        border-bottom: 1px solid #e0e0e0;
-        background: white;
-    }
-    
-    .stats-table tr:hover td {
-        background: #f0f2f5;
-    }
-    
-    .stats-table .total-row {
-        background: #e8e8e8;
-        font-weight: 700;
-    }
-    
-    .stats-table .total-row td {
-        background: #e8e8e8;
-        font-weight: 700;
-    }
-    
-    .colline-info-card {
-        background: white;
-        border-radius: 12px;
-        padding: 15px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-    
-    .colline-info-card h6 {
-        color: #667eea;
-        margin-bottom: 10px;
-    }
-    
-    .btn-detail {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-size: 11px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin-top: 8px;
-    }
-    
-    .btn-detail:hover {
-        transform: scale(1.05);
-        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-    }
-    
     @media (max-width: 768px) {
         .map-col, .legend-col {
             flex: 0 0 100%;
@@ -676,6 +528,106 @@
         50% { transform: scale(1.0); }
     }
     </style>
+    <style type="text/css">
+        /* Modal Styles */
+.detail-modal .modal-content {
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.detail-modal .modal-header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: white;
+    border-bottom: none;
+    padding: 20px 25px;
+}
+
+.detail-modal .modal-header .close {
+    color: white;
+    opacity: 0.8;
+    text-shadow: none;
+}
+
+.detail-modal .modal-header .close:hover {
+    opacity: 1;
+}
+
+.detail-modal .modal-body {
+    padding: 25px;
+    background: #f8f9fa;
+}
+
+.detail-modal .modal-footer {
+    background: white;
+    border-top: 1px solid #e0e0e0;
+    padding: 15px 25px;
+}
+
+.stats-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.stats-table th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 10px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.stats-table td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #e0e0e0;
+    background: white;
+}
+
+.stats-table tr:hover td {
+    background: #f0f2f5;
+}
+
+.stats-table .total-row {
+    background: #e8e8e8;
+    font-weight: 700;
+}
+
+.stats-table .total-row td {
+    background: #e8e8e8;
+    font-weight: 700;
+}
+
+.colline-info-card {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.colline-info-card h6 {
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.btn-detail {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+}
+
+.btn-detail:hover {
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+    </style>
 </head>
 
 <body data-spy="scroll" data-offset="80">
@@ -734,7 +686,7 @@
                                 <div>Points d'intervention</div>
                             </div>
 
-                            <!-- NOUVELLE LÉGENDE DES NIVEAUX -->
+                            <!-- Légende des niveaux -->
                             <div class="legend-levels">
                                 <h4><i class="fa fa-layer-group"></i> Légende des niveaux</h4>
                                 <div class="legend-level-item province">
@@ -767,7 +719,7 @@
                                 </div>
                             </div>
 
-                            <!-- FILTRE TYPE DE GROUPE - EN SELECT -->
+                            <!-- Filtre type de groupe -->
                             <div class="type-groupes-filters">
                                 <h4><i class="fa fa-tags"></i> Filtrer par type de groupement</h4>
                                 <div class="filter-group">
@@ -812,24 +764,6 @@
                                 
                                 <button id="resetFilters">🔄 Réinitialiser</button>
                             </div>
-                            
-                            <!-- <div class="type-groupes-stats">
-                                <h4><i class="fa fa-pie-chart"></i> Statistiques par type</h4>
-                                <div id="typeGroupesStats" style="display: flex; flex-direction: column; gap: 10px;">
-                                    <div style="text-align: center; color: #999; padding: 10px;">Chargement...</div>
-                                </div>
-                            </div> -->
-                            
-                            <!-- <div class="groups-list" id="groupsList">
-                                <div style="text-align: center; color: #999; padding: 20px;">Chargement des groupes...</div>
-                            </div> -->
-                            
-                            <!-- <div class="points-section">
-                                <div class="points-title"><span>📍</span> Points récents</div>
-                                <div class="points-list" id="pointsList">
-                                    <div style="text-align: center; color: #999; padding: 20px;">Chargement...</div>
-                                </div>
-                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -925,20 +859,28 @@
         let markersCluster = null;
         let groupCounts = { group1: 0, group2: 0, group3: 0, group4: 0 };
         
-        // Données pour les filtres
-        let provincesList = [];
-        let communesList = [];
-        let zonesList = [];
-        let collinesList = [];
+        // Données pour les filtres hiérarchiques
+        let hierarchicalData = {
+            provinces: [],
+            communesByProvince: new Map(),
+            zonesByCommune: new Map(),
+            collinesByZone: new Map()
+        };
         
         // Filtre par type de groupe
         let currentTypeFilter = 'all';
-        let availableTypes = {};
         
         // Données pour les statistiques détaillées
         let allMembresData = [];
         
-        // Fonction pour parser les données avec conservation des stats détaillées
+        // Éléments DOM pour les filtres
+        const selectProvince = document.getElementById('filterProvince');
+        const selectCommune = document.getElementById('filterCommune');
+        const selectZone = document.getElementById('filterZone');
+        const selectColline = document.getElementById('filterColline');
+        const btnReset = document.getElementById('resetFilters');
+        
+        // Fonction pour parser les données
         function parseData(rawData, group) {
             if (!rawData || typeof rawData !== 'string' || rawData.trim() === '') return [];
             const points = rawData.split('@');
@@ -955,7 +897,6 @@
                 const detail = parts[5] || '';
                 if (isNaN(lat) || isNaN(lng)) continue;
                 
-                // Extraire les statistiques pour les collines
                 let stats = {};
                 if (group === 'group4' && detail) {
                     const membresMatch = detail.match(/👥 (\d+) membres/);
@@ -971,7 +912,6 @@
                     };
                 }
                 
-                // Extraire le type de groupe
                 let typeGroupe = null;
                 if (group === 'group4' && info) {
                     const typeMatch = info.match(/Type: (SLC|Fonctionnels)/i);
@@ -980,7 +920,6 @@
                     }
                 }
                 
-                // Extraire les noms de la hiérarchie
                 let zoneNom = '', communeNom = '', provinceNom = '';
                 if (group === 'group4' && info) {
                     const parts = info.split(' | ');
@@ -1004,7 +943,6 @@
                     provinceNom: provinceNom
                 };
                 
-                // Stocker les données pour les statistiques détaillées
                 if (group === 'group4') {
                     allMembresData.push(pointData);
                 }
@@ -1014,23 +952,489 @@
             return result;
         }
         
-        // Charger tous les points
-        const points1 = parseData(mesdonnees, 'group1');
-        const points2 = parseData(mesdonnees2, 'group2');
-        const points3 = parseData(mesdonnees3, 'group3');
-        const points4 = parseData(mesdonnees4, 'group4');
+        // Construction de la hiérarchie des données
+        function buildHierarchy() {
+            const provinces = allPoints.filter(p => p.group === 'group1');
+            const communes = allPoints.filter(p => p.group === 'group2');
+            const zones = allPoints.filter(p => p.group === 'group3');
+            const collines = allPoints.filter(p => p.group === 'group4');
+            
+            hierarchicalData.provinces = provinces.map(p => ({ id: p.id, name: p.title }));
+            
+            // Pour chaque province, trouver ses communes
+            provinces.forEach(province => {
+                const communesOfProvince = communes.filter(commune => {
+                    return collines.some(colline => 
+                        colline.info && colline.info.includes(commune.title) && 
+                        colline.info && colline.info.includes(province.title)
+                    );
+                });
+                hierarchicalData.communesByProvince.set(province.id, communesOfProvince.map(c => ({ id: c.id, name: c.title })));
+            });
+            
+            // Pour chaque commune, trouver ses zones
+            communes.forEach(commune => {
+                const zonesOfCommune = zones.filter(zone => {
+                    return collines.some(colline => 
+                        colline.info && colline.info.includes(zone.title) && 
+                        colline.info && colline.info.includes(commune.title)
+                    );
+                });
+                hierarchicalData.zonesByCommune.set(commune.id, zonesOfCommune.map(z => ({ id: z.id, name: z.title })));
+            });
+            
+            // Pour chaque zone, trouver ses collines
+            zones.forEach(zone => {
+                const collinesOfZone = collines.filter(colline => 
+                    colline.info && colline.info.includes(zone.title)
+                );
+                hierarchicalData.collinesByZone.set(zone.id, collinesOfZone.map(c => ({ id: c.id, name: c.title })));
+            });
+        }
         
-        allPoints = [...points1, ...points2, ...points3, ...points4];
+        // Remplir le select des provinces
+        function fillProvinces() {
+            selectProvince.innerHTML = '<option value="all">🌍 Toutes les provinces</option>';
+            hierarchicalData.provinces.forEach(p => {
+                selectProvince.innerHTML += `<option value="${p.id}">🏢 ${p.name}</option>`;
+            });
+            selectProvince.disabled = false;
+        }
         
-        // Compter les points par groupe
-        allPoints.forEach(p => {
-            if (groupCounts[p.group] !== undefined) groupCounts[p.group]++;
+        // Mettre à jour les communes selon la province sélectionnée
+        function updateCommunes(provinceId) {
+            selectCommune.innerHTML = '<option value="all">🏛️ Toutes les communes</option>';
+            selectZone.innerHTML = '<option value="all">📍 Toutes les zones</option>';
+            selectColline.innerHTML = '<option value="all">🏥 Toutes les collines</option>';
+            
+            selectCommune.disabled = true;
+            selectZone.disabled = true;
+            selectColline.disabled = true;
+            
+            if (provinceId !== 'all') {
+                const communes = hierarchicalData.communesByProvince.get(provinceId) || [];
+                if (communes.length > 0) {
+                    communes.forEach(c => {
+                        selectCommune.innerHTML += `<option value="${c.id}">🏛️ ${c.name}</option>`;
+                    });
+                    selectCommune.disabled = false;
+                }
+            } else {
+                // Si toutes les provinces, afficher toutes les communes
+                const allCommunes = allPoints.filter(p => p.group === 'group2');
+                if (allCommunes.length > 0) {
+                    allCommunes.forEach(c => {
+                        selectCommune.innerHTML += `<option value="${c.id}">🏛️ ${c.title}</option>`;
+                    });
+                    selectCommune.disabled = false;
+                }
+            }
+        }
+        
+        // Mettre à jour les zones selon la commune sélectionnée
+        function updateZones(communeId) {
+            selectZone.innerHTML = '<option value="all">📍 Toutes les zones</option>';
+            selectColline.innerHTML = '<option value="all">🏥 Toutes les collines</option>';
+            
+            selectZone.disabled = true;
+            selectColline.disabled = true;
+            
+            if (communeId !== 'all') {
+                const zones = hierarchicalData.zonesByCommune.get(communeId) || [];
+                if (zones.length > 0) {
+                    zones.forEach(z => {
+                        selectZone.innerHTML += `<option value="${z.id}">📍 ${z.name}</option>`;
+                    });
+                    selectZone.disabled = false;
+                }
+            } else {
+                // Si toutes les communes, afficher toutes les zones
+                const allZones = allPoints.filter(p => p.group === 'group3');
+                if (allZones.length > 0) {
+                    allZones.forEach(z => {
+                        selectZone.innerHTML += `<option value="${z.id}">📍 ${z.title}</option>`;
+                    });
+                    selectZone.disabled = false;
+                }
+            }
+        }
+        
+        // Mettre à jour les collines selon la zone sélectionnée
+        function updateCollines(zoneId) {
+            selectColline.innerHTML = '<option value="all">🏥 Toutes les collines</option>';
+            selectColline.disabled = true;
+            
+            if (zoneId !== 'all') {
+                const collines = hierarchicalData.collinesByZone.get(zoneId) || [];
+                if (collines.length > 0) {
+                    collines.forEach(c => {
+                        selectColline.innerHTML += `<option value="${c.id}">🏥 ${c.name}</option>`;
+                    });
+                    selectColline.disabled = false;
+                }
+            } else {
+                // Si toutes les zones, afficher toutes les collines
+                const allCollines = allPoints.filter(p => p.group === 'group4');
+                if (allCollines.length > 0) {
+                    allCollines.forEach(c => {
+                        selectColline.innerHTML += `<option value="${c.id}">🏥 ${c.title}</option>`;
+                    });
+                    selectColline.disabled = false;
+                }
+            }
+        }
+        
+        // Appliquer tous les filtres
+        function applyFilters() {
+            const provinceId = selectProvince.value;
+            const communeId = selectCommune.value;
+            const zoneId = selectZone.value;
+            const collineId = selectColline.value;
+            
+            let filteredPoints = [...allPoints];
+            
+            // Filtre par type de groupe
+            if (currentTypeFilter !== 'all') {
+                filteredPoints = filteredPoints.filter(p => {
+                    if (p.group === 'group4') {
+                        return p.typeGroupe === currentTypeFilter;
+                    }
+                    if (p.group === 'group1') {
+                        return allPoints.some(c => c.group === 'group4' && c.info && c.info.includes(p.title) && c.typeGroupe === currentTypeFilter);
+                    }
+                    if (p.group === 'group2') {
+                        return allPoints.some(c => c.group === 'group4' && c.info && c.info.includes(p.title) && c.typeGroupe === currentTypeFilter);
+                    }
+                    if (p.group === 'group3') {
+                        return allPoints.some(c => c.group === 'group4' && c.info && c.info.includes(p.title) && c.typeGroupe === currentTypeFilter);
+                    }
+                    return true;
+                });
+            }
+            
+            // Filtres hiérarchiques
+            if (collineId !== 'all') {
+                filteredPoints = filteredPoints.filter(p => p.group === 'group4' && p.id == collineId);
+            }
+            else if (zoneId !== 'all') {
+                const zone = allPoints.find(p => p.group === 'group3' && p.id == zoneId);
+                if (zone) {
+                    filteredPoints = filteredPoints.filter(p => 
+                        (p.group === 'group3' && p.id == zoneId) ||
+                        (p.group === 'group4' && p.info && p.info.includes(zone.title))
+                    );
+                }
+            }
+            else if (communeId !== 'all') {
+                const commune = allPoints.find(p => p.group === 'group2' && p.id == communeId);
+                if (commune) {
+                    filteredPoints = filteredPoints.filter(p => 
+                        (p.group === 'group2' && p.id == communeId) ||
+                        (p.group === 'group3' && p.info && p.info.includes(commune.title)) ||
+                        (p.group === 'group4' && p.info && p.info.includes(commune.title))
+                    );
+                }
+            }
+            else if (provinceId !== 'all') {
+                const province = allPoints.find(p => p.group === 'group1' && p.id == provinceId);
+                if (province) {
+                    filteredPoints = filteredPoints.filter(p => 
+                        (p.group === 'group1' && p.id == provinceId) ||
+                        (p.group === 'group2' && p.info && p.info.includes(province.title)) ||
+                        (p.group === 'group3' && p.info && p.info.includes(province.title)) ||
+                        (p.group === 'group4' && p.info && p.info.includes(province.title))
+                    );
+                }
+            }
+            
+            // Mettre à jour la carte
+            if (markersCluster) {
+                map.removeLayer(markersCluster);
+            }
+            
+            markersCluster = L.markerClusterGroup({
+                spiderfyOnMaxZoom: true,
+                showCoverageOnHover: false,
+                zoomToBoundsOnClick: true,
+                maxClusterRadius: 60,
+                iconCreateFunction: function(cluster) {
+                    const count = cluster.getChildCount();
+                    let size = 32;
+                    if (count >= 5 && count < 15) size = 42;
+                    else if (count >= 15) size = 52;
+                    return L.divIcon({
+                        html: `<div style="background: linear-gradient(135deg, #667eea, #764ba2); width: ${size}px; height: ${size}px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: ${size > 40 ? '16px' : '12px'};">${count}</div>`,
+                        className: 'custom-marker',
+                        iconSize: L.point(size, size),
+                        iconAnchor: L.point(size/2, size/2)
+                    });
+                }
+            });
+            
+            filteredPoints.forEach(point => {
+                markersCluster.addLayer(createMarker(point));
+            });
+            
+            map.addLayer(markersCluster);
+            
+            if (filteredPoints.length > 0) {
+                const bounds = markersCluster.getBounds();
+                if (bounds.isValid()) map.fitBounds(bounds, { padding: [50, 50] });
+            }
+            
+            // Mettre à jour les compteurs
+            const newCounts = { group1: 0, group2: 0, group3: 0, group4: 0 };
+            filteredPoints.forEach(p => { if (newCounts[p.group] !== undefined) newCounts[p.group]++; });
+            
+            if (document.getElementById('group1Count')) document.getElementById('group1Count').innerText = newCounts.group1;
+            if (document.getElementById('group2Count')) document.getElementById('group2Count').innerText = newCounts.group2;
+            if (document.getElementById('group3Count')) document.getElementById('group3Count').innerText = newCounts.group3;
+            if (document.getElementById('group4Count')) document.getElementById('group4Count').innerText = newCounts.group4;
+            document.getElementById('totalPointsDisplay').innerText = filteredPoints.length;
+        }
+        
+        // Réinitialiser tous les filtres
+        function resetAllFilters() {
+            selectProvince.value = 'all';
+            selectCommune.value = 'all';
+            selectZone.value = 'all';
+            selectColline.value = 'all';
+            selectCommune.disabled = true;
+            selectZone.disabled = true;
+            selectColline.disabled = true;
+            currentTypeFilter = 'all';
+            
+            const typeSelect = document.getElementById('typeGroupeSelect');
+            if (typeSelect) {
+                typeSelect.value = 'all';
+            }
+            
+            applyFilters();
+        }
+        
+        // Initialiser le filtre type de groupe
+        function initTypeGroupeSelect() {
+            const select = document.getElementById('typeGroupeSelect');
+            if (!select) return;
+            
+            const typesExistants = new Set();
+            allPoints.filter(p => p.group === 'group4').forEach(p => {
+                if (p.typeGroupe) {
+                    typesExistants.add(p.typeGroupe);
+                }
+            });
+            
+            const slcOption = select.querySelector('option[value="SLC"]');
+            const fonctionnelsOption = select.querySelector('option[value="Fonctionnels"]');
+            
+            if (slcOption && !typesExistants.has('SLC')) {
+                slcOption.disabled = true;
+                slcOption.textContent = '🏪 SLC (aucune donnée)';
+            }
+            if (fonctionnelsOption && !typesExistants.has('Fonctionnels')) {
+                fonctionnelsOption.disabled = true;
+                fonctionnelsOption.textContent = '⚙️ Fonctionnels (aucune donnée)';
+            }
+            
+            select.addEventListener('change', function() {
+                currentTypeFilter = this.value;
+                applyFilters();
+            });
+        }
+        
+        // Créer un marqueur
+        function createMarker(point) {
+            const config = groupConfig[point.group];
+            const iconHtml = `<div style="background: ${config.gradient}; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px ${config.color}; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer;">${config.icon}</div>`;
+            const icon = L.divIcon({ html: iconHtml, className: 'custom-marker', iconSize: [30, 30], popupAnchor: [0, -15] });
+            const marker = L.marker([point.lat, point.lng], { icon: icon });
+            
+            let buttonDetail = '';
+            if (point.group === 'group4') {
+                buttonDetail = `<button class="btn-detail" onclick="showDetails('${point.id}')">📊 Voir les détails statistiques</button>`;
+            }
+            
+            const popupContent = `
+                <div style="min-width: 280px;">
+                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; padding: 10px 12px; border-radius: 12px 12px 0 0;">
+                        ${config.icon} ${point.title}
+                    </div>
+                    <div style="padding: 12px;">
+                        <p><strong>🏷️ ID:</strong> ${point.id}</p>
+                        <p><strong>📝 Info:</strong> ${point.info || 'Non renseignée'}</p>
+                        ${point.detail ? `<p><strong>📊 Détail:</strong> ${point.detail}</p>` : ''}
+                        ${buttonDetail}
+                    </div>
+                    <div style="background: #f8f9fa; padding: 8px 12px; border-radius: 0 0 12px 12px; font-size: 11px; color: #666;">
+                        📍 ${point.lat.toFixed(6)}, ${point.lng.toFixed(6)}
+                    </div>
+                </div>
+            `;
+            marker.bindPopup(popupContent);
+            return marker;
+        }
+        
+        // Afficher les détails dans le modal
+        // Fonction pour afficher les détails dans le modal
+// Fonction pour afficher les détails dans le modal
+window.showDetails = function(collineId) {
+    const colline = allPoints.find(p => p.group === 'group4' && p.id == collineId);
+    if (!colline) return;
+    
+    // Récupérer toutes les collines de la même COMMUNE que la colline sélectionnée
+    const communeCollines = allMembresData.filter(c => c.communeNom === colline.communeNom);
+    
+    // Calculer les statistiques par zone au sein de cette commune
+    const zonesStats = new Map();
+    communeCollines.forEach(item => {
+        if (!zonesStats.has(item.zoneNom)) {
+            zonesStats.set(item.zoneNom, {
+                zone: item.zoneNom,
+                collineCount: 0,
+                nb_membres: 0,
+                nb_hommes: 0,
+                nb_femmes: 0,
+                nb_groupes: 0
+            });
+        }
+        const stats = zonesStats.get(item.zoneNom);
+        stats.collineCount++;
+        stats.nb_membres += item.stats.nb_membres;
+        stats.nb_hommes += item.stats.nb_hommes;
+        stats.nb_femmes += item.stats.nb_femmes;
+        stats.nb_groupes += item.stats.nb_groupes;
+    });
+    
+    // Générer le tableau des statistiques par zone
+    let tableRows = '';
+    let totalZones = 0, totalCollines = 0, totalMembres = 0, totalHommes = 0, totalFemmes = 0, totalGroupes = 0;
+    
+    zonesStats.forEach(stat => {
+        tableRows += `
+            <tr>
+                <td>${stat.zone}</td>
+                <td>${stat.collineCount}</td>
+                <td>${stat.nb_membres.toLocaleString()}</td>
+                <td>${stat.nb_hommes.toLocaleString()}</td>
+                <td>${stat.nb_femmes.toLocaleString()}</td>
+                <td>${stat.nb_groupes}</td>
+            </tr>
+        `;
+        totalZones++;
+        totalCollines += stat.collineCount;
+        totalMembres += stat.nb_membres;
+        totalHommes += stat.nb_hommes;
+        totalFemmes += stat.nb_femmes;
+        totalGroupes += stat.nb_groupes;
+    });
+    
+    // Ajouter la ligne totale
+    tableRows += `
+        <tr class="total-row">
+            <td><strong>TOTAL (${colline.communeNom})</strong></td>
+            <td><strong>${totalCollines}</strong></td>
+            <td><strong>${totalMembres.toLocaleString()}</strong></td>
+            <td><strong>${totalHommes.toLocaleString()}</strong></td>
+            <td><strong>${totalFemmes.toLocaleString()}</strong></td>
+            <td><strong>${totalGroupes}</strong></td>
+        </tr>
+    `;
+    
+    // Afficher les informations de la colline sélectionnée
+    document.getElementById('modalCollineInfo').innerHTML = `
+        <div class="colline-info-card">
+            <h6><i class="fa fa-map-marker"></i> Informations de la colline sélectionnée</h6>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Nom:</strong> ${colline.title}</p>
+                    <p><strong>Zone:</strong> ${colline.zoneNom}</p>
+                    <p><strong>Commune:</strong> ${colline.communeNom}</p>
+                    <p><strong>Province:</strong> ${colline.provinceNom}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Type de groupement:</strong> <span class="badge" style="background: ${colline.typeGroupe === 'SLC' ? '#3498db' : '#e67e22'}; color: white; padding: 3px 10px; border-radius: 20px;">${colline.typeGroupe || 'Non défini'}</span></p>
+                    <p><strong>Membres:</strong> ${colline.stats.nb_membres} | <strong>Hommes:</strong> ${colline.stats.nb_hommes} | <strong>Femmes:</strong> ${colline.stats.nb_femmes}</p>
+                    <p><strong>Groupes:</strong> ${colline.stats.nb_groupes}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="colline-info-card" style="margin-top: 15px;">
+            <h6><i class="fa fa-chart-bar"></i> Statistiques détaillées de la commune : ${colline.communeNom}</h6>
+            <p style="font-size: 12px; color: #666; margin-bottom: 10px;">👥 Répartition par zone d'intervention</p>
+            <div style="overflow-x: auto;">
+                <table class="stats-table" id="detailsTable">
+                    <thead>
+                        <tr>
+                            <th>Zone</th>
+                            <th>Collines</th>
+                            <th>Total bénéficiaires</th>
+                            <th>Hommes</th>
+                            <th>Femmes</th>
+                            <th>Groupes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tableRows}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('modalStatsTable').innerHTML = '';
+    
+    // Initialiser DataTable
+    setTimeout(() => {
+        if ($.fn.DataTable.isDataTable('#detailsTable')) {
+            $('#detailsTable').DataTable().destroy();
+        }
+        $('#detailsTable').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json'
+            },
+            pageLength: 10,
+            scrollX: true
         });
-        
-        console.log('Total points:', allPoints.length, groupCounts);
-        
-        // Mettre à jour l'affichage
-        document.getElementById('totalPointsDisplay').innerText = allPoints.length;
+    }, 100);
+    
+    $('#detailModal').modal('show');
+};
+        // Initialiser les marqueurs
+        function initMarkers() {
+            if (markersCluster) {
+                map.removeLayer(markersCluster);
+            }
+            markersCluster = L.markerClusterGroup({
+                spiderfyOnMaxZoom: true,
+                showCoverageOnHover: false,
+                zoomToBoundsOnClick: true,
+                maxClusterRadius: 60,
+                iconCreateFunction: function(cluster) {
+                    const count = cluster.getChildCount();
+                    let size = 32;
+                    if (count >= 5 && count < 15) size = 42;
+                    else if (count >= 15) size = 52;
+                    return L.divIcon({
+                        html: `<div style="background: linear-gradient(135deg, #667eea, #764ba2); width: ${size}px; height: ${size}px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: ${size > 40 ? '16px' : '12px'};">${count}</div>`,
+                        className: 'custom-marker',
+                        iconSize: L.point(size, size),
+                        iconAnchor: L.point(size/2, size/2)
+                    });
+                }
+            });
+            
+            allPoints.forEach(point => {
+                markersCluster.addLayer(createMarker(point));
+            });
+            
+            map.addLayer(markersCluster);
+            
+            if (allPoints.length > 0) {
+                const bounds = markersCluster.getBounds();
+                if (bounds.isValid()) map.fitBounds(bounds, { padding: [60, 60] });
+            }
+        }
         
         // Générer la légende dynamique
         function generateDynamicLegend() {
@@ -1093,9 +1497,70 @@
             }
         };
         
-        generateDynamicLegend();
+        window.flyToPoint = function(lat, lng) {
+            map.flyTo([lat, lng], 15, { duration: 1.5 });
+            setTimeout(() => {
+                L.popup().setLatLng([lat, lng]).setContent('📍 Point sélectionné').openOn(map);
+                setTimeout(() => map.closePopup(), 2000);
+            }, 1500);
+        };
         
-        // Générer les groupes dynamiquement
+        // Chargement principal
+        const points1 = parseData(mesdonnees, 'group1');
+        const points2 = parseData(mesdonnees2, 'group2');
+        const points3 = parseData(mesdonnees3, 'group3');
+        const points4 = parseData(mesdonnees4, 'group4');
+        
+        allPoints = [...points1, ...points2, ...points3, ...points4];
+        
+        allPoints.forEach(p => {
+            if (groupCounts[p.group] !== undefined) groupCounts[p.group]++;
+        });
+        
+        document.getElementById('totalPointsDisplay').innerText = allPoints.length;
+        
+        buildHierarchy();
+        fillProvinces();
+        updateCommunes('all');
+        generateDynamicLegend();
+        initMarkers();
+        initTypeGroupeSelect();
+        
+        // Événements des filtres
+        selectProvince.addEventListener('change', function() {
+            updateCommunes(this.value);
+            applyFilters();
+        });
+        
+        selectCommune.addEventListener('change', function() {
+            updateZones(this.value);
+            applyFilters();
+        });
+        
+        selectZone.addEventListener('change', function() {
+            updateCollines(this.value);
+            applyFilters();
+        });
+        
+        selectColline.addEventListener('change', function() {
+            applyFilters();
+        });
+        
+        if (btnReset) {
+            btnReset.addEventListener('click', resetAllFilters);
+        }
+        
+        // Gestion des groupes cards
+        document.querySelectorAll('.group-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const group = this.getAttribute('data-group');
+                if (group) {
+                    flyToGroup(group.replace('group', ''));
+                }
+            });
+        });
+        
+        // Rétablir les groupes cards si existants
         const groupsListDiv = document.getElementById('groupsList');
         if (groupsListDiv && allPoints.length > 0) {
             groupsListDiv.innerHTML = `
@@ -1160,12 +1625,21 @@
                     </div>
                 </div>
             `;
+            
+            document.querySelectorAll('.group-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const group = this.getAttribute('data-group');
+                    if (group) {
+                        flyToGroup(group.replace('group', ''));
+                    }
+                });
+            });
         }
         
         // Points récents
-        const recentPoints = allPoints.slice(-10).reverse();
         const pointsListDiv = document.getElementById('pointsList');
         if (pointsListDiv) {
+            const recentPoints = allPoints.slice(-10).reverse();
             pointsListDiv.innerHTML = recentPoints.map(point => `
                 <div class="point-item ${point.group}" onclick="flyToPoint(${point.lat}, ${point.lng})">
                     <div class="point-name">${point.groupIcon} ${point.title}</div>
@@ -1173,507 +1647,6 @@
                 </div>
             `).join('');
         }
-        
-        // Fonction pour créer un marqueur avec bouton détails
-        function createMarker(point) {
-            const config = groupConfig[point.group];
-            const iconHtml = `<div style="background: ${config.gradient}; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px ${config.color}; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer;">${config.icon}</div>`;
-            const icon = L.divIcon({ html: iconHtml, className: 'custom-marker', iconSize: [30, 30], popupAnchor: [0, -15] });
-            const marker = L.marker([point.lat, point.lng], { icon: icon });
-            
-            // Pour les collines, ajouter un bouton détails dans le popup
-            let buttonDetail = '';
-            if (point.group === 'group4') {
-                buttonDetail = `<button class="btn-detail" onclick="showDetails('${point.id}')">📊 Voir les détails statistiques</button>`;
-            }
-            
-            const popupContent = `
-                <div style="min-width: 280px;">
-                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; padding: 10px 12px; border-radius: 12px 12px 0 0;">
-                        ${config.icon} ${point.title}
-                    </div>
-                    <div style="padding: 12px;">
-                        <p><strong>🏷️ ID:</strong> ${point.id}</p>
-                        <p><strong>📝 Info:</strong> ${point.info || 'Non renseignée'}</p>
-                        ${point.detail ? `<p><strong>📊 Détail:</strong> ${point.detail}</p>` : ''}
-                        ${buttonDetail}
-                    </div>
-                    <div style="background: #f8f9fa; padding: 8px 12px; border-radius: 0 0 12px 12px; font-size: 11px; color: #666;">
-                        📍 ${point.lat.toFixed(6)}, ${point.lng.toFixed(6)}
-                    </div>
-                </div>
-            `;
-            marker.bindPopup(popupContent);
-            return marker;
-        }
-        
-        // Fonction pour afficher les détails dans le modal
-        window.showDetails = function(collineId) {
-            const colline = allPoints.find(p => p.group === 'group4' && p.id == collineId);
-            if (!colline) return;
-            
-            // Récupérer toutes les données de la même commune, zone, province
-            const communeData = allMembresData.filter(c => c.communeNom === colline.communeNom);
-            const zoneData = allMembresData.filter(c => c.zoneNom === colline.zoneNom);
-            const provinceData = allMembresData.filter(c => c.provinceNom === colline.provinceNom);
-            
-            // Calculer les totaux par commune
-            const communesStats = new Map();
-            allMembresData.forEach(item => {
-                if (!communesStats.has(item.communeNom)) {
-                    communesStats.set(item.communeNom, {
-                        commune: item.communeNom,
-                        zoneCount: 0,
-                        collineCount: 0,
-                        nb_membres: 0,
-                        nb_hommes: 0,
-                        nb_femmes: 0
-                    });
-                }
-                const stats = communesStats.get(item.communeNom);
-                stats.zoneCount = [...new Set(allMembresData.filter(c => c.communeNom === item.communeNom).map(c => c.zoneNom))].length;
-                stats.collineCount++;
-                stats.nb_membres += item.stats.nb_membres;
-                stats.nb_hommes += item.stats.nb_hommes;
-                stats.nb_femmes += item.stats.nb_femmes;
-            });
-            
-            // Préparer les lignes du tableau
-            let tableRows = '';
-            let totalZones = 0, totalCollines = 0, totalMembres = 0, totalHommes = 0, totalFemmes = 0;
-            
-            communesStats.forEach(stat => {
-                tableRows += `
-                    <tr>
-                        <td>${stat.commune}</td>
-                        <td>${stat.zoneCount}</td>
-                        <td>${stat.collineCount}</td>
-                        <td>-</td>
-                        <td>${stat.nb_membres.toLocaleString()}</td>
-                        <td>${stat.nb_hommes.toLocaleString()}</td>
-                        <td>${stat.nb_femmes.toLocaleString()}</td>
-                    </tr>
-                `;
-                totalZones += stat.zoneCount;
-                totalCollines += stat.collineCount;
-                totalMembres += stat.nb_membres;
-                totalHommes += stat.nb_hommes;
-                totalFemmes += stat.nb_femmes;
-            });
-            
-            // Ajouter la ligne totale
-            tableRows += `
-                <tr class="total-row" style="background: #e8e8e8; font-weight: 700;">
-                    <td><strong>TOTAL</strong></td>
-                    <td><strong>${totalZones}</strong></td>
-                    <td><strong>${totalCollines}</strong></td>
-                    <td><strong>-</strong></td>
-                    <td><strong>${totalMembres.toLocaleString()}</strong></td>
-                    <td><strong>${totalHommes.toLocaleString()}</strong></td>
-                    <td><strong>${totalFemmes.toLocaleString()}</strong></td>
-                </tr>
-            `;
-            
-            // Afficher les informations de la colline
-            document.getElementById('modalCollineInfo').innerHTML = `
-                <div class="colline-info-card">
-                    <h6><i class="fa fa-map-marker"></i> Colline sélectionnée</h6>
-                    <p><strong>Nom:</strong> ${colline.title}</p>
-                    <p><strong>Zone:</strong> ${colline.zoneNom}</p>
-                    <p><strong>Commune:</strong> ${colline.communeNom}</p>
-                    <p><strong>Province:</strong> ${colline.provinceNom}</p>
-                    <p><strong>Type de groupement:</strong> ${colline.typeGroupe || 'Non défini'}</p>
-                    <p><strong>Membres:</strong> ${colline.stats.nb_membres} | <strong>Hommes:</strong> ${colline.stats.nb_hommes} | <strong>Femmes:</strong> ${colline.stats.nb_femmes} | <strong>Groupes:</strong> ${colline.stats.nb_groupes}</p>
-                </div>
-            `;
-            
-            // Afficher le tableau des statistiques
-            document.getElementById('modalStatsTable').innerHTML = `
-                <h6 style="margin-bottom: 15px; color: #1a1a2e;">
-                    <i class="fa fa-table"></i> Statistiques par commune
-                </h6>
-                <div style="overflow-x: auto;">
-                    <table class="stats-table" id="detailsTable">
-                        <thead>
-                            <tr>
-                                <th>Commune</th>
-                                <th>Zones</th>
-                                <th>Collines</th>
-                                <th>Groupes SILC</th>
-                                <th>Total bénéficiaires</th>
-                                <th>Hommes</th>
-                                <th>Femmes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${tableRows}
-                        </tbody>
-                    </table>
-                </div>
-            `;
-            
-            // Initialiser DataTable
-            setTimeout(() => {
-                if ($.fn.DataTable.isDataTable('#detailsTable')) {
-                    $('#detailsTable').DataTable().destroy();
-                }
-                $('#detailsTable').DataTable({
-                    language: {
-                        url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json'
-                    },
-                    pageLength: 10,
-                    scrollX: true
-                });
-            }, 100);
-            
-            $('#detailModal').modal('show');
-        };
-        
-        // Initialiser les marqueurs
-        function initMarkers() {
-            if (markersCluster) {
-                map.removeLayer(markersCluster);
-            }
-            markersCluster = L.markerClusterGroup({
-                spiderfyOnMaxZoom: true,
-                showCoverageOnHover: false,
-                zoomToBoundsOnClick: true,
-                maxClusterRadius: 60,
-                iconCreateFunction: function(cluster) {
-                    const count = cluster.getChildCount();
-                    let size = 32;
-                    if (count >= 5 && count < 15) size = 42;
-                    else if (count >= 15) size = 52;
-                    return L.divIcon({
-                        html: `<div style="background: linear-gradient(135deg, #667eea, #764ba2); width: ${size}px; height: ${size}px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: ${size > 40 ? '16px' : '12px'};">${count}</div>`,
-                        className: 'custom-marker',
-                        iconSize: L.point(size, size),
-                        iconAnchor: L.point(size/2, size/2)
-                    });
-                }
-            });
-            
-            allPoints.forEach(point => {
-                markersCluster.addLayer(createMarker(point));
-            });
-            
-            map.addLayer(markersCluster);
-            
-            if (allPoints.length > 0) {
-                const bounds = markersCluster.getBounds();
-                if (bounds.isValid()) map.fitBounds(bounds, { padding: [60, 60] });
-            }
-        }
-        
-        initMarkers();
-        
-        // ==================== FILTRES ====================
-        
-        const selectProvince = document.getElementById('filterProvince');
-        const selectCommune = document.getElementById('filterCommune');
-        const selectZone = document.getElementById('filterZone');
-        const selectColline = document.getElementById('filterColline');
-        const btnReset = document.getElementById('resetFilters');
-        
-        provincesList = allPoints.filter(p => p.group === 'group1').map(p => ({ id: p.id, name: p.title }));
-        
-        function fillProvinces() {
-            selectProvince.innerHTML = '<option value="all">🌍 Toutes les provinces</option>';
-            provincesList.forEach(p => {
-                selectProvince.innerHTML += `<option value="${p.id}">🏢 ${p.name}</option>`;
-            });
-            selectProvince.disabled = false;
-        }
-        
-        function updateCommunes(provinceId) {
-            selectCommune.innerHTML = '<option value="all">🏛️ Toutes les communes</option>';
-            selectCommune.disabled = true;
-            selectZone.innerHTML = '<option value="all">📍 Toutes les zones</option>';
-            selectZone.disabled = true;
-            selectColline.innerHTML = '<option value="all">🏥 Toutes les collines</option>';
-            selectColline.disabled = true;
-            
-            if (provinceId === 'all') {
-                communesList = allPoints.filter(p => p.group === 'group2').map(p => ({ id: p.id, name: p.title }));
-            } else {
-                communesList = [];
-                allPoints.filter(p => p.group === 'group2').forEach(commune => {
-                    const hasZonesWithData = allPoints.some(z => z.group === 'group3' && z.info.includes(commune.title));
-                    if (hasZonesWithData) {
-                        communesList.push({ id: commune.id, name: commune.title });
-                    }
-                });
-            }
-            
-            if (communesList.length > 0) {
-                selectCommune.disabled = false;
-                communesList.forEach(c => {
-                    selectCommune.innerHTML += `<option value="${c.id}">🏛️ ${c.name}</option>`;
-                });
-            } else {
-                selectCommune.innerHTML = '<option value="all">❌ Aucune commune</option>';
-            }
-        }
-        
-        function updateZones(communeId) {
-            selectZone.innerHTML = '<option value="all">📍 Toutes les zones</option>';
-            selectZone.disabled = true;
-            selectColline.innerHTML = '<option value="all">🏥 Toutes les collines</option>';
-            selectColline.disabled = true;
-            
-            if (communeId === 'all') {
-                zonesList = allPoints.filter(p => p.group === 'group3').map(p => ({ id: p.id, name: p.title }));
-            } else {
-                const commune = allPoints.find(p => p.group === 'group2' && p.id == communeId);
-                if (commune) {
-                    zonesList = allPoints.filter(p => p.group === 'group3' && p.info.includes(commune.title)).map(p => ({ id: p.id, name: p.title }));
-                } else {
-                    zonesList = [];
-                }
-            }
-            
-            if (zonesList.length > 0) {
-                selectZone.disabled = false;
-                zonesList.forEach(z => {
-                    selectZone.innerHTML += `<option value="${z.id}">📍 ${z.name}</option>`;
-                });
-            } else {
-                selectZone.innerHTML = '<option value="all">❌ Aucune zone</option>';
-            }
-        }
-        
-        function updateCollines(zoneId) {
-            selectColline.innerHTML = '<option value="all">🏥 Toutes les collines</option>';
-            selectColline.disabled = true;
-            
-            if (zoneId === 'all') {
-                collinesList = allPoints.filter(p => p.group === 'group4').map(p => ({ id: p.id, name: p.title }));
-            } else {
-                const zone = allPoints.find(p => p.group === 'group3' && p.id == zoneId);
-                if (zone) {
-                    collinesList = allPoints.filter(p => p.group === 'group4' && p.info.includes(zone.title)).map(p => ({ id: p.id, name: p.title }));
-                } else {
-                    collinesList = [];
-                }
-            }
-            
-            if (collinesList.length > 0) {
-                selectColline.disabled = false;
-                collinesList.forEach(c => {
-                    selectColline.innerHTML += `<option value="${c.id}">🏥 ${c.name}</option>`;
-                });
-            } else {
-                selectColline.innerHTML = '<option value="all">❌ Aucune colline</option>';
-            }
-        }
-        
-        function applyFilters() {
-            const provinceId = selectProvince.value;
-            const communeId = selectCommune.value;
-            const zoneId = selectZone.value;
-            const collineId = selectColline.value;
-            
-            let filteredPoints = [...allPoints];
-            
-            // Filtre par type de groupe
-            if (currentTypeFilter !== 'all') {
-                filteredPoints = filteredPoints.filter(p => {
-                    if (p.group === 'group4') {
-                        return p.typeGroupe === currentTypeFilter;
-                    }
-                    if (p.group === 'group1') {
-                        return allPoints.some(c => c.group === 'group4' && c.info && c.info.includes(p.title) && c.typeGroupe === currentTypeFilter);
-                    }
-                    if (p.group === 'group2') {
-                        return allPoints.some(c => c.group === 'group4' && c.info && c.info.includes(p.title) && c.typeGroupe === currentTypeFilter);
-                    }
-                    if (p.group === 'group3') {
-                        return allPoints.some(c => c.group === 'group4' && c.info && c.info.includes(p.title) && c.typeGroupe === currentTypeFilter);
-                    }
-                    return true;
-                });
-            }
-            
-            if (collineId !== 'all') {
-                filteredPoints = filteredPoints.filter(p => p.group === 'group4' && p.id == collineId);
-            }
-            else if (zoneId !== 'all') {
-                const zone = allPoints.find(p => p.group === 'group3' && p.id == zoneId);
-                if (zone) {
-                    filteredPoints = filteredPoints.filter(p => 
-                        (p.group === 'group3' && p.id == zoneId) ||
-                        (p.group === 'group4' && p.info && p.info.includes(zone.title))
-                    );
-                }
-            }
-            else if (communeId !== 'all') {
-                const commune = allPoints.find(p => p.group === 'group2' && p.id == communeId);
-                if (commune) {
-                    filteredPoints = filteredPoints.filter(p => 
-                        (p.group === 'group2' && p.id == communeId) ||
-                        (p.group === 'group3' && p.info && p.info.includes(commune.title)) ||
-                        (p.group === 'group4' && p.info && p.info.includes(commune.title))
-                    );
-                }
-            }
-            else if (provinceId !== 'all') {
-                const province = allPoints.find(p => p.group === 'group1' && p.id == provinceId);
-                if (province) {
-                    filteredPoints = filteredPoints.filter(p => 
-                        (p.group === 'group1' && p.id == provinceId) ||
-                        (p.group === 'group4' && p.info && p.info.includes(province.title))
-                    );
-                }
-            }
-            
-            if (markersCluster) {
-                map.removeLayer(markersCluster);
-            }
-            
-            markersCluster = L.markerClusterGroup({
-                spiderfyOnMaxZoom: true,
-                showCoverageOnHover: false,
-                zoomToBoundsOnClick: true,
-                maxClusterRadius: 60,
-                iconCreateFunction: function(cluster) {
-                    const count = cluster.getChildCount();
-                    let size = 32;
-                    if (count >= 5 && count < 15) size = 42;
-                    else if (count >= 15) size = 52;
-                    return L.divIcon({
-                        html: `<div style="background: linear-gradient(135deg, #667eea, #764ba2); width: ${size}px; height: ${size}px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: ${size > 40 ? '16px' : '12px'};">${count}</div>`,
-                        className: 'custom-marker',
-                        iconSize: L.point(size, size),
-                        iconAnchor: L.point(size/2, size/2)
-                    });
-                }
-            });
-            
-            filteredPoints.forEach(point => {
-                markersCluster.addLayer(createMarker(point));
-            });
-            
-            map.addLayer(markersCluster);
-            
-            if (filteredPoints.length > 0) {
-                const bounds = markersCluster.getBounds();
-                if (bounds.isValid()) map.fitBounds(bounds, { padding: [50, 50] });
-            }
-            
-            const newCounts = { group1: 0, group2: 0, group3: 0, group4: 0 };
-            filteredPoints.forEach(p => { if (newCounts[p.group] !== undefined) newCounts[p.group]++; });
-            
-            if (document.getElementById('group1Count')) document.getElementById('group1Count').innerText = newCounts.group1;
-            if (document.getElementById('group2Count')) document.getElementById('group2Count').innerText = newCounts.group2;
-            if (document.getElementById('group3Count')) document.getElementById('group3Count').innerText = newCounts.group3;
-            if (document.getElementById('group4Count')) document.getElementById('group4Count').innerText = newCounts.group4;
-            document.getElementById('totalPointsDisplay').innerText = filteredPoints.length;
-            
-            const pointsRecents = filteredPoints.slice(-10).reverse();
-            if (pointsListDiv) {
-                pointsListDiv.innerHTML = pointsRecents.map(point => `
-                    <div class="point-item ${point.group}" onclick="flyToPoint(${point.lat}, ${point.lng})">
-                        <div class="point-name">${point.groupIcon} ${point.title}</div>
-                        <div class="point-coord">📌 ${point.lat.toFixed(5)}, ${point.lng.toFixed(5)}</div>
-                    </div>
-                `).join('');
-            }
-        }
-        
-        function resetAllFilters() {
-            selectProvince.value = 'all';
-            selectCommune.value = 'all';
-            selectZone.value = 'all';
-            selectColline.value = 'all';
-            selectCommune.disabled = true;
-            selectZone.disabled = true;
-            selectColline.disabled = true;
-            currentTypeFilter = 'all';
-            
-            // Réinitialiser le select type groupe
-            const typeSelect = document.getElementById('typeGroupeSelect');
-            if (typeSelect) {
-                typeSelect.value = 'all';
-            }
-            
-            applyFilters();
-        }
-        
-        // Initialisation du select pour le filtre type de groupe
-        function initTypeGroupeSelect() {
-            const select = document.getElementById('typeGroupeSelect');
-            if (!select) return;
-            
-            // Vérifier quels types existent dans les données
-            const typesExistants = new Set();
-            allPoints.filter(p => p.group === 'group4').forEach(p => {
-                if (p.typeGroupe) {
-                    typesExistants.add(p.typeGroupe);
-                }
-            });
-            
-            // Activer/désactiver les options selon les données
-            const slcOption = select.querySelector('option[value="SLC"]');
-            const fonctionnelsOption = select.querySelector('option[value="Fonctionnels"]');
-            
-            if (slcOption && !typesExistants.has('SLC')) {
-                slcOption.disabled = true;
-                slcOption.textContent = '🏪 SLC (aucune donnée)';
-            }
-            if (fonctionnelsOption && !typesExistants.has('Fonctionnels')) {
-                fonctionnelsOption.disabled = true;
-                fonctionnelsOption.textContent = '⚙️ Fonctionnels (aucune donnée)';
-            }
-            
-            select.addEventListener('change', function() {
-                currentTypeFilter = this.value;
-                applyFilters();
-            });
-        }
-        
-        fillProvinces();
-        updateCommunes('all');
-        
-        selectProvince.addEventListener('change', function() {
-            updateCommunes(this.value);
-            applyFilters();
-        });
-        
-        selectCommune.addEventListener('change', function() {
-            updateZones(this.value);
-            applyFilters();
-        });
-        
-        selectZone.addEventListener('change', function() {
-            updateCollines(this.value);
-            applyFilters();
-        });
-        
-        selectColline.addEventListener('change', function() {
-            applyFilters();
-        });
-        
-        if (btnReset) {
-            btnReset.addEventListener('click', resetAllFilters);
-        }
-        
-        document.querySelectorAll('.group-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const group = this.getAttribute('data-group');
-                flyToGroup(group.replace('group', ''));
-            });
-        });
-        
-        window.flyToPoint = function(lat, lng) {
-            map.flyTo([lat, lng], 15, { duration: 1.5 });
-            setTimeout(() => {
-                L.popup().setLatLng([lat, lng]).setContent('📍 Point sélectionné').openOn(map);
-                setTimeout(() => map.closePopup(), 2000);
-            }, 1500);
-        };
-        
-        // Initialiser le filtre type groupe
-        initTypeGroupeSelect();
         
         console.log('✅ Carte initialisée avec', allPoints.length, 'points');
     </script>
