@@ -37,28 +37,43 @@
                             <div class="table-responsive">
                                 <table id="membresTable" class="table table-bordered table-hover">
                                     <thead class="table-light">
-                                        <tr>
-                                            <th>Commune</th>
-                                            <th>Zone</th>
-                                            <th>Colline</th>
-                                            <th>Groupes fonctionnels</th>
-                                            <th>Membres inscrits</th>
-                                            <th>Hommes</th>
-                                            <th>Femmes</th>
-                                            <th>Type de groupe</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
+    <tr>
+        <th>Commune</th>
+        <th>Zone</th>
+        <th>Colline</th>
+        <th>Description</th>
+        <th>Membres inscrits</th>
+        <th>Hommes</th>
+        <th>Femmes</th>
+        <th>Structures</th>
+        <th>Type de structures</th>
+        <th>Actions</th>
+    </tr>
+</thead>
                                     <tbody>
                                         <?php foreach ($membres as $m): ?>
                                         <tr>
                                             <td><?= esc($m['COMMUNE_NAME'] ?? '-') ?></td>
                                             <td><?= esc($m['ZONE_NAME'] ?? '-') ?></td>
                                             <td><?= esc($m['COLLINE_NAME'] ?? '-') ?></td>
-                                            <td><?= esc($m['NB_GROUPE_FONCTIONNELS'] ?? 0) ?></td>
+                                            <td class="description-cell">
+                                                <?php if (!empty($m['DESCRIPTION'])): ?>
+                                                    <?php 
+                                                    $description = strip_tags($m['DESCRIPTION']);
+                                                    $truncated = mb_substr($description, 0, 100);
+                                                    ?>
+                                                    <span class="description-preview"><?= nl2br(esc($truncated)) ?></span>
+                                                    <?php if (mb_strlen($description) > 100): ?>
+                                                        <a href="#" class="show-more-link" data-fulltext="<?= esc($description) ?>" style="color: #007bff; font-size: 12px;">... voir plus</a>
+                                                    <?php endif ?>
+                                                <?php else: ?>
+                                                    <span class="text-muted">Aucune description</span>
+                                                <?php endif ?>
+                                            </td>
                                             <td><?= esc($m['NB_MEMBRE_INSCRITS'] ?? 0) ?></td>
                                             <td><?= esc($m['NOMBRE_HOMME'] ?? 0) ?></td>
                                             <td><?= esc($m['NOMBRE_FEMME'] ?? 0) ?></td>
+                                            <td><?= esc($m['NB_GROUPE'] ?? 0) ?></td>
                                             <td>
                                                 <?php if (!empty($m['TYPE_GROUPE'])): ?>
                                                     <span class="badge badge-primary"><?= esc($m['TYPE_GROUPE']) ?></span>
@@ -66,7 +81,7 @@
                                                     <span class="badge badge-secondary">Non défini</span>
                                                 <?php endif ?>
                                             </td>
-                                            <td>
+                                            <td class="text-center">
                                                 <div class="dropdown">
                                                     <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
                                                         <i class="fa fa-cog"></i> Actions
@@ -81,8 +96,8 @@
                                                         </a>
                                                     </div>
                                                 </div>
-                                            </td>
-                                        </tr>
+                                              </td>
+                                         </tr>
                                         <?php endforeach ?>
                                     </tbody>
                                 </table>
@@ -136,20 +151,52 @@
         </div>
     </div>
 
+    <!-- Modal pour afficher la description complète -->
+    <div class="modal fade" id="descriptionModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="fa fa-file-text-o"></i> Description complète
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+                    <div id="fullDescriptionText" style="white-space: pre-wrap; word-wrap: break-word; line-height: 1.6;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i class="fa fa-times"></i> Fermer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
     $(document).ready(function() {
         $('.content-wrapper').css('min-height', $(window).height() - 100);
         
+        // Initialisation de DataTable
         $("#membresTable").DataTable({
             "order": [[0, 'desc']],
             "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tous"]],
             "pageLength": 10,
             "scrollX": true,
             "autoWidth": false,
-            "columnDefs": [{ 
-                "targets": [8],
-                "orderable": false 
-            }],
+            "columnDefs": [
+                { 
+                    "targets": [9],  // Colonne Actions
+                    "orderable": false 
+                },
+                { 
+                    "targets": [3],  // Colonne Description
+                    "orderable": true,
+                    "width": "250px"
+                }
+            ],
             "language": {
                 "sProcessing": "Traitement en cours...",
                 "sSearch": "Rechercher&nbsp;:",
@@ -166,7 +213,26 @@
                 }
             }
         });
+
+        // Gestionnaire pour afficher la description complète dans le modal
+        $(document).on('click', '.show-more-link', function(e) {
+            e.preventDefault();
+            var fullText = $(this).data('fulltext');
+            $('#fullDescriptionText').html(escapeHtml(fullText).replace(/\n/g, '<br>'));
+            $('#descriptionModal').modal('show');
+        });
     });
+
+    // Fonction pour échapper le HTML
+    function escapeHtml(text) {
+        if (!text) return '';
+        return text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
 
     $(window).resize(function() {
         $('.content-wrapper').css('min-height', $(window).height() - 100);
@@ -221,6 +287,62 @@
         }
         .modal-header.bg-danger {
             background-color: #dc3545 !important;
+        }
+        .modal-header.bg-primary {
+            background-color: #007bff !important;
+        }
+        
+        /* Styles pour la colonne description */
+        .description-cell {
+            max-width: 300px;
+            min-width: 200px;
+            white-space: normal;
+            word-wrap: break-word;
+            line-height: 1.4;
+            font-size: 12px;
+            padding: 8px;
+        }
+        
+        .description-preview {
+            display: inline;
+            color: #333;
+        }
+        
+        .show-more-link {
+            display: inline-block;
+            margin-top: 3px;
+            font-size: 11px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .show-more-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Style pour le modal de description */
+        #fullDescriptionText {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .description-cell {
+                max-width: 200px;
+                min-width: 150px;
+                font-size: 11px;
+            }
+            
+            .table thead th {
+                font-size: 12px;
+            }
         }
     </style>
 

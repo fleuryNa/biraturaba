@@ -21,12 +21,12 @@ class Carto extends BaseController
             SELECT 
                 -- Infos membres_inscrits
                 mi.ID_MEMBRES as membres_id,
-                mi.NB_GROUPE_FONCTIONNELS as nb_groupes_fonctionnels,
+                mi.NB_GROUPE as nb_structures,
                 mi.NB_MEMBRE_INSCRITS as nb_membres,
                 mi.NOMBRE_HOMME as nb_hommes,
                 mi.NOMBRE_FEMME as nb_femmes,
                 mi.ID_TYPE_GROUPE,
-                tg.DESC_GROUPE as type_groupe_nom,
+                tg.DESC_GROUPE as type_structure_nom,
                 
                 -- Infos collines
                 c.COLLINE_ID,
@@ -140,7 +140,6 @@ class Carto extends BaseController
         
         // 4. Données des collines avec membres - GESTION DES COORDONNÉES INVALIDES
         $collines = [];
-        $type_groupes_stats = []; // Pour les statistiques par type de groupe
         
         foreach ($membres_data as $row) {
             $lat = $row['colline_lat'];
@@ -175,223 +174,118 @@ class Carto extends BaseController
                 }
             }
             
-            $type_groupe_nom = $row['type_groupe_nom'] ?? 'Non défini';
-            
-            // Statistiques par type de groupe
-            $id_type = $row['ID_TYPE_GROUPE'] ?? 0;
-            if (!isset($type_groupes_stats[$id_type])) {
-                $type_groupes_stats[$id_type] = [
-                    'id' => $id_type,
-                    'nom' => $type_groupe_nom,
-                    'nb_sites' => 0,
-                    'nb_membres' => 0,
-                    'nb_hommes' => 0,
-                    'nb_femmes' => 0,
-                    'nb_groupes' => 0
-                ];
-            }
-            $type_groupes_stats[$id_type]['nb_sites']++;
-            $type_groupes_stats[$id_type]['nb_membres'] += $row['nb_membres'];
-            $type_groupes_stats[$id_type]['nb_hommes'] += $row['nb_hommes'];
-            $type_groupes_stats[$id_type]['nb_femmes'] += $row['nb_femmes'];
-            $type_groupes_stats[$id_type]['nb_groupes'] += $row['nb_groupes_fonctionnels'];
-            
             $collines[] = [
                 'id' => $row['membres_id'],
                 'COLLINE_ID' => $row['COLLINE_ID'],
                 'nom' => $row['colline_nom'],
-                'lat' => $lat,
-                'lng' => $lng,
+                'lat' => (float)$lat,
+                'lng' => (float)$lng,
                 'coord_modifiee' => $coord_modifiee,
-                'id_type_groupe' => $row['ID_TYPE_GROUPE'] ?? 0,
-                'type_groupe_nom' => $type_groupe_nom,
+                'type_structure_nom' => $row['type_structure_nom'] ?? 'Non défini',
                 'zone_nom' => $row['zone_nom'],
                 'zone_id' => $row['ZONE_ID'],
                 'commune_nom' => $row['commune_nom'],
                 'commune_id' => $row['COMMUNE_ID'],
                 'province_nom' => $row['province_nom'],
                 'province_id' => $row['PROVINCE_ID'],
-                'nb_membres' => $row['nb_membres'],
-                'nb_hommes' => $row['nb_hommes'],
-                'nb_femmes' => $row['nb_femmes'],
-                'nb_groupes_fonctionnels' => $row['nb_groupes_fonctionnels']
+                'nb_membres' => (int)$row['nb_membres'],
+                'nb_hommes' => (int)$row['nb_hommes'],
+                'nb_femmes' => (int)$row['nb_femmes'],
+                'nb_structures' => (int)$row['nb_structures']
             ];
         }
 
         // ==================== CONSTRUCTION DES DONNEES POUR LA VUE ====================
-        $mesdonnees = "";   // Groupe 1 - Provinces
-        $mesdonnees2 = "";  // Groupe 2 - Communes
-        $mesdonnees3 = "";  // Groupe 3 - Zones
-        $mesdonnees4 = "";  // Groupe 4 - Collines
-        $points = [];
+        $provinces_list = [];
+        $communes_list = [];
+        $zones_list = [];
+        $collines_list = [];
         
-        $total_membres = 0;
-        $total_hommes = 0;
-        $total_femmes = 0;
-        $total_groupes = 0;
-        $total_sites = count($collines);
-        $total_coords_modifiees = 0;
-
-        // Construction du message pour les provinces (groupe 1)
         foreach ($provinces as $province) {
-            $lat = ($province['lat'] != -1 && !empty($province['lat'])) ? floatval($province['lat']) : -3.38;
-            $lng = ($province['lng'] != -1 && !empty($province['lng'])) ? floatval($province['lng']) : 29.36;
+            $lat = ($province['lat'] != -1 && !empty($province['lat'])) ? (float)$province['lat'] : -3.38;
+            $lng = ($province['lng'] != -1 && !empty($province['lng'])) ? (float)$province['lng'] : 29.36;
             
-            $info = "🏢 " . $province['nb_communes'] . " communes";
-            $detail = "Siège provincial";
-            
-            $formatted = $province['id'] . "<>" . $province['nom'] . "<>" . $lat . "<>" . $lng . "<>" . $info . "<>" . $detail;
-            $mesdonnees .= ($mesdonnees ? "@" : "") . $formatted;
-            
-            $points[] = [
-                'groupe' => 1,
+            $provinces_list[] = [
                 'id' => $province['id'],
                 'nom' => $province['nom'],
                 'lat' => $lat,
                 'lng' => $lng,
-                'icon' => '🏢',
-                'info' => $info,
-                'detail' => $detail
+                'info' => "🏢 " . $province['nb_communes'] . " communes",
+                'detail' => "Siège provincial"
             ];
         }
 
-        // Construction du message pour les communes (groupe 2)
         foreach ($communes as $commune) {
-            $lat = ($commune['lat'] != -1 && !empty($commune['lat'])) ? floatval($commune['lat']) : -3.38;
-            $lng = ($commune['lng'] != -1 && !empty($commune['lng'])) ? floatval($commune['lng']) : 29.36;
+            $lat = ($commune['lat'] != -1 && !empty($commune['lat'])) ? (float)$commune['lat'] : -3.38;
+            $lng = ($commune['lng'] != -1 && !empty($commune['lng'])) ? (float)$commune['lng'] : 29.36;
             
-            $info = "🏛️ " . $commune['province_nom'];
-            $detail = "Chef-lieu de commune";
-            
-            $formatted = $commune['id'] . "<>" . $commune['nom'] . "<>" . $lat . "<>" . $lng . "<>" . $info . "<>" . $detail;
-            $mesdonnees2 .= ($mesdonnees2 ? "@" : "") . $formatted;
-            
-            $points[] = [
-                'groupe' => 2,
+            $communes_list[] = [
                 'id' => $commune['id'],
                 'nom' => $commune['nom'],
                 'lat' => $lat,
                 'lng' => $lng,
-                'icon' => '🏛️',
-                'info' => $info,
-                'detail' => $detail,
+                'info' => "🏛️ " . $commune['province_nom'],
+                'detail' => "Chef-lieu de commune",
                 'province_id' => $commune['province_id']
             ];
         }
 
-        // Construction du message pour les zones (groupe 3)
         foreach ($zones as $zone) {
-            $lat = ($zone['lat'] != -1 && $zone['lat'] != 2 && !empty($zone['lat'])) ? floatval($zone['lat']) : -3.38;
-            $lng = ($zone['lng'] != -1 && $zone['lng'] != 2 && !empty($zone['lng'])) ? floatval($zone['lng']) : 29.36;
+            $lat = ($zone['lat'] != -1 && $zone['lat'] != 2 && !empty($zone['lat'])) ? (float)$zone['lat'] : -3.38;
+            $lng = ($zone['lng'] != -1 && $zone['lng'] != 2 && !empty($zone['lng'])) ? (float)$zone['lng'] : 29.36;
             
-            $info = "📍 " . $zone['commune_nom'];
-            $detail = "Zone de regroupement";
-            
-            $formatted = $zone['id'] . "<>" . $zone['nom'] . "<>" . $lat . "<>" . $lng . "<>" . $info . "<>" . $detail;
-            $mesdonnees3 .= ($mesdonnees3 ? "@" : "") . $formatted;
-            
-            $points[] = [
-                'groupe' => 3,
+            $zones_list[] = [
                 'id' => $zone['id'],
                 'nom' => $zone['nom'],
                 'lat' => $lat,
                 'lng' => $lng,
-                'icon' => '📍',
-                'info' => $info,
-                'detail' => $detail,
+                'info' => "📍 " . $zone['commune_nom'],
+                'detail' => "Zone de regroupement",
                 'commune_id' => $zone['commune_id']
             ];
         }
 
-        // Construction du message pour les collines avec membres (groupe 4)
         foreach ($collines as $colline) {
-            $lat = floatval($colline['lat']);
-            $lng = floatval($colline['lng']);
-            
-            $info = "🏥 " . $colline['zone_nom'] . " | " . $colline['commune_nom'] . " | " . $colline['province_nom'];
-            // Ajouter l'icône du type de groupe dans l'info
-            $type_icon = "";
-            if ($colline['type_groupe_nom'] == 'SLC') {
-                $type_icon = " 🏪";
-            } elseif ($colline['type_groupe_nom'] == 'Fonctionnels') {
-                $type_icon = " ⚙️";
-            }
-            $info .= " | 📌 Type: " . $colline['type_groupe_nom'] . $type_icon;
-            
-            // Ajouter un indicateur si les coordonnées ont été modifiées
-            if ($colline['coord_modifiee']) {
-                $info .= " | ⚠️ Position estimée";
-                $total_coords_modifiees++;
-            }
-            $detail = "👥 " . $colline['nb_membres'] . " membres | 👨 " . $colline['nb_hommes'] . " H | 👩 " . $colline['nb_femmes'] . " F | 📊 " . $colline['nb_groupes_fonctionnels'] . " groupes";
-            
-            $formatted = $colline['id'] . "<>" . $colline['nom'] . "<>" . $lat . "<>" . $lng . "<>" . $info . "<>" . $detail;
-            $mesdonnees4 .= ($mesdonnees4 ? "@" : "") . $formatted;
-            
-            $points[] = [
-                'groupe' => 4,
+            $collines_list[] = [
                 'id' => $colline['id'],
-                'colline_id' => $colline['COLLINE_ID'],
+                'COLLINE_ID' => $colline['COLLINE_ID'],
                 'nom' => $colline['nom'],
-                'lat' => $lat,
-                'lng' => $lng,
-                'icon' => '🏥',
-                'info' => $info,
-                'detail' => $detail,
-                'coord_modifiee' => $colline['coord_modifiee'],
-                'id_type_groupe' => $colline['id_type_groupe'],
-                'type_groupe_nom' => $colline['type_groupe_nom'],
-                'zone_id' => $colline['zone_id'],
-                'commune_id' => $colline['commune_id'],
-                'province_id' => $colline['province_id'],
+                'lat' => $colline['lat'],
+                'lng' => $colline['lng'],
+                'info' => "🏥 " . $colline['zone_nom'] . " | " . $colline['commune_nom'] . " | " . $colline['province_nom'] . " | 📌 Type: " . $colline['type_structure_nom'],
+                'detail' => "👥 " . $colline['nb_membres'] . " membres | 👨 " . $colline['nb_hommes'] . " H | 👩 " . $colline['nb_femmes'] . " F | 📊 " . $colline['nb_structures'] . " structures",
+                'type_structure_nom' => $colline['type_structure_nom'],
+                'zone_nom' => $colline['zone_nom'],
+                'commune_nom' => $colline['commune_nom'],
+                'province_nom' => $colline['province_nom'],
                 'nb_membres' => $colline['nb_membres'],
                 'nb_hommes' => $colline['nb_hommes'],
                 'nb_femmes' => $colline['nb_femmes'],
-                'nb_groupes' => $colline['nb_groupes_fonctionnels']
+                'nb_structures' => $colline['nb_structures']
             ];
-            
-            $total_membres += $colline['nb_membres'];
-            $total_hommes += $colline['nb_hommes'];
-            $total_femmes += $colline['nb_femmes'];
-            $total_groupes += $colline['nb_groupes_fonctionnels'];
-        }
-
-        // Nettoyer les statistiques des types de groupe (enlever l'index 0 si pas de type)
-        $type_groupes_stats_clean = [];
-        foreach ($type_groupes_stats as $tg) {
-            if ($tg['id'] > 0) {
-                $type_groupes_stats_clean[] = $tg;
-            }
         }
 
         $data = [
             'title' => 'Cartographie',
             'pageTitle' => 'Carte des zones d intervention',
-            'mesdonnees' => $mesdonnees,
-            'mesdonnees2' => $mesdonnees2,
-            'mesdonnees3' => $mesdonnees3,
-            'mesdonnees4' => $mesdonnees4,
-            'points' => $points,
+            'provinces' => json_encode($provinces_list),
+            'communes' => json_encode($communes_list),
+            'zones' => json_encode($zones_list),
+            'collines' => json_encode($collines_list),
             'stats' => [
-                'total_sites' => $total_sites,
-                'total_membres' => $total_membres,
-                'total_hommes' => $total_hommes,
-                'total_femmes' => $total_femmes,
-                'total_groupes' => $total_groupes,
-                'total_coords_modifiees' => $total_coords_modifiees
-            ],
-            'type_groupes_stats' => $type_groupes_stats_clean
+                'total_provinces' => count($provinces_list),
+                'total_communes' => count($communes_list),
+                'total_zones' => count($zones_list),
+                'total_sites' => count($collines_list),
+                'total_membres' => array_sum(array_column($collines_list, 'nb_membres')),
+                'total_hommes' => array_sum(array_column($collines_list, 'nb_hommes')),
+                'total_femmes' => array_sum(array_column($collines_list, 'nb_femmes')),
+                'total_structures' => array_sum(array_column($collines_list, 'nb_structures'))
+            ]
         ];
 
-        // Debug
-        log_message('info', 'Cartographie - Provinces: ' . count($provinces));
-        log_message('info', 'Cartographie - Communes: ' . count($communes));
-        log_message('info', 'Cartographie - Zones: ' . count($zones));
-        log_message('info', 'Cartographie - Collines avec membres: ' . $total_sites);
-        log_message('info', 'Cartographie - Collines avec coordonnées estimées: ' . $total_coords_modifiees);
-        log_message('info', 'Cartographie - Total points: ' . (count($provinces) + count($communes) + count($zones) + $total_sites));
-        
-        $data['partenaires'] = $this->model->getRequete("SELECT p.* FROM partners p GROUP BY p.ID_PARTNERS");
+        $data['partenaires'] =$this->model->getRequete("SELECT p.*FROM partners p
+        GROUP BY p.ID_PARTNERS ");
 
         return view('App\Modules\Cartographie\Views\CartoFront', $data);
     }

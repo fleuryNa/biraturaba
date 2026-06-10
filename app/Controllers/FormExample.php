@@ -7,7 +7,7 @@ use App\Models\ProvinceModel;
 use App\Models\CommuneModel;
 use App\Models\ZoneModel;
 use App\Models\CollineModel;
-use App\Models\TypeGroupeModel; // Nouveau modèle
+use App\Models\TypeGroupeModel;
 
 class FormExample extends BaseController
 {
@@ -27,7 +27,7 @@ class FormExample extends BaseController
         $db = \Config\Database::connect();
         
         $membres = $db->table('membres_inscrits m')
-            ->select('m.ID_MEMBRES, c.COMMUNE_NAME, z.ZONE_NAME, col.COLLINE_NAME, m.NB_GROUPE_FONCTIONNELS, m.NB_MEMBRE_INSCRITS, m.NOMBRE_HOMME, m.NOMBRE_FEMME, m.ID_TYPE_GROUPE, tg.DESC_GROUPE as TYPE_GROUPE')
+            ->select('m.ID_MEMBRES, m.DESCRIPTION, c.COMMUNE_NAME, z.ZONE_NAME, col.COLLINE_NAME, m.NB_MEMBRE_INSCRITS, m.NOMBRE_HOMME, m.NOMBRE_FEMME, m.NB_GROUPE, m.ID_TYPE_GROUPE, tg.DESC_GROUPE as TYPE_GROUPE')
             ->join('collines col', 'col.COLLINE_ID = m.COLLINE_ID', 'left')
             ->join('zones z', 'z.ZONE_ID = col.ZONE_ID', 'left')
             ->join('communes c', 'c.COMMUNE_ID = z.COMMUNE_ID', 'left')
@@ -43,7 +43,7 @@ class FormExample extends BaseController
     {
         $db = \Config\Database::connect();
         $membres = $db->table('membres_inscrits m')
-            ->select('c.COMMUNE_NAME, z.ZONE_NAME, col.COLLINE_NAME, m.NB_GROUPE_FONCTIONNELS, m.NB_MEMBRE_INSCRITS, m.NOMBRE_HOMME, m.NOMBRE_FEMME, tg.DESC_GROUPE as TYPE_GROUPE')
+            ->select('c.COMMUNE_NAME, z.ZONE_NAME, col.COLLINE_NAME, m.DESCRIPTION, m.NB_MEMBRE_INSCRITS, m.NOMBRE_HOMME, m.NOMBRE_FEMME, m.NB_GROUPE, tg.DESC_GROUPE as TYPE_GROUPE')
             ->join('collines col', 'col.COLLINE_ID = m.COLLINE_ID', 'left')
             ->join('zones z', 'z.ZONE_ID = col.ZONE_ID', 'left')
             ->join('communes c', 'c.COMMUNE_ID = z.COMMUNE_ID', 'left')
@@ -59,17 +59,18 @@ class FormExample extends BaseController
         ];
 
         $csv = fopen('php://temp', 'r+');
-        fputcsv($csv, ['Commune', 'Zone', 'Colline', 'Groupes fonctionnels', 'Membres inscrits', 'Hommes', 'Femmes', 'Type de groupe']);
+        fputcsv($csv, ['Commune', 'Zone', 'Colline', 'Description', 'Membres inscrits', 'Hommes', 'Femmes', 'Structures', 'Type de groupe']);
 
         foreach ($membres as $membre) {
             fputcsv($csv, [
                 $membre['COMMUNE_NAME'] ?? '',
                 $membre['ZONE_NAME'] ?? '',
                 $membre['COLLINE_NAME'] ?? '',
-                $membre['NB_GROUPE_FONCTIONNELS'],
+                $membre['DESCRIPTION'] ?? '',
                 $membre['NB_MEMBRE_INSCRITS'],
                 $membre['NOMBRE_HOMME'],
                 $membre['NOMBRE_FEMME'],
+                $membre['NB_GROUPE'],
                 $membre['TYPE_GROUPE'] ?? '',
             ]);
         }
@@ -103,7 +104,7 @@ class FormExample extends BaseController
             'commune_id'  => 'required|integer',
             'zone_id'     => 'required|integer',
             'colline_id'  => 'required|integer',
-            'nb_groupe_fonctionnels' => 'required|integer',
+            'description' => 'required|string|min_length[10]',
             'nb_membre_inscrits'     => 'required|integer',
             'nombre_homme'           => 'required|integer',
             'nombre_femme'           => 'required|integer',
@@ -111,23 +112,80 @@ class FormExample extends BaseController
             'id_type_groupe'         => 'required|integer',
         ];
 
-        if (! $this->validate($rules)) {
+        $messages = [
+            'province_id' => [
+                'required' => 'La province est obligatoire.',
+                'integer'  => 'La province doit être un nombre valide.'
+            ],
+            'commune_id' => [
+                'required' => 'La commune est obligatoire.',
+                'integer'  => 'La commune doit être un nombre valide.'
+            ],
+            'zone_id' => [
+                'required' => 'La zone est obligatoire.',
+                'integer'  => 'La zone doit être un nombre valide.'
+            ],
+            'colline_id' => [
+                'required' => 'La colline est obligatoire.',
+                'integer'  => 'La colline doit être un nombre valide.'
+            ],
+            'description' => [
+                'required'    => 'La description est obligatoire.',
+                'string'      => 'La description doit être un texte valide.',
+                'min_length'  => 'La description doit contenir au moins 10 caractères.'
+            ],
+            'nb_membre_inscrits' => [
+                'required' => 'Le nombre de membres inscrits est obligatoire.',
+                'integer'  => 'Le nombre de membres inscrits doit être un nombre valide.'
+            ],
+            'nombre_homme' => [
+                'required' => 'Le nombre d\'hommes est obligatoire.',
+                'integer'  => 'Le nombre d\'hommes doit être un nombre valide.'
+            ],
+            'nombre_femme' => [
+                'required' => 'Le nombre de femmes est obligatoire.',
+                'integer'  => 'Le nombre de femmes doit être un nombre valide.'
+            ],
+            'nb_groupe' => [
+                'required' => 'Le nombre de structures est obligatoire.',
+                'integer'  => 'Le nombre de structures doit être un nombre valide.'
+            ],
+            'id_type_groupe' => [
+                'required' => 'Le type de groupe est obligatoire.',
+                'integer'  => 'Le type de groupe doit être un nombre valide.'
+            ]
+        ];
+
+        if (! $this->validate($rules, $messages)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        // Validation personnalisée : vérifier que hommes + femmes = membres inscrits
+        $nombre_homme = (int)$this->request->getPost('nombre_homme');
+        $nombre_femme = (int)$this->request->getPost('nombre_femme');
+        $nb_membre_inscrits = (int)$this->request->getPost('nb_membre_inscrits');
+
+        if (($nombre_homme + $nombre_femme) != $nb_membre_inscrits) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', [
+                    'somme' => 'La somme du nombre d\'hommes et de femmes (' . ($nombre_homme + $nombre_femme) . ') doit être égale au nombre total de membres inscrits (' . $nb_membre_inscrits . ').'
+                ]);
         }
 
         $data = [
             'COLLINE_ID' => $this->request->getPost('colline_id'),
-            'NB_GROUPE_FONCTIONNELS' => $this->request->getPost('nb_groupe_fonctionnels'),
-            'NB_MEMBRE_INSCRITS' => $this->request->getPost('nb_membre_inscrits'),
-            'NOMBRE_HOMME' => $this->request->getPost('nombre_homme'),
-            'NOMBRE_FEMME' => $this->request->getPost('nombre_femme'),
+            'DESCRIPTION' => $this->request->getPost('description'),
+            'NB_MEMBRE_INSCRITS' => $nb_membre_inscrits,
+            'NOMBRE_HOMME' => $nombre_homme,
+            'NOMBRE_FEMME' => $nombre_femme,
             'NB_GROUPE' => $this->request->getPost('nb_groupe'),
             'ID_TYPE_GROUPE' => $this->request->getPost('id_type_groupe'),
         ];
 
         $this->membreModel->insert($data);
 
-        return redirect()->to('/formexample')->with('success', 'Membre created successfully');
+        return redirect()->to('/formexample')->with('success', 'Membre créé avec succès');
     }
 
     // Show edit form
@@ -135,7 +193,7 @@ class FormExample extends BaseController
     {
         $membre = $this->membreModel->find($id);
         if (! $membre) {
-            return redirect()->to('/formexample')->with('error', 'Membre not found');
+            return redirect()->to('/formexample')->with('error', 'Membre non trouvé');
         }
 
         $provinceModel = new ProvinceModel();
@@ -179,7 +237,7 @@ class FormExample extends BaseController
             'commune_id'  => 'required|integer',
             'zone_id'     => 'required|integer',
             'colline_id'  => 'required|integer',
-            'nb_groupe_fonctionnels' => 'required|integer',
+            'description' => 'required|string|min_length[10]',
             'nb_membre_inscrits'     => 'required|integer',
             'nombre_homme'           => 'required|integer',
             'nombre_femme'           => 'required|integer',
@@ -187,23 +245,80 @@ class FormExample extends BaseController
             'id_type_groupe'         => 'required|integer',
         ];
 
-        if (! $this->validate($rules)) {
+        $messages = [
+            'province_id' => [
+                'required' => 'La province est obligatoire.',
+                'integer'  => 'La province doit être un nombre valide.'
+            ],
+            'commune_id' => [
+                'required' => 'La commune est obligatoire.',
+                'integer'  => 'La commune doit être un nombre valide.'
+            ],
+            'zone_id' => [
+                'required' => 'La zone est obligatoire.',
+                'integer'  => 'La zone doit être un nombre valide.'
+            ],
+            'colline_id' => [
+                'required' => 'La colline est obligatoire.',
+                'integer'  => 'La colline doit être un nombre valide.'
+            ],
+            'description' => [
+                'required'    => 'La description est obligatoire.',
+                'string'      => 'La description doit être un texte valide.',
+                'min_length'  => 'La description doit contenir au moins 10 caractères.'
+            ],
+            'nb_membre_inscrits' => [
+                'required' => 'Le nombre de membres inscrits est obligatoire.',
+                'integer'  => 'Le nombre de membres inscrits doit être un nombre valide.'
+            ],
+            'nombre_homme' => [
+                'required' => 'Le nombre d\'hommes est obligatoire.',
+                'integer'  => 'Le nombre d\'hommes doit être un nombre valide.'
+            ],
+            'nombre_femme' => [
+                'required' => 'Le nombre de femmes est obligatoire.',
+                'integer'  => 'Le nombre de femmes doit être un nombre valide.'
+            ],
+            'nb_groupe' => [
+                'required' => 'Le nombre de structures est obligatoire.',
+                'integer'  => 'Le nombre de structures doit être un nombre valide.'
+            ],
+            'id_type_groupe' => [
+    'required' => 'Le type de structures est obligatoire.',
+    'integer'  => 'Le type de structures doit être un nombre valide.'
+]
+        ];
+
+        if (! $this->validate($rules, $messages)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        // Validation personnalisée : vérifier que hommes + femmes = membres inscrits
+        $nombre_homme = (int)$this->request->getPost('nombre_homme');
+        $nombre_femme = (int)$this->request->getPost('nombre_femme');
+        $nb_membre_inscrits = (int)$this->request->getPost('nb_membre_inscrits');
+
+        if (($nombre_homme + $nombre_femme) != $nb_membre_inscrits) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', [
+                    'somme' => 'La somme du nombre d\'hommes et de femmes (' . ($nombre_homme + $nombre_femme) . ') doit être égale au nombre total de membres inscrits (' . $nb_membre_inscrits . ').'
+                ]);
         }
 
         $data = [
             'COLLINE_ID' => $this->request->getPost('colline_id'),
-            'NB_GROUPE_FONCTIONNELS' => $this->request->getPost('nb_groupe_fonctionnels'),
-            'NB_MEMBRE_INSCRITS' => $this->request->getPost('nb_membre_inscrits'),
-            'NOMBRE_HOMME' => $this->request->getPost('nombre_homme'),
-            'NOMBRE_FEMME' => $this->request->getPost('nombre_femme'),
+            'DESCRIPTION' => $this->request->getPost('description'),
+            'NB_MEMBRE_INSCRITS' => $nb_membre_inscrits,
+            'NOMBRE_HOMME' => $nombre_homme,
+            'NOMBRE_FEMME' => $nombre_femme,
             'NB_GROUPE' => $this->request->getPost('nb_groupe'),
             'ID_TYPE_GROUPE' => $this->request->getPost('id_type_groupe'),
         ];
 
         $this->membreModel->update($id, $data);
 
-        return redirect()->to('/formexample')->with('success', 'Membre updated successfully');
+        return redirect()->to('/formexample')->with('success', 'Membre mis à jour avec succès');
     }
 
     // Delete membre
@@ -211,10 +326,10 @@ class FormExample extends BaseController
     {
         if ($id) {
             $this->membreModel->delete($id);
-            return redirect()->to('/formexample')->with('success', 'Membre deleted');
+            return redirect()->to('/formexample')->with('success', 'Membre supprimé avec succès');
         }
 
-        return redirect()->to('/formexample')->with('error', 'Invalid ID');
+        return redirect()->to('/formexample')->with('error', 'ID invalide');
     }
 
     // AJAX endpoints to support cascading selects
@@ -239,7 +354,6 @@ class FormExample extends BaseController
         return $this->response->setJSON($collines);
     }
     
-    // Nouvelle méthode pour les types de groupe
     public function getTypeGroupes()
     {
         $typeGroupes = $this->typeGroupeModel->findAll();
