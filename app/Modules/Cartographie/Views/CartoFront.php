@@ -274,6 +274,12 @@
         box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
     
+    /* Style pour les marqueurs personnalisés */
+    .custom-marker {
+        background: transparent !important;
+        border: none !important;
+    }
+    
     @media (max-width: 768px) {
         .map-col, .legend-col {
             flex: 0 0 100%;
@@ -312,36 +318,33 @@
                 </div>
             </div>
         </div>
-
-
-
     </section>
     <!-- END SECTION TOP -->
 
     <!-- START MAP SECTION -->
     <section class="case_content_top_area section-padding" style="padding: 60px 0;">
         <div class="container">
-        <!-- DESCRIPTION DE LA CARTE -->
-<div class="row mb-4">
-    <div class="col-md-12">
-        <div class="info-banner" style="background: linear-gradient(135deg, #2c3e50, #1a1a2e); border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; color: white;">
-            <h5 style="color: white; margin: 0 0 8px 0;"><i class="fa fa-info-circle"></i> Comment utiliser cette carte ?</h5>
-            <p style="color: #ccc; margin: 0; font-size: 13px;">
-                🗺️ Cette carte montre l'ensemble des sites d'intervention du projet Biraturaba.<br>
-                • 🏢 Les provinces (rouge) - 🏛️ Les communes (vert) - 📍 Les zones (bleu) - 🏥 Les collines (violet)<br>
-                • Cliquez sur les marqueurs pour voir les détails de chaque site.<br>
-                • Utilisez les filtres ci-contre pour affiner votre recherche par province, commune, zone ou type de structure.<br>
-                • Les clusters (cercles avec chiffres) regroupent les points proches - cliquez dessus pour les déployer.
-            </p>
-            <div class="legend-icons" style="display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap;">
-                <span style="cursor: pointer;" onclick="flyToGroup('province')"><span style="background:#FF0000; width:12px;height:12px;display:inline-block;border-radius:50%;"></span> 🏢 Provinces</span>
-                <span style="cursor: pointer;" onclick="flyToGroup('commune')"><span style="background:#00FF00; width:12px;height:12px;display:inline-block;border-radius:50%;"></span> 🏛️ Communes</span>
-                <span style="cursor: pointer;" onclick="flyToGroup('zone')"><span style="background:#0000FF; width:12px;height:12px;display:inline-block;border-radius:50%;"></span> 📍 Zones</span>
-                <span style="cursor: pointer;" onclick="flyToGroup('colline')"><span style="background:#800080; width:12px;height:12px;display:inline-block;border-radius:50%;"></span> 🏥 Collines</span>
+            <!-- DESCRIPTION DE LA CARTE -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="info-banner" style="background: linear-gradient(135deg, #2c3e50, #1a1a2e); border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; color: white;">
+                        <h5 style="color: white; margin: 0 0 8px 0;"><i class="fa fa-info-circle"></i> Comment utiliser cette carte ?</h5>
+                        <p style="color: #ccc; margin: 0; font-size: 13px;">
+                            🗺️ Cette carte montre l'ensemble des sites d'intervention du projet Biraturaba.<br>
+                            • Provinces (rouge) - Communes (vert) - Zones (bleu) - Collines (violet)<br>
+                            • Cliquez sur les marqueurs pour voir les détails de chaque site.<br>
+                            • Utilisez les filtres ci-contre pour affiner votre recherche par province, commune, zone ou type de structure.<br>
+                            • Les clusters (cercles avec chiffres) regroupent les points proches - cliquez dessus pour les déployer.
+                        </p>
+                        <div class="legend-icons" style="display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap;">
+                            <span style="cursor: pointer;" onclick="flyToGroup('province')"><span style="background:#FF0000; width:12px;height:12px;display:inline-block;border-radius:50%;"></span> Provinces</span>
+                            <span style="cursor: pointer;" onclick="flyToGroup('commune')"><span style="background:#00FF00; width:12px;height:12px;display:inline-block;border-radius:50%;"></span> Communes</span>
+                            <span style="cursor: pointer;" onclick="flyToGroup('zone')"><span style="background:#0000FF; width:12px;height:12px;display:inline-block;border-radius:50%;"></span> Zones</span>
+                            <span style="cursor: pointer;" onclick="flyToGroup('colline')"><span style="background:#800080; width:12px;height:12px;display:inline-block;border-radius:50%;"></span> Collines</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
 
             <div class="row">
                 <div class="col-md-8 map-col">
@@ -364,28 +367,28 @@
                                 <div class="legend-level-item">
                                     <div class="legend-color" style="background: #FF0000;"></div>
                                     <div class="legend-info">
-                                        <strong>🏢 Provinces</strong>
+                                        <strong>Provinces</strong>
                                         <span>Sites provinciaux</span>
                                     </div>
                                 </div>
                                 <div class="legend-level-item">
                                     <div class="legend-color" style="background: #00FF00;"></div>
                                     <div class="legend-info">
-                                        <strong>🏛️ Communes</strong>
+                                        <strong>Communes</strong>
                                         <span>Chefs-lieux de commune</span>
                                     </div>
                                 </div>
                                 <div class="legend-level-item">
                                     <div class="legend-color" style="background: #0000FF;"></div>
                                     <div class="legend-info">
-                                        <strong>📍 Zones</strong>
+                                        <strong>Zones</strong>
                                         <span>Zones de regroupement</span>
                                     </div>
                                 </div>
                                 <div class="legend-level-item">
                                     <div class="legend-color" style="background: #800080;"></div>
                                     <div class="legend-info">
-                                        <strong>🏥 Collines</strong>
+                                        <strong>Collines</strong>
                                         <span>Sites d'intervention</span>
                                     </div>
                                 </div>
@@ -394,34 +397,34 @@
                             <div class="type-structure-filter">
                                 <h4><i class="fa fa-tags"></i> Filtrer par type de structure</h4>
                                 <select id="typeStructureSelect" class="form-control">
-                                    <option value="all">📋 Tous les types</option>
-                                    <option value="SLC">🏪 SLC (SILC)</option>
-                                    <option value="Fonctionnels">⚙️ Structures Fonctionnelles</option>
+                                    <option value="all">Tous les types</option>
+                                    <option value="SLC">SLC (SILC)</option>
+                                    <option value="Fonctionnels">Structures Fonctionnelles</option>
                                 </select>
                             </div>
 
                             <div class="filter-box">
                                 <h4>🔍 Filtres hiérarchiques</h4>
                                 <div class="filter-group">
-                                    <label>🏢 Province</label>
+                                    <label>Province</label>
                                     <select id="filterProvince">
                                         <option value="all">Toutes les provinces</option>
                                     </select>
                                 </div>
                                 <div class="filter-group">
-                                    <label>🏛️ Commune</label>
+                                    <label>Commune</label>
                                     <select id="filterCommune" disabled>
                                         <option value="all">Toutes les communes</option>
                                     </select>
                                 </div>
                                 <div class="filter-group">
-                                    <label>📍 Zone</label>
+                                    <label>Zone</label>
                                     <select id="filterZone" disabled>
                                         <option value="all">Toutes les zones</option>
                                     </select>
                                 </div>
                                 <div class="filter-group">
-                                    <label>🏥 Colline</label>
+                                    <label>Colline</label>
                                     <select id="filterColline" disabled>
                                         <option value="all">Toutes les collines</option>
                                     </select>
@@ -473,18 +476,29 @@
         const zones = <?= $zones ?: '[]' ?>;
         const collines = <?= $collines ?: '[]' ?>;
         const stats = <?= json_encode($stats) ?: '{}' ?>;
-
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')
+                .replace(/\n/g, '<br>');
+        }
+        
         console.log('Provinces:', provinces.length);
         console.log('Communes:', communes.length);
         console.log('Zones:', zones.length);
         console.log('Collines:', collines.length);
 
-        // Configuration des groupes
-        const groupConfig = {
-            province: { color: '#FF0000', gradient: 'linear-gradient(135deg, #FF0000, #CC0000)', icon: '🏢', name: 'Provinces', level: 1 },
-            commune: { color: '#00FF00', gradient: 'linear-gradient(135deg, #00FF00, #00CC00)', icon: '🏛️', name: 'Communes', level: 2 },
-            zone: { color: '#0000FF', gradient: 'linear-gradient(135deg, #0000FF, #0000CC)', icon: '📍', name: 'Zones', level: 3 },
-            colline: { color: '#800080', gradient: 'linear-gradient(135deg, #800080, #660066)', icon: '🏥', name: 'Collines', level: 4 }
+        // Configuration des couleurs pour les marqueurs
+        const markerColors = {
+            province: { bg: '#FF0000', name: 'Province' },
+            commune: { bg: '#00FF00', name: 'Commune' },
+            zone: { bg: '#0000FF', name: 'Zone' },
+            colline: { bg: '#800080', name: 'Colline' }
         };
 
         // Initialisation de la carte
@@ -500,25 +514,69 @@
         let markersCluster = null;
         let currentTypeFilter = 'all';
 
-        // Créer un marqueur personnalisé
-        function createMarker(point, config) {
-            const iconHtml = `<div style="background: ${config.gradient}; width: 32px; height: 32px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px ${config.color}; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer;">${config.icon}</div>`;
-            const icon = L.divIcon({ html: iconHtml, className: 'custom-marker', iconSize: [32, 32], popupAnchor: [0, -16] });
+        // Fonction pour créer un marqueur personnalisé SANS logo à l'intérieur
+        function createCustomColoredMarker(point, type) {
+            const colorConfig = markerColors[type];
+            
+            // Créer un SVG qui ressemble à l'icône Leaflet standard sans logo
+            const markerHtml = `
+                <svg width="25" height="41" viewBox="0 0 25 41" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="grad-${type}" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:${colorConfig.bg};stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:${colorConfig.bg};stop-opacity:0.8" />
+                        </linearGradient>
+                        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.3"/>
+                        </filter>
+                    </defs>
+                    <g filter="url(#shadow)">
+                        <path d="M12.5 0C5.6 0 0 5.6 0 12.5C0 21.875 12.5 41 12.5 41C12.5 41 25 21.875 25 12.5C25 5.6 19.4 0 12.5 0Z" 
+                              fill="url(#grad-${type})" stroke="white" stroke-width="1.5"/>
+                        <circle cx="12.5" cy="12.5" r="4" fill="white" opacity="0.3"/>
+                    </g>
+                </svg>
+            `;
+            
+            const icon = L.divIcon({
+                html: markerHtml,
+                className: 'custom-marker',
+                iconSize: [25, 41],
+                iconAnchor: [12.5, 41],
+                popupAnchor: [0, -35]
+            });
+            
             const marker = L.marker([point.lat, point.lng], { icon: icon });
             
             let buttonDetail = '';
-            if (config.level === 4) {
+            let descriptionHtml = '';
+            
+            if (type === 'colline') {
                 buttonDetail = `<button class="btn-detail" onclick="showDetails('${point.id}')">📊 Voir les détails</button>`;
+                
+                if (point.description && point.description.trim() !== '') {
+                    let description = point.description;
+                    if (description.length > 150) {
+                        description = description.substring(0, 150) + '...';
+                    }
+                    descriptionHtml = `
+                        <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
+                            <strong><i class="fa fa-align-left"></i> Description:</strong>
+                            <p style="margin-top: 5px; font-size: 12px; line-height: 1.4; color: #555;">${escapeHtml(description)}</p>
+                        </div>
+                    `;
+                }
             }
             
             const popupContent = `
-                <div style="min-width: 280px;">
-                    <div style="background: linear-gradient(135deg, #1a1a2e, #16213e); color: white; padding: 10px 12px; border-radius: 12px 12px 0 0;">
-                        ${config.icon} ${point.nom}
+                <div style="min-width: 280px; max-width: 350px;">
+                    <div style="background: ${colorConfig.bg}; color: white; padding: 10px 12px; border-radius: 12px 12px 0 0;">
+                        ${point.nom}
                     </div>
                     <div style="padding: 12px;">
-                        <p><strong>📝 Info:</strong> ${point.info || 'Non renseignée'}</p>
-                        ${point.detail ? `<p><strong>📊 Détail:</strong> ${point.detail}</p>` : ''}
+                        <p><strong>Info:</strong> ${point.info || 'Non renseignée'}</p>
+                        ${point.detail ? `<p><strong>Détail:</strong> ${point.detail}</p>` : ''}
+                        ${descriptionHtml}
                         ${buttonDetail}
                     </div>
                     <div style="background: #f8f9fa; padding: 8px 12px; border-radius: 0 0 12px 12px; font-size: 11px; color: #666;">
@@ -536,22 +594,26 @@
             
             // Ajouter les provinces
             provinces.forEach(p => {
-                allPoints.push({ ...p, type: 'province', config: groupConfig.province });
+                allPoints.push({ ...p, type: 'province' });
             });
             
             // Ajouter les communes
             communes.forEach(c => {
-                allPoints.push({ ...c, type: 'commune', config: groupConfig.commune });
+                allPoints.push({ ...c, type: 'commune' });
             });
             
             // Ajouter les zones
             zones.forEach(z => {
-                allPoints.push({ ...z, type: 'zone', config: groupConfig.zone });
+                allPoints.push({ ...z, type: 'zone' });
             });
             
             // Ajouter les collines
             collines.forEach(c => {
-                allPoints.push({ ...c, type: 'colline', config: groupConfig.colline });
+                allPoints.push({ 
+                    ...c, 
+                    type: 'colline',
+                    description: c.description || ''
+                });
             });
             
             console.log('Total points à afficher:', allPoints.length);
@@ -580,7 +642,7 @@
             });
             
             allPoints.forEach(point => {
-                markersCluster.addLayer(createMarker(point, point.config));
+                markersCluster.addLayer(createCustomColoredMarker(point, point.type));
             });
             
             map.addLayer(markersCluster);
@@ -595,238 +657,233 @@
         }
 
         // Appliquer les filtres
-       // Appliquer les filtres
-function applyFilters() {
-    if (!markersCluster) return;
-    
-    const provinceId = document.getElementById('filterProvince').value;
-    const communeId = document.getElementById('filterCommune').value;
-    const zoneId = document.getElementById('filterZone').value;
-    const collineId = document.getElementById('filterColline').value;
-    
-    let filtered = [...allPoints];
-    
-    // Filtre par type de structure (uniquement pour les collines)
-    if (currentTypeFilter !== 'all') {
-        filtered = filtered.filter(point => {
-            if (point.type === 'colline') {
-                return point.type_structure_nom === currentTypeFilter;
+        function applyFilters() {
+            if (!markersCluster) return;
+            
+            const provinceId = document.getElementById('filterProvince').value;
+            const communeId = document.getElementById('filterCommune').value;
+            const zoneId = document.getElementById('filterZone').value;
+            const collineId = document.getElementById('filterColline').value;
+            
+            let filtered = [...allPoints];
+            
+            // Filtre par type de structure (uniquement pour les collines)
+            if (currentTypeFilter !== 'all') {
+                filtered = filtered.filter(point => {
+                    if (point.type === 'colline') {
+                        return point.type_structure_nom === currentTypeFilter;
+                    }
+                    if (point.type === 'province') {
+                        return collines.some(c => c.province_nom === point.nom && c.type_structure_nom === currentTypeFilter);
+                    }
+                    if (point.type === 'commune') {
+                        return collines.some(c => c.commune_nom === point.nom && c.type_structure_nom === currentTypeFilter);
+                    }
+                    if (point.type === 'zone') {
+                        return collines.some(c => c.zone_nom === point.nom && c.type_structure_nom === currentTypeFilter);
+                    }
+                    return true;
+                });
             }
-            // Pour les provinces, communes, zones : on garde si elles ont des collines du type sélectionné
-            if (point.type === 'province') {
-                return collines.some(c => c.province_nom === point.nom && c.type_structure_nom === currentTypeFilter);
+            
+            // Filtres hiérarchiques
+            if (collineId !== 'all') {
+                filtered = filtered.filter(p => p.type === 'colline' && p.id == collineId);
+            } else if (zoneId !== 'all') {
+                filtered = filtered.filter(p => (p.type === 'zone' && p.id == zoneId) || (p.type === 'colline' && p.zone_id == zoneId));
+            } else if (communeId !== 'all') {
+                filtered = filtered.filter(p => (p.type === 'commune' && p.id == communeId) || (p.type === 'zone' && p.commune_id == communeId) || (p.type === 'colline' && p.commune_id == communeId));
+            } else if (provinceId !== 'all') {
+                filtered = filtered.filter(p => (p.type === 'province' && p.id == provinceId) || (p.type === 'commune' && p.province_id == provinceId) || (p.type === 'zone' && p.province_id == provinceId) || (p.type === 'colline' && p.province_id == provinceId));
             }
-            if (point.type === 'commune') {
-                return collines.some(c => c.commune_nom === point.nom && c.type_structure_nom === currentTypeFilter);
-            }
-            if (point.type === 'zone') {
-                return collines.some(c => c.zone_nom === point.nom && c.type_structure_nom === currentTypeFilter);
-            }
-            return true;
-        });
-    }
-    
-    // Filtres hiérarchiques
-    if (collineId !== 'all') {
-        filtered = filtered.filter(p => p.type === 'colline' && p.id == collineId);
-    } else if (zoneId !== 'all') {
-        filtered = filtered.filter(p => (p.type === 'zone' && p.id == zoneId) || (p.type === 'colline' && p.zone_id == zoneId));
-    } else if (communeId !== 'all') {
-        filtered = filtered.filter(p => (p.type === 'commune' && p.id == communeId) || (p.type === 'zone' && p.commune_id == communeId) || (p.type === 'colline' && p.commune_id == communeId));
-    } else if (provinceId !== 'all') {
-        filtered = filtered.filter(p => (p.type === 'province' && p.id == provinceId) || (p.type === 'commune' && p.province_id == provinceId) || (p.type === 'zone' && p.province_id == provinceId) || (p.type === 'colline' && p.province_id == provinceId));
-    }
-    
-    // Reconstruire les marqueurs
-    markersCluster.clearLayers();
-    filtered.forEach(point => {
-        markersCluster.addLayer(createMarker(point, point.config));
-    });
-    map.addLayer(markersCluster);
-    
-    document.getElementById('totalPointsDisplay').innerText = filtered.length;
-}
+            
+            // Reconstruire les marqueurs
+            markersCluster.clearLayers();
+            filtered.forEach(point => {
+                markersCluster.addLayer(createCustomColoredMarker(point, point.type));
+            });
+            map.addLayer(markersCluster);
+            
+            document.getElementById('totalPointsDisplay').innerText = filtered.length;
+        }
 
-      // Remplir les selects de filtres
-function initFilters() {
-    const provinceSelect = document.getElementById('filterProvince');
-    const communeSelect = document.getElementById('filterCommune');
-    const zoneSelect = document.getElementById('filterZone');
-    const collineSelect = document.getElementById('filterColline');
-    
-    // Provinces
-    provinceSelect.innerHTML = '<option value="all">🌍 Toutes les provinces</option>';
-    provinces.forEach(p => {
-        provinceSelect.innerHTML += `<option value="${p.id}">🏢 ${p.nom}</option>`;
-    });
-    
-    // Initialiser les communes (toutes)
-    communeSelect.innerHTML = '<option value="all">🏛️ Toutes les communes</option>';
-    communes.forEach(c => {
-        communeSelect.innerHTML += `<option value="${c.id}">🏛️ ${c.nom}</option>`;
-    });
-    communeSelect.disabled = false;
-    
-    // Initialiser les zones (toutes)
-    zoneSelect.innerHTML = '<option value="all">📍 Toutes les zones</option>';
-    zones.forEach(z => {
-        zoneSelect.innerHTML += `<option value="${z.id}">📍 ${z.nom}</option>`;
-    });
-    zoneSelect.disabled = false;
-    
-    // Initialiser les collines (toutes)
-    collineSelect.innerHTML = '<option value="all">🏥 Toutes les collines</option>';
-    collines.forEach(c => {
-        collineSelect.innerHTML += `<option value="${c.id}">🏥 ${c.nom}</option>`;
-    });
-    collineSelect.disabled = false;
-    
-    // Événement Province
-    provinceSelect.addEventListener('change', function() {
-        const provinceId = this.value;
-        communeSelect.innerHTML = '<option value="all">🏛️ Toutes les communes</option>';
-        zoneSelect.innerHTML = '<option value="all">📍 Toutes les zones</option>';
-        collineSelect.innerHTML = '<option value="all">🏥 Toutes les collines</option>';
-        
-        if (provinceId !== 'all') {
-            const communesFiltered = communes.filter(c => c.province_id == provinceId);
-            communesFiltered.forEach(c => {
-                communeSelect.innerHTML += `<option value="${c.id}">🏛️ ${c.nom}</option>`;
+        // Remplir les selects de filtres
+        function initFilters() {
+            const provinceSelect = document.getElementById('filterProvince');
+            const communeSelect = document.getElementById('filterCommune');
+            const zoneSelect = document.getElementById('filterZone');
+            const collineSelect = document.getElementById('filterColline');
+            
+            // Provinces
+            provinceSelect.innerHTML = '<option value="all">Toutes les provinces</option>';
+            provinces.forEach(p => {
+                provinceSelect.innerHTML += `<option value="${p.id}">${p.nom}</option>`;
             });
             
-            const zonesFiltered = zones.filter(z => z.province_id == provinceId);
-            zonesFiltered.forEach(z => {
-                zoneSelect.innerHTML += `<option value="${z.id}">📍 ${z.nom}</option>`;
-            });
-            
-            const collinesFiltered = collines.filter(c => c.province_id == provinceId);
-            collinesFiltered.forEach(c => {
-                collineSelect.innerHTML += `<option value="${c.id}">🏥 ${c.nom}</option>`;
-            });
-        } else {
-            // Réafficher toutes les communes
+            // Initialiser les communes (toutes)
+            communeSelect.innerHTML = '<option value="all">Toutes les communes</option>';
             communes.forEach(c => {
-                communeSelect.innerHTML += `<option value="${c.id}">🏛️ ${c.nom}</option>`;
+                communeSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
             });
+            communeSelect.disabled = false;
+            
+            // Initialiser les zones (toutes)
+            zoneSelect.innerHTML = '<option value="all">Toutes les zones</option>';
             zones.forEach(z => {
-                zoneSelect.innerHTML += `<option value="${z.id}">📍 ${z.nom}</option>`;
+                zoneSelect.innerHTML += `<option value="${z.id}">${z.nom}</option>`;
             });
+            zoneSelect.disabled = false;
+            
+            // Initialiser les collines (toutes)
+            collineSelect.innerHTML = '<option value="all">Toutes les collines</option>';
             collines.forEach(c => {
-                collineSelect.innerHTML += `<option value="${c.id}">🏥 ${c.nom}</option>`;
+                collineSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
             });
-        }
-        applyFilters();
-    });
-    
-    // Événement Commune
-    communeSelect.addEventListener('change', function() {
-        const communeId = this.value;
-        zoneSelect.innerHTML = '<option value="all">📍 Toutes les zones</option>';
-        collineSelect.innerHTML = '<option value="all">🏥 Toutes les collines</option>';
-        
-        if (communeId !== 'all') {
-            const zonesFiltered = zones.filter(z => z.commune_id == communeId);
-            zonesFiltered.forEach(z => {
-                zoneSelect.innerHTML += `<option value="${z.id}">📍 ${z.nom}</option>`;
+            collineSelect.disabled = false;
+            
+            // Événement Province
+            provinceSelect.addEventListener('change', function() {
+                const provinceId = this.value;
+                communeSelect.innerHTML = '<option value="all">Toutes les communes</option>';
+                zoneSelect.innerHTML = '<option value="all">Toutes les zones</option>';
+                collineSelect.innerHTML = '<option value="all">Toutes les collines</option>';
+                
+                if (provinceId !== 'all') {
+                    const communesFiltered = communes.filter(c => c.province_id == provinceId);
+                    communesFiltered.forEach(c => {
+                        communeSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
+                    });
+                    
+                    const zonesFiltered = zones.filter(z => z.province_id == provinceId);
+                    zonesFiltered.forEach(z => {
+                        zoneSelect.innerHTML += `<option value="${z.id}">${z.nom}</option>`;
+                    });
+                    
+                    const collinesFiltered = collines.filter(c => c.province_id == provinceId);
+                    collinesFiltered.forEach(c => {
+                        collineSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
+                    });
+                } else {
+                    communes.forEach(c => {
+                        communeSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
+                    });
+                    zones.forEach(z => {
+                        zoneSelect.innerHTML += `<option value="${z.id}">${z.nom}</option>`;
+                    });
+                    collines.forEach(c => {
+                        collineSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
+                    });
+                }
+                applyFilters();
             });
             
-            const collinesFiltered = collines.filter(c => c.commune_id == communeId);
-            collinesFiltered.forEach(c => {
-                collineSelect.innerHTML += `<option value="${c.id}">🏥 ${c.nom}</option>`;
+            // Événement Commune
+            communeSelect.addEventListener('change', function() {
+                const communeId = this.value;
+                zoneSelect.innerHTML = '<option value="all">Toutes les zones</option>';
+                collineSelect.innerHTML = '<option value="all">Toutes les collines</option>';
+                
+                if (communeId !== 'all') {
+                    const zonesFiltered = zones.filter(z => z.commune_id == communeId);
+                    zonesFiltered.forEach(z => {
+                        zoneSelect.innerHTML += `<option value="${z.id}">${z.nom}</option>`;
+                    });
+                    
+                    const collinesFiltered = collines.filter(c => c.commune_id == communeId);
+                    collinesFiltered.forEach(c => {
+                        collineSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
+                    });
+                } else {
+                    zones.forEach(z => {
+                        zoneSelect.innerHTML += `<option value="${z.id}">${z.nom}</option>`;
+                    });
+                    collines.forEach(c => {
+                        collineSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
+                    });
+                }
+                applyFilters();
             });
-        } else {
-            zones.forEach(z => {
-                zoneSelect.innerHTML += `<option value="${z.id}">📍 ${z.nom}</option>`;
+            
+            // Événement Zone
+            zoneSelect.addEventListener('change', function() {
+                const zoneId = this.value;
+                collineSelect.innerHTML = '<option value="all">Toutes les collines</option>';
+                
+                if (zoneId !== 'all') {
+                    const collinesFiltered = collines.filter(c => c.zone_id == zoneId);
+                    collinesFiltered.forEach(c => {
+                        collineSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
+                    });
+                } else {
+                    collines.forEach(c => {
+                        collineSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
+                    });
+                }
+                applyFilters();
             });
-            collines.forEach(c => {
-                collineSelect.innerHTML += `<option value="${c.id}">🏥 ${c.nom}</option>`;
+            
+            collineSelect.addEventListener('change', function() {
+                applyFilters();
+            });
+            
+            // Filtre type de structure
+            const typeSelect = document.getElementById('typeStructureSelect');
+            typeSelect.addEventListener('change', function() {
+                currentTypeFilter = this.value;
+                applyFilters();
+            });
+            
+            // Reset
+            document.getElementById('resetFilters').addEventListener('click', function() {
+                provinceSelect.value = 'all';
+                communeSelect.value = 'all';
+                zoneSelect.value = 'all';
+                collineSelect.value = 'all';
+                typeSelect.value = 'all';
+                currentTypeFilter = 'all';
+                
+                communeSelect.innerHTML = '<option value="all">Toutes les communes</option>';
+                zoneSelect.innerHTML = '<option value="all">Toutes les zones</option>';
+                collineSelect.innerHTML = '<option value="all">Toutes les collines</option>';
+                
+                communes.forEach(c => {
+                    communeSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
+                });
+                zones.forEach(z => {
+                    zoneSelect.innerHTML += `<option value="${z.id}">${z.nom}</option>`;
+                });
+                collines.forEach(c => {
+                    collineSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
+                });
+                
+                applyFilters();
+                if (markersCluster && markersCluster.getBounds().isValid()) {
+                    map.fitBounds(markersCluster.getBounds(), { padding: [50, 50] });
+                }
             });
         }
-        applyFilters();
-    });
-    
-    // Événement Zone
-    zoneSelect.addEventListener('change', function() {
-        const zoneId = this.value;
-        collineSelect.innerHTML = '<option value="all">🏥 Toutes les collines</option>';
-        
-        if (zoneId !== 'all') {
-            const collinesFiltered = collines.filter(c => c.zone_id == zoneId);
-            collinesFiltered.forEach(c => {
-                collineSelect.innerHTML += `<option value="${c.id}">🏥 ${c.nom}</option>`;
-            });
-        } else {
-            collines.forEach(c => {
-                collineSelect.innerHTML += `<option value="${c.id}">🏥 ${c.nom}</option>`;
-            });
-        }
-        applyFilters();
-    });
-    
-    collineSelect.addEventListener('change', function() {
-        applyFilters();
-    });
-    
-    // Filtre type de structure
-    const typeSelect = document.getElementById('typeStructureSelect');
-    typeSelect.addEventListener('change', function() {
-        currentTypeFilter = this.value;
-        applyFilters();
-    });
-    
-    // Reset
-    document.getElementById('resetFilters').addEventListener('click', function() {
-        provinceSelect.value = 'all';
-        communeSelect.value = 'all';
-        zoneSelect.value = 'all';
-        collineSelect.value = 'all';
-        typeSelect.value = 'all';
-        currentTypeFilter = 'all';
-        
-        // Réinitialiser les listes
-        communeSelect.innerHTML = '<option value="all">🏛️ Toutes les communes</option>';
-        zoneSelect.innerHTML = '<option value="all">📍 Toutes les zones</option>';
-        collineSelect.innerHTML = '<option value="all">🏥 Toutes les collines</option>';
-        
-        communes.forEach(c => {
-            communeSelect.innerHTML += `<option value="${c.id}">🏛️ ${c.nom}</option>`;
-        });
-        zones.forEach(z => {
-            zoneSelect.innerHTML += `<option value="${z.id}">📍 ${z.nom}</option>`;
-        });
-        collines.forEach(c => {
-            collineSelect.innerHTML += `<option value="${c.id}">🏥 ${c.nom}</option>`;
-        });
-        
-        applyFilters();
-        if (markersCluster && markersCluster.getBounds().isValid()) {
-            map.fitBounds(markersCluster.getBounds(), { padding: [50, 50] });
-        }
-    });
-}
 
-// Fonction pour voler vers un groupe
-function flyToGroup(groupType) {
-    let points = [];
-    if (groupType === 'province') points = provinces;
-    else if (groupType === 'commune') points = communes;
-    else if (groupType === 'zone') points = zones;
-    else if (groupType === 'colline') points = collines;
-    
-    if (points.length > 0) {
-        const bounds = L.latLngBounds(points.map(p => [p.lat, p.lng]));
-        map.fitBounds(bounds, { padding: [50, 50] });
-    }
-}
+        // Fonction pour voler vers un groupe
+        function flyToGroup(groupType) {
+            let points = [];
+            if (groupType === 'province') points = provinces;
+            else if (groupType === 'commune') points = communes;
+            else if (groupType === 'zone') points = zones;
+            else if (groupType === 'colline') points = collines;
+            
+            if (points.length > 0) {
+                const bounds = L.latLngBounds(points.map(p => [p.lat, p.lng]));
+                map.fitBounds(bounds, { padding: [50, 50] });
+            }
+        }
+        
         // Afficher les détails dans le modal
         window.showDetails = function(collineId) {
             const colline = collines.find(c => c.id == collineId);
             if (!colline) return;
             
-            // Récupérer toutes les collines de la même commune
             const communeCollines = collines.filter(c => c.commune_nom === colline.commune_nom);
             
-            // Calculer les stats par zone
             const zonesStats = new Map();
             communeCollines.forEach(c => {
                 if (!zonesStats.has(c.zone_nom)) {
@@ -879,6 +936,16 @@ function flyToGroup(groupType) {
                 </tr>
             `;
             
+            let descriptionHtml = '';
+            if (colline.description && colline.description.trim() !== '') {
+                descriptionHtml = `
+                    <div class="colline-info-card" style="margin-top: 15px;">
+                        <h6><i class="fa fa-align-left"></i> Description détaillée</h6>
+                        <p style="font-size: 13px; line-height: 1.6; background: #f8f9fa; padding: 12px; border-radius: 8px;">${escapeHtml(colline.description)}</p>
+                    </div>
+                `;
+            }
+            
             document.getElementById('modalCollineInfo').innerHTML = `
                 <div class="colline-info-card">
                     <h6><i class="fa fa-map-marker"></i> ${colline.nom}</h6>
@@ -895,6 +962,7 @@ function flyToGroup(groupType) {
                         </div>
                     </div>
                 </div>
+                ${descriptionHtml}
                 <div class="colline-info-card">
                     <h6>Statistiques de la commune: ${colline.commune_nom}</h6>
                     <div style="overflow-x: auto;">
@@ -928,7 +996,7 @@ function flyToGroup(groupType) {
             
             $('#detailModal').modal('show');
         };
-
+        
         // Chargement initial
         window.addEventListener('load', function() {
             document.getElementById('preloader').style.display = 'none';
