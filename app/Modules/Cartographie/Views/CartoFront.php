@@ -41,7 +41,6 @@
     
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css" />
     
     <style>
     * {
@@ -299,7 +298,6 @@
     
     .modal-footer .btn-secondary:hover {
         background: #5a6268;
-        transform: translateY(-1px);
     }
     
     .colline-detail-header {
@@ -387,7 +385,6 @@
         width: 100%;
         border-collapse: collapse;
         font-size: 13px;
-        min-width: 600px;
     }
     
     .stats-table thead tr {
@@ -532,6 +529,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
+                    <br><br><br>
                     <div class="section-top-title">
                         <h1>CARTOGRAPHIE</h1>
                     </div>
@@ -661,7 +659,7 @@
 
     <?php echo view('includes/frontend/footer'); ?>
 
-    <!-- Modal amélioré -->
+    <!-- Modal (gardé ici car il fait partie du contenu de la page) -->
     <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -669,7 +667,7 @@
                     <h5 class="modal-title" id="detailModalLabel">
                         <i class="fa fa-chart-bar"></i> Statistiques détaillées
                     </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -677,21 +675,22 @@
                     <div id="modalCollineInfo"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                        <i class="fa fa-times"></i> Fermer
-                    </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Styles additionnels pour Leaflet et DataTables (ne pas les mettre dans le footer) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+
+    <!-- Scripts additionnels (Leaflet et DataTables) -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-    <script src="<?= base_url('public/assetsfront/bootstrap/js/bootstrap.min.js') ?>"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
 
     <script>
         // Données PHP converties en JSON
@@ -712,7 +711,6 @@
                 .replace(/\n/g, '<br>');
         }
         
-        // Fonction pour formater les nombres
         function formatNumber(num) {
             if (!num && num !== 0) return '0';
             return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
@@ -723,7 +721,6 @@
         console.log('Zones:', zones.length);
         console.log('Collines:', collines.length);
 
-        // Configuration des couleurs pour les marqueurs
         const markerColors = {
             province: { bg: '#FF0000', name: 'Province' },
             commune: { bg: '#00FF00', name: 'Commune' },
@@ -731,7 +728,6 @@
             colline: { bg: '#800080', name: 'Colline' }
         };
 
-        // Initialisation de la carte
         const map = L.map('map').setView([-3.3858874, 28.6053531], 8);
         
         L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -744,7 +740,6 @@
         let markersCluster = null;
         let currentTypeFilter = 'all';
 
-        // Fonction pour créer un marqueur personnalisé
         function createCustomColoredMarker(point, type) {
             const colorConfig = markerColors[type];
             
@@ -817,7 +812,6 @@
             return marker;
         }
 
-        // Initialiser tous les marqueurs
         let totalCollinesCount = 0;
         function initMarkers() {
             allPoints = [];
@@ -883,7 +877,6 @@
             }
         }
 
-        // Appliquer les filtres
         function applyFilters() {
             if (!markersCluster) return;
             
@@ -932,7 +925,6 @@
             document.getElementById('totalPointsDisplay').innerText = filteredCollinesCount;
         }
 
-        // Remplir les selects de filtres
         function initFilters() {
             const provinceSelect = document.getElementById('filterProvince');
             const communeSelect = document.getElementById('filterCommune');
@@ -1079,7 +1071,6 @@
             });
         }
 
-        // Fonction pour voler vers un groupe
         function flyToGroup(groupType) {
             let points = [];
             if (groupType === 'province') points = provinces;
@@ -1093,7 +1084,6 @@
             }
         }
         
-        // Afficher les détails dans le modal
         window.showDetails = function(collineId) {
             const colline = collines.find(c => c.id == collineId);
             if (!colline) return;
@@ -1223,7 +1213,6 @@
             
             document.getElementById('modalCollineInfo').innerHTML = modalContent;
             
-            // Initialiser DataTable sans responsive pour desktop
             setTimeout(() => {
                 if ($.fn.DataTable.isDataTable('#detailsTable')) {
                     $('#detailsTable').DataTable().destroy();
@@ -1245,11 +1234,12 @@
                 });
             }, 100);
             
+            // Utilisation de Bootstrap JS qui est déjà chargé par le footer
             $('#detailModal').modal('show');
         };
         
-        // Chargement initial
-        window.addEventListener('load', function() {
+        // Attendre que le DOM soit chargé
+        document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('preloader').style.display = 'none';
             initMarkers();
             initFilters();
