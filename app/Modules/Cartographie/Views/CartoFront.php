@@ -589,123 +589,148 @@
         }
 
         // Initialiser tous les marqueurs
-        function initMarkers() {
-            allPoints = [];
-            
-            // Ajouter les provinces
-            provinces.forEach(p => {
-                allPoints.push({ ...p, type: 'province' });
+        let totalCollinesCount = 0;
+   function initMarkers() {
+    allPoints = [];
+    
+    // Ajouter les provinces
+    provinces.forEach(p => {
+        allPoints.push({ ...p, type: 'province' });
+    });
+    
+    // Ajouter les communes
+    communes.forEach(c => {
+        allPoints.push({ ...c, type: 'commune' });
+    });
+    
+    // Ajouter les zones
+    zones.forEach(z => {
+        allPoints.push({ ...z, type: 'zone' });
+    });
+    
+    // Ajouter les collines
+    collines.forEach(c => {
+        allPoints.push({ 
+            ...c, 
+            type: 'colline',
+            description: c.description || ''
+        });
+    });
+    
+    // Calculer le nombre total de collines UNIQUEMENT
+    totalCollinesCount = collines.length;
+    
+    console.log('Total points à afficher:', allPoints.length);
+    console.log('Total collines (points d\'intervention):', totalCollinesCount);
+    
+    if (markersCluster) {
+        map.removeLayer(markersCluster);
+    }
+    
+    markersCluster = L.markerClusterGroup({
+        spiderfyOnMaxZoom: true,
+        showCoverageOnHover: false,
+        zoomToBoundsOnClick: true,
+        maxClusterRadius: 60,
+        iconCreateFunction: function(cluster) {
+            const count = cluster.getChildCount();
+            let size = 40;
+            if (count >= 10) size = 50;
+            if (count >= 50) size = 60;
+            return L.divIcon({
+                html: `<div style="background: linear-gradient(135deg, #667eea, #764ba2); width: ${size}px; height: ${size}px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: ${size > 45 ? '16px' : '12px'};">${count}</div>`,
+                className: 'custom-marker',
+                iconSize: L.point(size, size),
+                iconAnchor: L.point(size/2, size/2)
             });
-            
-            // Ajouter les communes
-            communes.forEach(c => {
-                allPoints.push({ ...c, type: 'commune' });
-            });
-            
-            // Ajouter les zones
-            zones.forEach(z => {
-                allPoints.push({ ...z, type: 'zone' });
-            });
-            
-            // Ajouter les collines
-            collines.forEach(c => {
-                allPoints.push({ 
-                    ...c, 
-                    type: 'colline',
-                    description: c.description || ''
-                });
-            });
-            
-            console.log('Total points à afficher:', allPoints.length);
-            
-            if (markersCluster) {
-                map.removeLayer(markersCluster);
-            }
-            
-            markersCluster = L.markerClusterGroup({
-                spiderfyOnMaxZoom: true,
-                showCoverageOnHover: false,
-                zoomToBoundsOnClick: true,
-                maxClusterRadius: 60,
-                iconCreateFunction: function(cluster) {
-                    const count = cluster.getChildCount();
-                    let size = 40;
-                    if (count >= 10) size = 50;
-                    if (count >= 50) size = 60;
-                    return L.divIcon({
-                        html: `<div style="background: linear-gradient(135deg, #667eea, #764ba2); width: ${size}px; height: ${size}px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: ${size > 45 ? '16px' : '12px'};">${count}</div>`,
-                        className: 'custom-marker',
-                        iconSize: L.point(size, size),
-                        iconAnchor: L.point(size/2, size/2)
-                    });
-                }
-            });
-            
-            allPoints.forEach(point => {
-                markersCluster.addLayer(createCustomColoredMarker(point, point.type));
-            });
-            
-            map.addLayer(markersCluster);
-            
-            // Mettre à jour l'affichage du total
-            document.getElementById('totalPointsDisplay').innerText = allPoints.length;
-            
-            // Ajuster la vue
-            if (allPoints.length > 0 && markersCluster.getBounds().isValid()) {
-                map.fitBounds(markersCluster.getBounds(), { padding: [50, 50] });
-            }
         }
+    });
+    
+    allPoints.forEach(point => {
+        markersCluster.addLayer(createCustomColoredMarker(point, point.type));
+    });
+    
+    map.addLayer(markersCluster);
+    
+    // Afficher le nombre de collines uniquement
+    document.getElementById('totalPointsDisplay').innerText = totalCollinesCount;
+    
+    // Ajuster la vue
+    if (allPoints.length > 0 && markersCluster.getBounds().isValid()) {
+        map.fitBounds(markersCluster.getBounds(), { padding: [50, 50] });
+    }
+}
 
         // Appliquer les filtres
-        function applyFilters() {
-            if (!markersCluster) return;
-            
-            const provinceId = document.getElementById('filterProvince').value;
-            const communeId = document.getElementById('filterCommune').value;
-            const zoneId = document.getElementById('filterZone').value;
-            const collineId = document.getElementById('filterColline').value;
-            
-            let filtered = [...allPoints];
-            
-            // Filtre par type de structure (uniquement pour les collines)
-            if (currentTypeFilter !== 'all') {
-                filtered = filtered.filter(point => {
-                    if (point.type === 'colline') {
-                        return point.type_structure_nom === currentTypeFilter;
-                    }
-                    if (point.type === 'province') {
-                        return collines.some(c => c.province_nom === point.nom && c.type_structure_nom === currentTypeFilter);
-                    }
-                    if (point.type === 'commune') {
-                        return collines.some(c => c.commune_nom === point.nom && c.type_structure_nom === currentTypeFilter);
-                    }
-                    if (point.type === 'zone') {
-                        return collines.some(c => c.zone_nom === point.nom && c.type_structure_nom === currentTypeFilter);
-                    }
-                    return true;
-                });
+       function applyFilters() {
+    if (!markersCluster) return;
+    
+    const provinceId = document.getElementById('filterProvince').value;
+    const communeId = document.getElementById('filterCommune').value;
+    const zoneId = document.getElementById('filterZone').value;
+    const collineId = document.getElementById('filterColline').value;
+    
+    let filtered = [...allPoints];
+    
+    // Filtre par type de structure (uniquement pour les collines)
+    if (currentTypeFilter !== 'all') {
+        filtered = filtered.filter(point => {
+            if (point.type === 'colline') {
+                return point.type_structure_nom === currentTypeFilter;
             }
-            
-            // Filtres hiérarchiques
-            if (collineId !== 'all') {
-                filtered = filtered.filter(p => p.type === 'colline' && p.id == collineId);
-            } else if (zoneId !== 'all') {
-                filtered = filtered.filter(p => (p.type === 'zone' && p.id == zoneId) || (p.type === 'colline' && p.zone_id == zoneId));
-            } else if (communeId !== 'all') {
-                filtered = filtered.filter(p => (p.type === 'commune' && p.id == communeId) || (p.type === 'zone' && p.commune_id == communeId) || (p.type === 'colline' && p.commune_id == communeId));
-            } else if (provinceId !== 'all') {
-                filtered = filtered.filter(p => (p.type === 'province' && p.id == provinceId) || (p.type === 'commune' && p.province_id == provinceId) || (p.type === 'zone' && p.province_id == provinceId) || (p.type === 'colline' && p.province_id == provinceId));
+            if (point.type === 'province') {
+                return collines.some(c => c.province_nom === point.nom && c.type_structure_nom === currentTypeFilter);
             }
-            
-            // Reconstruire les marqueurs
-            markersCluster.clearLayers();
-            filtered.forEach(point => {
-                markersCluster.addLayer(createCustomColoredMarker(point, point.type));
-            });
-            map.addLayer(markersCluster);
-            
-            document.getElementById('totalPointsDisplay').innerText = filtered.length;
-        }
+            if (point.type === 'commune') {
+                return collines.some(c => c.commune_nom === point.nom && c.type_structure_nom === currentTypeFilter);
+            }
+            if (point.type === 'zone') {
+                return collines.some(c => c.zone_nom === point.nom && c.type_structure_nom === currentTypeFilter);
+            }
+            return true;
+        });
+    }
+    
+    // Filtres hiérarchiques
+    if (collineId !== 'all') {
+        filtered = filtered.filter(p => p.type === 'colline' && p.id == collineId);
+    } else if (zoneId !== 'all') {
+        filtered = filtered.filter(p => (p.type === 'zone' && p.id == zoneId) || (p.type === 'colline' && p.zone_id == zoneId));
+    } else if (communeId !== 'all') {
+        filtered = filtered.filter(p => (p.type === 'commune' && p.id == communeId) || (p.type === 'zone' && p.commune_id == communeId) || (p.type === 'colline' && p.commune_id == communeId));
+    } else if (provinceId !== 'all') {
+        filtered = filtered.filter(p => (p.type === 'province' && p.id == provinceId) || (p.type === 'commune' && p.province_id == provinceId) || (p.type === 'zone' && p.province_id == provinceId) || (p.type === 'colline' && p.province_id == provinceId));
+    }
+    
+    // Reconstruire les marqueurs
+    markersCluster.clearLayers();
+    filtered.forEach(point => {
+        markersCluster.addLayer(createCustomColoredMarker(point, point.type));
+    });
+    map.addLayer(markersCluster);
+    
+    // Compter UNIQUEMENT les collines dans les points filtrés
+    const filteredCollinesCount = filtered.filter(point => point.type === 'colline').length;
+    document.getElementById('totalPointsDisplay').innerText = filteredCollinesCount;
+}
+// Voici le code complet modifié. Les changements principaux sont :
+
+// Ajout d'une variable totalCollinesCount pour stocker le nombre total de collines
+
+// Dans initMarkers() :
+
+// Le compteur affiche collines.length au lieu de allPoints.length
+
+// La variable totalCollinesCount est initialisée avec le nombre de collines
+
+// Dans applyFilters() :
+
+// Au lieu d'afficher filtered.length (qui inclut provinces, communes, zones et collines)
+
+// On filtre pour ne compter que les points de type 'colline' avec filtered.filter(point => point.type === 'colline').length
+
+// Ainsi, le tableau de bord affichera toujours le nombre de collines uniquement, que ce soit au chargement initial ou après application des filtres.
+
 
         // Remplir les selects de filtres
         function initFilters() {
