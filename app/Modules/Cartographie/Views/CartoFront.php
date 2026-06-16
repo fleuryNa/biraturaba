@@ -58,7 +58,7 @@
     
     #map {
         width: 100%;
-        height: 110vh;
+        height: 115vh;
         border-radius: 16px;
         box-shadow: 0 10px 40px rgba(0,0,0,0.15);
         border: 1px solid rgba(255,255,255,0.3);
@@ -506,6 +506,33 @@
             font-size: 11px;
         }
     }
+    /* Styles pour le tableau de bord des statistiques par type */
+.stats-dashboard {
+    transition: all 0.3s ease;
+}
+
+.stat-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: default;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2) !important;
+}
+
+.stat-card .fa {
+    margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+    .stat-card {
+        padding: 14px !important;
+    }
+    .stat-card div[style*="font-size: 22px"] {
+        font-size: 18px !important;
+    }
+}
     </style>
 </head>
 
@@ -548,7 +575,7 @@
                     <div class="info-banner" style="background: linear-gradient(135deg, #2c3e50, #1a1a2e); border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; color: white;">
                         <h5 style="color: white; margin: 0 0 8px 0;"><i class="fa fa-info-circle"></i> Comment utiliser cette carte ?</h5>
                         <p style="color: #ccc; margin: 0; font-size: 13px;">
-                            🗺️ Cette carte montre l'ensemble des sites d'intervention du projet Biraturaba.<br>
+                            🗺️ Cette carte montre l'ensemble des zones d'intervention de  Biraturaba ASBL.<br>
                             • Provinces (rouge) - Communes (vert) - Zones (bleu) - Collines (violet)<br>
                             • Cliquez sur les marqueurs pour voir les détails de chaque site.<br>
                             • Utilisez les filtres ci-contre pour affiner votre recherche par province, commune, zone ou type de structure.<br>
@@ -563,6 +590,28 @@
                     </div>
                 </div>
             </div>
+
+            <!-- TABLEAU DE BORD DES STATISTIQUES PAR TYPE DE STRUCTURE (version barres) -->
+ <!-- TABLEAU DE BORD DES STATISTIQUES PAR TYPE DE STRUCTURE (DYNAMIQUE) -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="stats-dashboard" style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+            <h4 style="color: #1a1a2e; margin-bottom: 20px; font-weight: 600;">
+                <i class="fa fa-pie-chart" style="color: #667eea;"></i> 
+                Statistiques par type de structure
+                <span id="statsFilterInfo" style="font-size: 12px; font-weight: 400; color: #888; margin-left: 10px;"></span>
+            </h4>
+            <div id="statsContainer">
+                <!-- Les statistiques seront générées dynamiquement en JavaScript -->
+                <div class="text-center text-muted" style="padding: 20px 0;">
+                    <i class="fa fa-spinner fa-spin" style="font-size: 24px;"></i>
+                    <p style="margin-top: 10px;">Chargement des statistiques...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
             <div class="row">
                 <div class="col-md-8 map-col">
@@ -580,46 +629,16 @@
                                 <div>Points d'intervention (Collines)</div>
                             </div>
 
-                            <div class="legend-levels">
-                                <h4><i class="fa fa-layer-group"></i> Légende</h4>
-                                <div class="legend-level-item">
-                                    <div class="legend-color" style="background: #FF0000;"></div>
-                                    <div class="legend-info">
-                                        <strong>Provinces</strong>
-                                        <span>Sites provinciaux</span>
-                                    </div>
-                                </div>
-                                <div class="legend-level-item">
-                                    <div class="legend-color" style="background: #00FF00;"></div>
-                                    <div class="legend-info">
-                                        <strong>Communes</strong>
-                                        <span>Chefs-lieux de commune</span>
-                                    </div>
-                                </div>
-                                <div class="legend-level-item">
-                                    <div class="legend-color" style="background: #0000FF;"></div>
-                                    <div class="legend-info">
-                                        <strong>Zones</strong>
-                                        <span>Zones de regroupement</span>
-                                    </div>
-                                </div>
-                                <div class="legend-level-item">
-                                    <div class="legend-color" style="background: #800080;"></div>
-                                    <div class="legend-info">
-                                        <strong>Collines</strong>
-                                        <span>Sites d'intervention</span>
-                                    </div>
-                                </div>
-                            </div>
-
+                           
                             <div class="type-structure-filter">
-                                <h4><i class="fa fa-tags"></i> Filtrer par type de structure</h4>
-                                <select id="typeStructureSelect" class="form-control">
-                                    <option value="all">Tous les types</option>
-                                    <option value="SLC">SLC (SILC)</option>
-                                    <option value="Fonctionnels">Structures Fonctionnelles</option>
-                                </select>
-                            </div>
+    <h4><i class="fa fa-tags"></i> Filtrer par type de structure</h4>
+    <select id="typeStructureSelect" class="form-control">
+        <option value="all">Tous les types</option>
+        <?php foreach ($types_structure as $type): ?>
+            <option value="<?= esc($type['nom']) ?>"><?= esc($type['nom']) ?></option>
+        <?php endforeach; ?>
+    </select>
+</div>
 
                             <div class="filter-box">
                                 <h4>🔍 Filtres hiérarchiques</h4>
@@ -699,6 +718,126 @@
         const zones = <?= $zones ?: '[]' ?>;
         const collines = <?= $collines ?: '[]' ?>;
         const stats = <?= json_encode($stats) ?: '{}' ?>;
+        // ============================================
+// FONCTIONS POUR LES STATISTIQUES DYNAMIQUES
+// ============================================
+
+/**
+ * Calcule les statistiques par type de structure en fonction des données filtrées
+ */
+function calculateStatsByType(filteredCollines) {
+    const statsMap = new Map();
+    
+    // Parcourir toutes les collines filtrées
+    filteredCollines.forEach(colline => {
+        const type = colline.type_structure_nom || 'Non défini';
+        
+        if (!statsMap.has(type)) {
+            statsMap.set(type, {
+                type_structure: type,
+                nb_collines: 0,
+                total_membres: 0,
+                total_hommes: 0,
+                total_femmes: 0,
+                total_structures: 0
+            });
+        }
+        
+        const stat = statsMap.get(type);
+        stat.nb_collines++;
+        stat.total_membres += colline.nb_membres || 0;
+        stat.total_hommes += colline.nb_hommes || 0;
+        stat.total_femmes += colline.nb_femmes || 0;
+        stat.total_structures += colline.nb_structures || 0;
+    });
+    
+    // Convertir en tableau et trier par nombre de membres décroissant
+    return Array.from(statsMap.values()).sort((a, b) => b.total_membres - a.total_membres);
+}
+
+/**
+ * Détermine la couleur d'un type de structure
+ */
+function getTypeColor(type) {
+    const typeLower = type ? type.toLowerCase() : '';
+    if (typeLower.includes('slc') || typeLower.includes('silc')) {
+        return '#3498db';
+    } else if (typeLower.includes('fonctionnel')) {
+        return '#e67e22';
+    } else if (typeLower.includes('coop')) {
+        return '#27ae60';
+    } else {
+        return '#667eea';
+    }
+}
+
+/**
+ * Met à jour l'affichage du tableau de bord des statistiques
+ */
+function updateStatsDashboard(filteredCollines) {
+    const statsContainer = document.getElementById('statsContainer');
+    const statsFilterInfo = document.getElementById('statsFilterInfo');
+    
+    if (!statsContainer) return;
+    
+    // Calculer les statistiques
+    const stats = calculateStatsByType(filteredCollines);
+    
+    // Mettre à jour l'info du filtre
+    if (statsFilterInfo) {
+        const totalCollines = filteredCollines.length;
+        statsFilterInfo.textContent = `(${totalCollines} collines affichées)`;
+    }
+    
+    if (stats.length === 0) {
+        statsContainer.innerHTML = `
+            <div class="text-center text-muted" style="padding: 30px 0;">
+                <i class="fa fa-info-circle" style="font-size: 24px;"></i>
+                <p style="margin-top: 10px;">Aucune donnée correspondant aux filtres actuels</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // Générer le HTML
+    let html = '<div class="row">';
+    
+    stats.forEach(stat => {
+        const badgeColor = getTypeColor(stat.type_structure);
+        
+        html += `
+            <div class="col-md-4 col-sm-6 mb-3">
+                <div class="stat-card" style="background: ${badgeColor}; border-radius: 12px; padding: 18px; color: white; height: 100%; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <span style="font-size: 14px; font-weight: 500; opacity: 0.9;">
+                            <i class="fa fa-tag"></i> ${escapeHtml(stat.type_structure)}
+                        </span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 2px 12px; border-radius: 20px; font-size: 12px;">
+                            ${stat.nb_collines} collines
+                        </span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <div>
+                            <div style="font-size: 22px; font-weight: 700;">${formatNumber(stat.total_membres)}</div>
+                            <div style="font-size: 11px; opacity: 0.8;">Total membres</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 22px; font-weight: 700;">${formatNumber(stat.total_structures)}</div>
+                            <div style="font-size: 11px; opacity: 0.8;">Structures</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.2); display: flex; justify-content: space-between; font-size: 13px;">
+                        <span><i class="fa fa-male"></i> Hommes: ${formatNumber(stat.total_hommes)}</span>
+                        <span><i class="fa fa-female"></i> Femmes: ${formatNumber(stat.total_femmes)}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    html += '</div>';
+    statsContainer.innerHTML = html;
+}
         
         function escapeHtml(text) {
             if (!text) return '';
@@ -877,53 +1016,66 @@
             }
         }
 
-        function applyFilters() {
-            if (!markersCluster) return;
-            
-            const provinceId = document.getElementById('filterProvince').value;
-            const communeId = document.getElementById('filterCommune').value;
-            const zoneId = document.getElementById('filterZone').value;
-            const collineId = document.getElementById('filterColline').value;
-            
-            let filtered = [...allPoints];
-            
-            if (currentTypeFilter !== 'all') {
-                filtered = filtered.filter(point => {
-                    if (point.type === 'colline') {
-                        return point.type_structure_nom === currentTypeFilter;
-                    }
-                    if (point.type === 'province') {
-                        return collines.some(c => c.province_nom === point.nom && c.type_structure_nom === currentTypeFilter);
-                    }
-                    if (point.type === 'commune') {
-                        return collines.some(c => c.commune_nom === point.nom && c.type_structure_nom === currentTypeFilter);
-                    }
-                    if (point.type === 'zone') {
-                        return collines.some(c => c.zone_nom === point.nom && c.type_structure_nom === currentTypeFilter);
-                    }
-                    return true;
-                });
+      function applyFilters() {
+    if (!markersCluster) return;
+    
+    const provinceId = document.getElementById('filterProvince').value;
+    const communeId = document.getElementById('filterCommune').value;
+    const zoneId = document.getElementById('filterZone').value;
+    const collineId = document.getElementById('filterColline').value;
+    
+    let filtered = [...allPoints];
+    
+    // Filtrage par type de structure
+    if (currentTypeFilter !== 'all') {
+        filtered = filtered.filter(point => {
+            if (point.type === 'colline') {
+                return point.type_structure_nom === currentTypeFilter;
             }
-            
-            if (collineId !== 'all') {
-                filtered = filtered.filter(p => p.type === 'colline' && p.id == collineId);
-            } else if (zoneId !== 'all') {
-                filtered = filtered.filter(p => (p.type === 'zone' && p.id == zoneId) || (p.type === 'colline' && p.zone_id == zoneId));
-            } else if (communeId !== 'all') {
-                filtered = filtered.filter(p => (p.type === 'commune' && p.id == communeId) || (p.type === 'zone' && p.commune_id == communeId) || (p.type === 'colline' && p.commune_id == communeId));
-            } else if (provinceId !== 'all') {
-                filtered = filtered.filter(p => (p.type === 'province' && p.id == provinceId) || (p.type === 'commune' && p.province_id == provinceId) || (p.type === 'zone' && p.province_id == provinceId) || (p.type === 'colline' && p.province_id == provinceId));
+            if (point.type === 'province') {
+                return collines.some(c => c.province_nom === point.nom && c.type_structure_nom === currentTypeFilter);
             }
-            
-            markersCluster.clearLayers();
-            filtered.forEach(point => {
-                markersCluster.addLayer(createCustomColoredMarker(point, point.type));
-            });
-            map.addLayer(markersCluster);
-            
-            const filteredCollinesCount = filtered.filter(point => point.type === 'colline').length;
-            document.getElementById('totalPointsDisplay').innerText = filteredCollinesCount;
-        }
+            if (point.type === 'commune') {
+                return collines.some(c => c.commune_nom === point.nom && c.type_structure_nom === currentTypeFilter);
+            }
+            if (point.type === 'zone') {
+                return collines.some(c => c.zone_nom === point.nom && c.type_structure_nom === currentTypeFilter);
+            }
+            return true;
+        });
+    }
+    
+    // Filtrage hiérarchique
+    if (collineId !== 'all') {
+        filtered = filtered.filter(p => p.type === 'colline' && p.id == collineId);
+    } else if (zoneId !== 'all') {
+        filtered = filtered.filter(p => (p.type === 'zone' && p.id == zoneId) || (p.type === 'colline' && p.zone_id == zoneId));
+    } else if (communeId !== 'all') {
+        filtered = filtered.filter(p => (p.type === 'commune' && p.id == communeId) || (p.type === 'zone' && p.commune_id == communeId) || (p.type === 'colline' && p.commune_id == communeId));
+    } else if (provinceId !== 'all') {
+        filtered = filtered.filter(p => (p.type === 'province' && p.id == provinceId) || (p.type === 'commune' && p.province_id == provinceId) || (p.type === 'zone' && p.province_id == provinceId) || (p.type === 'colline' && p.province_id == provinceId));
+    }
+    
+    // Mettre à jour les marqueurs sur la carte
+    markersCluster.clearLayers();
+    filtered.forEach(point => {
+        markersCluster.addLayer(createCustomColoredMarker(point, point.type));
+    });
+    map.addLayer(markersCluster);
+    
+    // Mettre à jour le compteur total
+    const filteredCollinesCount = filtered.filter(point => point.type === 'colline').length;
+    document.getElementById('totalPointsDisplay').innerText = filteredCollinesCount;
+    
+    // ============================================
+    // METTRE À JOUR LE TABLEAU DE BORD DES STATISTIQUES
+    // ============================================
+    // Extraire uniquement les collines filtrées
+    const filteredCollines = filtered.filter(p => p.type === 'colline');
+    
+    // Mettre à jour le tableau de bord avec les données filtrées
+    updateStatsDashboard(filteredCollines);
+}
 
         function initFilters() {
             const provinceSelect = document.getElementById('filterProvince');
@@ -1239,11 +1391,18 @@
         };
         
         // Attendre que le DOM soit chargé
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('preloader').style.display = 'none';
-            initMarkers();
-            initFilters();
-        });
+       document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('preloader').style.display = 'none';
+    initMarkers();
+    initFilters();
+    
+    // Initialiser le tableau de bord avec toutes les collines
+    setTimeout(function() {
+        // Récupérer toutes les collines depuis les données
+        const allCollines = collines.map(c => ({ ...c, type: 'colline' }));
+        updateStatsDashboard(allCollines);
+    }, 300);
+});
     </script>
 </body>
 </html>

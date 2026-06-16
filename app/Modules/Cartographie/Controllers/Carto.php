@@ -16,8 +16,29 @@ class Carto extends BaseController
 
     public function index()
     {
+        // ==================== RÉCUPÉRATION DES TYPES DE STRUCTURES DEPUIS LA BASE ====================
+        $sql_types = "SELECT ID_TYPE_GROUPE as id, DESC_GROUPE as nom FROM type_groupes ORDER BY DESC_GROUPE";
+        $types_structure = $this->db->query($sql_types)->getResultArray();
+
+        // ==================== STATISTIQUES PAR TYPE DE STRUCTURE (pour affichage initial) ====================
+        $sql_stats_types = "
+            SELECT 
+                tg.DESC_GROUPE as type_structure,
+                COUNT(DISTINCT mi.ID_MEMBRES) as nb_collines,
+                SUM(mi.NB_MEMBRE_INSCRITS) as total_membres,
+                SUM(mi.NOMBRE_HOMME) as total_hommes,
+                SUM(mi.NOMBRE_FEMME) as total_femmes,
+                SUM(mi.NB_GROUPE) as total_structures
+            FROM membres_inscrits mi
+            LEFT JOIN type_groupes tg ON mi.ID_TYPE_GROUPE = tg.ID_TYPE_GROUPE
+            WHERE mi.NB_MEMBRE_INSCRITS > 0
+            GROUP BY tg.DESC_GROUPE
+            ORDER BY total_membres DESC
+        ";
+        $stats_par_type = $this->db->query($sql_stats_types)->getResultArray();
+
         // ==================== REQUÊTE UNIQUE POUR TOUT RÉCUPÉRER DEPUIS MEMBRES_INSCRITS ====================
-          $sql = "
+        $sql = "
         SELECT 
             -- Infos membres_inscrits
             mi.ID_MEMBRES as membres_id,
@@ -70,7 +91,7 @@ class Carto extends BaseController
     ";
     
     $membres_data = $this->db->query($sql)->getResultArray();
-        $membres_data = $this->db->query($sql)->getResultArray();
+     
 
         // ==================== RÉCUPÉRATION DU NOMBRE DE COMMUNES PAR PROVINCE ====================
         $province_ids_with_data = array_unique(array_column($membres_data, 'PROVINCE_ID'));
@@ -187,7 +208,7 @@ class Carto extends BaseController
     'nom' => $row['colline_nom'],
     'lat' => (float)$lat,
     'lng' => (float)$lng,
-    'description' => $row['description'] ?? '',  // AJOUTEZ CETTE LIGNE
+    'description' => $row['description'] ?? '',
     'coord_modifiee' => $coord_modifiee,
     'type_structure_nom' => $row['type_structure_nom'] ?? 'Non défini',
     'zone_nom' => $row['zone_nom'],
@@ -260,7 +281,7 @@ class Carto extends BaseController
         'nom' => $colline['nom'],
         'lat' => $colline['lat'],
         'lng' => $colline['lng'],
-        'description' => $colline['description'],  // AJOUTEZ CETTE LIGNE
+        'description' => $colline['description'],
         'info' => "🏥 " . $colline['zone_nom'] . " | " . $colline['commune_nom'] . " | " . $colline['province_nom'] . " | 📌 Type: " . $colline['type_structure_nom'],
         'detail' => "👥 " . $colline['nb_membres'] . " membres | 👨 " . $colline['nb_hommes'] . " H | 👩 " . $colline['nb_femmes'] . " F | 📊 " . $colline['nb_structures'] . " structures",
         'type_structure_nom' => $colline['type_structure_nom'],
@@ -284,6 +305,8 @@ class Carto extends BaseController
             'communes' => json_encode($communes_list),
             'zones' => json_encode($zones_list),
             'collines' => json_encode($collines_list),
+            'types_structure' => $types_structure,
+            'stats_par_type' => $stats_par_type,
             'stats' => [
                 'total_provinces' => count($provinces_list),
                 'total_communes' => count($communes_list),
@@ -296,7 +319,7 @@ class Carto extends BaseController
             ]
         ];
 
-        $data['partenaires'] =$this->model->getRequete("SELECT p.*FROM partners p
+        $data['partenaires'] = $this->model->getRequete("SELECT p.* FROM partners p
         GROUP BY p.ID_PARTNERS ");
 
         return view('App\Modules\Cartographie\Views\CartoFront', $data);
