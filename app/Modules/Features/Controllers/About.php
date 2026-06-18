@@ -83,14 +83,20 @@ public function getList(): mixed
             ? '<img src="'.base_url('uploads/about/'.$row->IMAGE).'" width="60">'
             : '';
 
-        $description = strlen($row->DESCRIPTION) > 60
-            ? substr($row->DESCRIPTION, 0, 60).'...'
-            : $row->DESCRIPTION;
+     $fullDescription = iconv('UTF-8', 'UTF-8//IGNORE', $row->DESCRIPTION);
 
-        $sub = [];
+        $shortDescription = mb_strlen($fullDescription, 'UTF-8') > 60
+            ? mb_substr($fullDescription, 0, 60, 'UTF-8') . '...'
+            : $fullDescription;
+
+                $sub = [];
         $sub[] = $i++;
         $sub[] = $row->TITRE;
-        $sub[] = $description;
+        $sub[] = '<span data-toggle="tooltip"
+                data-placement="top"
+                title="' . htmlspecialchars($fullDescription, ENT_QUOTES, 'UTF-8') . '">'
+        . htmlspecialchars($shortDescription, ENT_QUOTES, 'UTF-8')
+        . '</span>';
         $sub[] = $image;
         $sub[] = $row->TEXTE_BOUTON;
         $sub[] = '<a href="'.$row->LIEN_BOUTON.'" target="_blank">Lien</a>';
@@ -113,6 +119,15 @@ public function getList(): mixed
 
         $data[] = $sub;
     }
+//     foreach ($data[0] as $key => $value) {
+//     if (is_string($value)) {
+//         echo "Colonne $key : ";
+//         var_dump(json_encode($value));
+//         echo "<br><br>";
+//     }
+// }
+// exit;
+
 
     return $this->response->setJSON([
         "draw" => intval($_POST['draw']),

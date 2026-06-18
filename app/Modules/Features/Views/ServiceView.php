@@ -260,7 +260,7 @@
     function editService(id) {
 
         $.ajax({
-            url: "<?= base_url('service/getOne/') ?>" + id,
+            url: "<?= base_url('services/getOne/') ?>" + id,
             type: "GET",
             dataType: "json",
 
@@ -294,7 +294,7 @@
         if (!confirm("Supprimer ce service ?")) return;
 
         $.ajax({
-            url: "<?= base_url('service/delete') ?>",
+            url: "<?= base_url('services/delete') ?>",
             type: "POST",
             data: {
                 ID_SERVICE: id
@@ -322,6 +322,11 @@
 
             reader.readAsDataURL(file);
         }
+    });
+
+
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip();
     });
     </script>
 

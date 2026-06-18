@@ -8,6 +8,13 @@ use App\Controllers\BaseController;
 class Temoignage extends BaseController
 {
 
+ protected $db;
+
+    public function __construct()
+    {
+        $this->db = \Config\Database::connect();
+    }
+
 
     public function index()
     {

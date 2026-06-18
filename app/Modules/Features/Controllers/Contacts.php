@@ -8,7 +8,12 @@ use App\Controllers\BaseController;
 class Contacts extends BaseController
 {
 
+ protected $db;
 
+    public function __construct()
+    {
+        $this->db = \Config\Database::connect();
+    }
     public function index()
     {
         $data['title'] = 'Liste de Contacts';
@@ -66,8 +71,8 @@ public function getList(): mixed
         )"
         : "";
 
-    $query_secondaire = $query_principal . $search . $group . $order_by . $limit;
-    $query_filter     = $query_principal . $search . $group;
+    $query_secondaire = $query_principal .' '. $search .' '. $group .' '. $order_by .' '. $limit;
+    $query_filter     = $query_principal .' '. $search .' '. $group;
 
     $fetch_data = $this->model->datatable($query_secondaire);
 

@@ -9,7 +9,10 @@ class Impact extends BaseController
         $data['title'] = 'Notre Impact';
         $data['partenaires'] =$this->model->getRequete("SELECT p.*FROM partners p
         GROUP BY p.ID_PARTNERS ");
-        return view('site/SuiviEvaluationView',$data);
+
+        $data['impacts'] =$this->model->getRequeteOne("SELECT p.*FROM impact p
+        GROUP BY p.ID_IMPACT ");
+        return view('site/ImpactView',$data);
     }
 
 

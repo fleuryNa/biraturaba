@@ -7,6 +7,12 @@ use App\Controllers\BaseController;
 
 class Service extends BaseController
 {
+       protected $db;
+
+    public function __construct()
+    {
+        $this->db = \Config\Database::connect();
+    }
 
 
     public function index()
@@ -88,10 +94,22 @@ public function getList(): mixed
             ? '<img src="' . base_url('uploads/service/' . $row->ICONE) . '" width="50">'
             : '';
 
+
+            $fullDescription = iconv('UTF-8', 'UTF-8//IGNORE', $row->DESCRIPTION);
+
+        $shortDescription = mb_strlen($fullDescription, 'UTF-8') > 60
+            ? mb_substr($fullDescription, 0, 60, 'UTF-8') . '...'
+            : $fullDescription;
+
+
         $sub = [];
         $sub[] = $i++;
         $sub[] = $row->NOM;
-        $sub[] = $row->DESCRIPTION;
+         $sub[] = '<span data-toggle="tooltip"
+                data-placement="top"
+                title="' . htmlspecialchars($fullDescription, ENT_QUOTES, 'UTF-8') . '">'
+        . htmlspecialchars($shortDescription, ENT_QUOTES, 'UTF-8')
+        . '</span>';
         $sub[] = $icon;
 
         $sub[] = '

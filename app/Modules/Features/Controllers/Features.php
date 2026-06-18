@@ -7,6 +7,12 @@ use App\Controllers\BaseController;
 
 class Features extends BaseController
 {
+     protected $db;
+
+    public function __construct()
+    {
+        $this->db = \Config\Database::connect();
+    }
 
 
     public function index()

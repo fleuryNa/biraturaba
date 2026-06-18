@@ -1,57 +1,59 @@
-  
+  <header class="header">
+      <div class="page-brand">
+          <a class="link" href="<?= base_url()?>Acceuil" style="width:70%; display:block;">
+              <img src="<?= base_url()?>public/assetsfront/logo/biraturaba.png" alt="Logo" class="brand-img"
+                  style="width:100%; height:auto;">
+          </a>
+      </div>
 
-
-<header class="header">
-    <div class="page-brand">
-        <a class="link" href="<?= base_url()?>Acceuil" style="width:70%; display:block;">
-            <img src="<?= base_url()?>public/assets/img/logos/biraturaba.png" alt="Logo" class="brand-img" style="width:100%; height:auto;">
-        </a>
-    </div>
-
-    <div class="flexbox flex-1">
-        <!-- START TOP-LEFT TOOLBAR-->
-        <ul class="nav navbar-toolbar">
-            <li>
-                <a class="nav-link sidebar-toggler js-sidebar-toggler"><i class="ti-menu"></i></a>
-            </li>
-            <li>
-              <!--   <form class="navbar-search" action="javascript:;">
+      <div class="flexbox flex-1">
+          <!-- START TOP-LEFT TOOLBAR-->
+          <ul class="nav navbar-toolbar">
+              <li>
+                  <a class="nav-link sidebar-toggler js-sidebar-toggler"><i class="ti-menu"></i></a>
+              </li>
+              <li>
+                  <!--   <form class="navbar-search" action="javascript:;">
                     <div class="rel">
                         <span class="search-icon"><i class="ti-search"></i></span>
                         <input class="form-control" placeholder="Search here...">
                     </div>
                 </form> -->
-            </li>
-        </ul>
-        <!-- END TOP-LEFT TOOLBAR-->
-        <!-- START TOP-RIGHT TOOLBAR-->
-        <ul class="nav navbar-toolbar">
+              </li>
+          </ul>
+          <!-- END TOP-LEFT TOOLBAR-->
+          <!-- START TOP-RIGHT TOOLBAR-->
+          <ul class="nav navbar-toolbar">
 
-           <li class="dropdown dropdown-user">
-            <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
-                <img src="<?= base_url()?>public/assets/img/admin-avatar.png" />
-                <span class="user-name">
-                   test
-                </span>
-                <i class="fa fa-angle-down m-l-5"></i>
-            </a>
+              <li class="dropdown dropdown-user">
+                  <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
+                      <img src="<?= base_url()?>public/assets/img/admin-avatar.png" />
+                      <span class="user-name">
 
-            <ul class="dropdown-menu dropdown-menu-right user-dropdown">
-                <li>
-                    <a class="dropdown-item" href="<?= base_url()?>/Login/forgotPassword">
-                        <i class="fa fa-support"></i> Changer mot de passe
-                    </a>
-                </li>
-                <li class="dropdown-divider"></li>
-                <li>
-                    <a class="dropdown-item" href="<?= base_url()?>/Login/do_logout">
-                        <i class="fa fa-power-off"></i> Déconnexion
-                    </a>
-                </li>
-            </ul>
-        </li>
+                          <div class="font-strong">
+                              <?= session()->get('SUPERBAT_NOM') . ' ' . session()->get('SUPERBAT_PRENOM') ?>
+                          </div>
 
-    </ul>
-    <!-- END TOP-RIGHT TOOLBAR-->
-</div>
-</header>
+                      </span>
+                      <i class="fa fa-angle-down m-l-5"></i>
+                  </a>
+
+                  <ul class="dropdown-menu dropdown-menu-right user-dropdown">
+                      <!-- <li>
+                          <a class="dropdown-item" href="<?= base_url()?>/Login/forgotPassword">
+                              <i class="fa fa-support"></i> Changer mot de passe
+                          </a>
+                      </li> -->
+                      <li class="dropdown-divider"></li>
+                      <li>
+                          <a class="dropdown-item" href="<?= base_url('logout')?>">
+                              <i class="fa fa-power-off"></i> Déconnexion
+                          </a>
+                      </li>
+                  </ul>
+              </li>
+
+          </ul>
+          <!-- END TOP-RIGHT TOOLBAR-->
+      </div>
+  </header>

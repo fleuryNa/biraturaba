@@ -1,103 +1,86 @@
 <?php
-namespace App\Controllers;
 
-use App\Controllers\BaseController;
+
+namespace App\Controllers;
 
 class Login extends BaseController
 {
     public function index()
     {
-        return view('LoginView');
-    }
-    public function doLogin()
-    {
-        // code... 
-        $statutconnexion = false;
-        $USERNAME        = $this->request->getPost('USERNAME');
-        $PASSWORD        = md5($this->request->getPost('PASSWORD'));
-        $connexion = $this->model->getRequeteOne('SELECT `USER_ID`,CREATE_PASSWORD, `MATRICULE`, `NOM`, `PRENOM`, `TEL`, `DATE_NAISSANCE`, `EMAIL`, `ID_SEXE`, `IS_ACTIVE`, rh_users.`ID_PROFIL`,rh_profil.PRO_DESCR,DATE_SYSTEME FROM `rh_users` JOIN rh_profil ON rh_users.ID_PROFIL=rh_profil.ID_PROFIL WHERE EMAIL LIKE "' . $USERNAME . '" AND PASSWORD LIKE "' . $PASSWORD . '" AND `IS_ACTIVE`=1');
-
-
-
-        if (empty($connexion)) {
-            # code...
-            return $this->response->setJSON([
-                'success'  => $statutconnexion,
-                'response' => "Mot de passe ou  utilisateur incorrect",
-            ]);
-        }
-        
-
-        $sql      = "SELECT rh_role.ROUTE FROM `rh_role_profil`  JOIN rh_role ON rh_role_profil.ID_ROLE=rh_role.ID_ROLE  WHERE `ID_PROFIL`=" . $connexion['ID_PROFIL'];
-        $datarole = $this->model->datatable($sql);
-        $role     = [];
-        foreach ($datarole as $key) {
-            // code...
-            $role[] = $key->ROUTE;
+        if (session()->get('SUPERBAT_ID_USER')) {
+            return redirect()->to(site_url('Acceuil'))
+                ->with('message', '<div class="alert alert-success text-center">Connexion déjà active</div>');
         }
 
-        if (! empty($connexion['USER_ID'])) {
-            $statutconnexion = true;
-            $newdata         = [
-                'userdata'  => $connexion,
-                'role'      => $role,
-                'logged_in' => true,
-            ];
-            $defaultroute = base_url('accueil');
-            if (in_array('accueil', $role)) {
-                # code...
-                $defaultroute = base_url('accueil');
-
-            }
-            // Récupérez l'URL de redirection ou définissez une page par défaut
-            $redirect_url = $this->session->get('redirect_url') ?? $defaultroute;
-            $this->session->remove('redirect_url'); // Supprimez après redirection
-            $this->session->set($newdata);
-        }
-        return $this->response->setJSON([
-            'success'      => $statutconnexion,
-            'response'     => "",
-            'redirect_url' => $redirect_url,
+        return view('LoginView', [
+            'title' => 'Login'
         ]);
     }
-    public function doLogout()
+
+    public function do_login()
     {
-        $this->session->remove('logged_in');
-        $this->session->remove('userdata');
-        $this->session->remove('role');
-        // $this->session->destroy();
-        return redirect()->route('backend');
-    }
-    public function checkSession()
-    {
-        $userdata = session()->get("userdata");
-        $userId   = $userdata['USER_ID'] ?? '';
-        if (empty($userId)) {
-            return $this->response->setJSON(['active' => false]);
-        } else {
-            return $this->response->setJSON(['active' => true]);
+        $username = $this->request->getPost('USERNAME');
+        $password = $this->request->getPost('PASSWORD');
+
+        $user = $this->model->getOne(
+            'admin_user',
+            ['USERNAME' => $username, 'STATUS' => 1]
+        );
+
+        if (!$user) {
+            return redirect()->back()->with('message',
+                '<div class="alert alert-danger">Utilisateur introuvable</div>'
+            );
         }
-    }
-    public function accessDeny()
-    {
-        return view('AccessDenyView');
-    }
-    public function createPassWord()
-    {
-        $PASSWORD = sha1($this->request->getPost('PASSWORD'));
-        $USER_ID  = $this->request->getPost('USER_ID');
-        $this->model->updateData('rh_users', ['USER_ID' => $USER_ID], ['PASSWORD' => $PASSWORD, 'CREATE_PASSWORD' => 1]);
-        return $this->response->setJSON([
-            'success'      => 1,
-            'response'     => "",
-            'redirect_url' => base_url('/'),
+
+        // ⚠️ recommandé : password_hash (mais je garde ton md5 pour migration)
+        if ($user['PASSWORD'] !== md5($password)) {
+            return redirect()->back()->with('message',
+                '<div class="alert alert-danger">Mot de passe incorrect</div>'
+            );
+        }
+
+        // PROFILS
+        $profils = $this->model->getRequete("
+            SELECT PROFIL_ID
+            FROM admin_user_profil
+            WHERE ID_USER = {$user['ID_USER']}
+        ");
+
+        $profilIds = array_column($profils, 'PROFIL_ID');
+
+        // DROITS (OPTIMISÉ EN 1 SEULE REQUÊTE)
+        $droits = $this->model->getRequete("
+            SELECT DISTINCT ID_DROIT
+            FROM config_profil_droit
+            WHERE PROFIL_ID IN (" . implode(',', $profilIds ?: [0]) . ")
+        ");
+
+        $droitIds = array_column($droits, 'ID_DROIT');
+
+        // SESSION CI4
+        session()->set([
+            'SUPERBAT_ID_USER'  => $user['ID_USER'],
+            'SUPERBAT_NOM'      => $user['NOM'],
+            'SUPERBAT_PRENOM'   => $user['PRENOM'],
+            'SUPERBAT_USERNAME' => $user['USERNAME'],
+            'SUPERBAT_PROFILS'  => $profilIds,
+            'SUPERBAT_DROIT'    => array_unique($droitIds),
+            'ID_EMPLOYE'        => $user['ID_EMPLOYE'] ?? null
         ]);
-    }
-    public function indexCP($USER_ID)
-    {
-        $connexion = $this->model->getRequeteOne("SELECT `USER_ID`,`NOM`,`PRENOM` FROM `rh_users` WHERE CREATE_PASSWORD=0 and md5(`USER_ID`)='" . $USER_ID . "'");
-        $data      = ['connexion' => $connexion];
-        return view('CreatePasswordView', $data);
+
+        return redirect()->to(site_url('formexample'))
+            ->with('message', '<div class="alert alert-success">Connexion réussie</div>');
     }
 
+    public function logout()
+    {
+        session()->destroy();
+        return redirect()->to(site_url('backend'));
+    }
+
+    public function forgotPassword()
+    {
+        return view('App\Modules\Administration\Views\mot_de_passe_oublier');
+    }
 }

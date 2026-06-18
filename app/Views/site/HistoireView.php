@@ -23,7 +23,7 @@
 
     <!-- START SECTION TOP -->
     <section class="section-top"
-        style="background-image: url(public/assetsfront/img/bg/section-top.png);background-size:cover; background-position: center center;">
+        style="background-image: url(public/assetsfront/img/bg/histoire.jpeg);background-size:cover; background-position: center center;">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 col-sm-12 col-xs-12 text-center">
@@ -39,355 +39,74 @@
     </section>
     <!-- END SECTION TOP -->
 
-    <!-- ABOUT PAGE -->
-    <section class="about_page_area">
-        <div class="container">
-            <div class="row text-center">
-                <div class="offset-lg-1 col-lg-10 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.1s" data-wow-offset="0">
-                    <div class="single_about_content">
-                        <h2>Prebuilt websites are designed <br /> to save you time.</h2>
-                        <p>There are many variations of passages of Lorem Ipsum available, but the majority have
-                            suffered alteration in some form, by injected humour, or randomised words which don't look
-                            even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be
-                            sure there isn't anything embarrassing hidden in the middle of text.</p>
-                    </div>
-                </div><!-- END COL -->
-            </div><!-- END ROW -->
-        </div>
-        <!--- END CONTAINER -->
-    </section>
-    <!-- END ABOUT PAGE -->
+<section class="about_area section-padding">
+    <div class="container">
+        <div class="row align-items-center">
 
-    <!-- FEATURES -->
-    <section class="feature_area section-padding">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-lg-4 col-sm-6 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.1s" data-wow-offset="0">
-                    <div class="single_feature">
-                        <img src="<?= base_url()?>public/assetsfront/img/icon/research.png" alt="icon" />
-                        <h4>UX Research</h4>
-                        <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur elit.</p>
-                    </div>
-                </div><!-- END COL -->
-                <div class="col-lg-4 col-sm-6 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.1s" data-wow-offset="0">
-                    <div class="single_feature">
-                        <img src="<?= base_url()?>public/assetsfront/img/icon/brand.png" alt="icon" />
-                        <h4>Brand Identity</h4>
-                        <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur elit.</p>
-                    </div>
-                </div><!-- END COL -->
-                <div class="col-lg-4 col-sm-6 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.2s" data-wow-offset="0">
-                    <div class="single_feature">
-                        <img src="<?= base_url()?>public/assetsfront/img/icon/web.png" alt="icon" />
-                        <h4>Web Development</h4>
-                        <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur elit.</p>
-                    </div>
-                </div><!-- END COL -->
-                <div class="col-lg-4 col-sm-6 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.3s" data-wow-offset="0">
-                    <div class="single_feature">
-                        <img src="<?= base_url()?>public/assetsfront/img/icon/strategy.png" alt="icon" />
-                        <h4>Business Strategy</h4>
-                        <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur elit.</p>
-                    </div>
-                </div><!-- END COL -->
-                <div class="col-lg-4 col-sm-6 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.4s" data-wow-offset="0">
-                    <div class="single_feature">
-                        <img src="<?= base_url()?>public/assetsfront/img/icon/design.png" alt="icon" />
-                        <h4>Web Design</h4>
-                        <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur elit.</p>
-                    </div>
-                </div><!-- END COL -->
-                <div class="col-lg-4 col-sm-6 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.5s" data-wow-offset="0">
-                    <div class="single_feature">
-                        <img src="<?= base_url()?>public/assetsfront/img/icon/photo.png" alt="icon" />
-                        <h4>Photography</h4>
-                        <p>Sed do eiusmod tempor incididunt ut labore. Lorem ipsum dolor sit amet, consectetur elit.</p>
-                    </div>
-                </div><!-- END COL -->
-            </div><!-- END ROW -->
-        </div>
-        <!--- END CONTAINER -->
-    </section>
-    <!-- END FEATURES -->
-
-    <!-- START COUNTER -->
-    <section data-stellar-background-ratio="0.3" class="counter_feature section-padding">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-lg-3 col-sm-6 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.1s" data-wow-offset="0">
-                    <div class="single-project">
-                        <img src="<?= base_url()?>public/assetsfront/img/icon/counter-1.png" alt="icon" />
-                        <h2 class="counter-num">32652</h2>
-                        <h4>Happy Customers</h4>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.2s" data-wow-offset="0">
-                    <div class="single-project">
-                        <img src="<?= base_url()?>public/assetsfront/img/icon/counter-2.png" alt="icon" />
-                        <h2 class="counter-num">21821</h2>
-                        <h4>Project Done</h4>
-                    </div>
-                </div><!-- END COL -->
-                <div class="col-lg-3 col-sm-6 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.3s" data-wow-offset="0">
-                    <div class="single-project">
-                        <img src="<?= base_url()?>public/assetsfront/img/icon/counter-3.png" alt="icon" />
-                        <h2 class="counter-num">5660</h2>
-                        <h4>In Business</h4>
-                    </div>
-                </div><!-- END COL -->
-                <div class="col-lg-3 col-sm-6 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.4s" data-wow-offset="0">
-                    <div class="single-project single-project-mrnone">
-                        <img src="<?= base_url()?>public/assetsfront/img/icon/counter-4.png" alt="icon" />
-                        <h2 class="counter-num">11859</h2>
-                        <h4>Support Cases</h4>
-                    </div>
-                </div><!-- END COL -->
-            </div>
-            <!--- END ROW -->
-            <div class="row text-center">
-                <div class="col-lg-8 offset-lg-2 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.3s" data-wow-offset="0">
-                    <div class="video_btn"
-                        style="background-image: url(public/assetsfront/img/bg/video-bg.jpg);  background-size:cover; background-position: center center;">
-                        <a class="video-play" href="https://www.youtube.com/watch?v=alswD2tCc_Q"><i
-                                class="ti-video-clapper"></i></a>
-                    </div>
+            <div class="col-lg-6 wow fadeInLeft" data-wow-duration="1s">
+                <div class="about_img">
+                    <img src="<?= base_url('public/assetsfront/img/histoire.jpeg') ?>"
+                        class="img-fluid rounded shadow"
+                        alt="Histoire de Biraturaba">
                 </div>
             </div>
-            <!--- END ROW -->
-        </div>
-        <!--- END CONTAINER -->
-    </section>
-    <!-- END COUNTER-->
 
-    <!-- START TEAM MEMBERS -->
-    <section id="team" class="team_area section-padding">
-        <div class="container">
-            <div class="section-title text-center">
-                <h2>Brilliant team</h2>
-                <p>It is a long established fact that a reader will be distracted by the readable content of a page when
-                    looking at its layout.</p>
-            </div>
-            <div class="row text-center">
-                <div class="col-lg-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.1s"
-                    data-wow-offset="0">
-                    <div class="our-team">
-                        <div class="single-team">
-                            <img src="<?= base_url()?>public/assetsfront/img/team/1.jpg" class="img-fluid" alt="" />
-                            <h3>Gary Hunt</h3>
-                            <p>Marketer</p>
-                        </div>
-                        <ul class="social">
-                            <li><a href="#" class="ti-facebook facebook"></a></li>
-                            <li><a href="#" class="ti-twitter twitter"></a></li>
-                            <li><a href="#" class="ti-google google"></a></li>
-                        </ul>
-                    </div>
-                    <!--- END OUR TEAM -->
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.2s"
-                    data-wow-offset="0">
-                    <div class="our-team">
-                        <div class="single-team">
-                            <img src="<?= base_url()?>public/assetsfront/img/team/2.jpg" class="img-fluid" alt="" />
-                            <h3>Ayoub Fennouni</h3>
-                            <p>Manager</p>
-                        </div>
-                        <ul class="social">
-                            <li><a href="#" class="ti-facebook facebook"></a></li>
-                            <li><a href="#" class="ti-twitter twitter"></a></li>
-                            <li><a href="#" class="ti-google google"></a></li>
-                        </ul>
-                    </div>
-                    <!--- END OUR TEAM -->
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.3s"
-                    data-wow-offset="0">
-                    <div class="our-team">
-                        <div class="single-team">
-                            <img src="<?= base_url()?>public/assetsfront/img/team/3.jpg" class="img-fluid" alt="" />
-                            <h3>Mark Linomit</h3>
-                            <p>Python Developer</p>
-                        </div>
-                        <ul class="social">
-                            <li><a href="#" class="ti-facebook facebook"></a></li>
-                            <li><a href="#" class="ti-twitter twitter"></a></li>
-                            <li><a href="#" class="ti-google google"></a></li>
-                        </ul>
-                    </div>
-                    <!--- END OUR TEAM -->
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-3 col-sm-6 col-xs-12 wow fadeInUp" data-wow-duration="1s" data-wow-delay="0.4s"
-                    data-wow-offset="0">
-                    <div class="our-team">
-                        <div class="single-team">
-                            <img src="<?= base_url()?>public/assetsfront/img/team/4.jpg" class="img-fluid" alt="" />
-                            <h3>Thompson Luis</h3>
-                            <p>Developer</p>
-                        </div>
-                        <ul class="social">
-                            <li><a href="#" class="ti-facebook facebook"></a></li>
-                            <li><a href="#" class="ti-twitter twitter"></a></li>
-                            <li><a href="#" class="ti-google google"></a></li>
-                        </ul>
-                    </div>
-                    <!--- END OUR TEAM -->
-                </div>
-                <!--- END COL -->
-            </div>
-            <!--- END ROW -->
-        </div>
-        <!--- END CONTAINER -->
-    </section>
-    <!-- END TEAM MEMBERS -->
+            <div class="col-lg-6 wow fadeInRight" data-wow-duration="1s">
+                <div class="about_content">
 
-    <!-- HIRE US -->
-    <div class="hire_us_area section-padding">
-        <div class="container">
-            <div class="row">
-                <div class="offset-lg-1 col-lg-10 col-sm-12 col-xs-12 wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.2s" data-wow-offset="0">
-                    <div class="row">
-                        <div class="col-lg-4 col-sm-6 col-xs-12">
-                            <div class="hire_img">
-                                <img src="<?= base_url()?>public/assetsfront/img/icon/search.png" class="img-fluid"
-                                    alt="" />
-                            </div>
-                        </div><!-- END COL  -->
-                        <div class="col-lg-8 col-sm-6 col-xs-12">
-                            <div class="hire_content">
-                                <h2>Want to work with us?</h2>
-                                <p>Sed do eiusmod tempor incididunt ut labore Lorem ipsum dolor sit amet consectetur
-                                    elit.</p>
-                                <a class="btn_one" href="contact.html">Contact us</a>
-                            </div>
-                        </div><!-- END COL  -->
-                    </div><!-- END ROW -->
-                </div><!-- END COL  -->
-            </div><!-- END ROW -->
+                    <span class="text-warning fw-bold">
+                        Depuis 2002
+                    </span>
+
+                    <h2>Notre Histoire</h2>
+
+                    <p>
+                        Biraturaba a été créé en 2002 par une équipe de cinq personnes
+                        animées par une vision commune : contribuer durablement à
+                        l'amélioration des conditions de vie de leur communauté.
+                    </p>
+
+                    <p>
+                        L'idée est née de l'expérience d'un des fondateurs ayant travaillé
+                        plusieurs années dans des ONG internationales. Il avait constaté
+                        que de nombreux projets mobilisaient d'importantes ressources
+                        financières mais que leurs résultats disparaissaient peu de temps
+                        après leur clôture, faute de mécanismes garantissant leur durabilité.
+                    </p>
+
+                    <p>
+                        Face à cette réalité, plusieurs propositions de changement et
+                        d'approches innovantes furent formulées. Cependant, il s'est avéré
+                        difficile d'influencer des décisions souvent prises loin des réalités
+                        locales et sans la participation effective des communautés concernées.
+                    </p>
+
+                    <p>
+                        C'est ainsi qu'est née l'idée de créer une organisation locale,
+                        dirigée par des acteurs locaux, avec une approche centrée sur les
+                        capacités des populations à améliorer elles-mêmes leurs conditions
+                        de vie à partir de leurs propres ressources.
+                    </p>
+
+                    <p>
+                        Le nom <strong>Biraturaba</strong>, qui signifie
+                        <em>« Cela nous concerne »</em> en kirundi,
+                        reflète parfaitement cette vision. Il exprime la conviction que
+                        les solutions durables doivent être initiées par les communautés
+                        elles-mêmes, avec responsabilité, engagement et solidarité.
+                    </p>
+
+                    <a href="#contact" class="btn_one mt-3">
+                        Découvrir nos actions
+                    </a>
+
+                </div>
+            </div>
+
         </div>
-        <!--- END CONTAINER -->
     </div>
-    <!-- END HIRE US -->
+</section>
 
-    <!-- CONTACT -->
-    <div id="contact" class="contact_area section-padding">
-        <div class="container">
-            <div class="section-title text-center">
-                <h2 class="section-title-white">Get in touch.</h2>
-                <p class="section-title-white">It is a long established fact that a reader will be distracted by the
-                    readable content of a page when looking at its layout.</p>
-            </div>
-            <div class="row">
-                <div class="offset-lg-1 col-lg-10 col-sm-12 col-xs-12 text-center wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.2s" data-wow-offset="0">
-                    <div class="contact">
-                        <form class="form" name="enq" method="post" action="contact.php"
-                            onsubmit="return validation();">
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <input type="text" name="name" class="form-control" placeholder="Name"
-                                        required="required">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <input type="email" name="email" class="form-control" placeholder="Email"
-                                        required="required">
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <input type="text" name="subject" class="form-control" placeholder="Subject"
-                                        required="required">
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <textarea rows="6" name="message" class="form-control"
-                                        placeholder="Type your message that on your mind..."
-                                        required="required"></textarea>
-                                </div>
-                                <div class="col-md-12 text-center">
-                                    <button type="submit" value="Send message" name="submit" id="submitButton"
-                                        class="contact_btn" title="Submit Your Message!">Send Message</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div><!-- END COL  -->
-            </div><!-- END ROW -->
-        </div>
-        <!--- END CONTAINER -->
-    </div>
-    <!-- END CONTACT -->
-
-    <!-- START PARTNER LOGO -->
-    <div class="partner-logo section-padding">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.1s" data-wow-offset="0">
-                    <div class="single_logo single_logo_bm">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/1.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.2s" data-wow-offset="0">
-                    <div class="single_logo">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/2.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.3s" data-wow-offset="0">
-                    <div class="single_logo single_logo_bm">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/3.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.4s" data-wow-offset="0">
-                    <div class="single_logo">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/4.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.5s" data-wow-offset="0">
-                    <div class="single_logo">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/5.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.6s" data-wow-offset="0">
-                    <div class="single_logo">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/6.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-            </div>
-            <!--- END ROW -->
-        </div>
-        <!--- END CONTAINER -->
-    </div>
-    <!-- END PARTNER LOGO -->
 
     <?php echo view('includes/frontend/footer') ?>
 </body>

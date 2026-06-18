@@ -46,9 +46,8 @@
         <div class="container">
 
             <div class="section-title text-center">
-                <h2>Brilliant team</h2>
-                <p>It is a long established fact that a reader will be distracted by the readable content of a page when
-                    looking at its layout.</p>
+                <h2>Équipe brillante</h2>
+                <p></p>
             </div>
 
             <div class="row text-center">
@@ -90,7 +89,7 @@
                 <?php foreach ($niveaux as $niveau => $membres): ?>
 
                 <h3 class="text-center mb-4">
-                    <?= $niveau ?>
+                    <?= $niveau==1 ? 'Representant' : 'Membres' ?>
                 </h3>
 
                 <div class="row text-center">

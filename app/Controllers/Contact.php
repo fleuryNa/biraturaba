@@ -13,4 +13,26 @@ class Contact extends BaseController
     }
 
 
+    public function save()
+{
+    $db = db_connect();
+
+    $data = [
+        'NAME_CONTACT'   => $this->request->getPost('name'),
+        'EMAIL'          => $this->request->getPost('email'),
+        'SUBJECT'        => $this->request->getPost('subject'),
+        'MESSAGE_CONTACT'=> $this->request->getPost('message'),
+        'IS_READ'        => 0,
+        'DATE_INSERTION' => date('Y-m-d H:i:s')
+    ];
+
+    $db->table('contacts')->insert($data);
+
+    return $this->response->setJSON([
+        'status' => true,
+        'message' => 'Message envoyé avec succès'
+    ]);
+}
+
+
 }

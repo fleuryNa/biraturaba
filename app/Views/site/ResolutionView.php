@@ -4,6 +4,7 @@
 <?php
 	echo view('includes/frontend/header');
 ?>
+<?php helper('text'); ?>
 
 <body data-spy="scroll" data-offset="80">
 
@@ -44,61 +45,26 @@
     <section class="portfolio_project_area section-padding">
         <div class="container">
             <div class="row">
+                <?php 
+                
+                 $i=01;
+                if (!empty($projets)): ?>
+
+                <?php foreach ($projets as $projet): ?>
                 <div class="col-lg-12 col-sm-12 col-xs-12">
                     <div class="single_project">
-                        <img src="<?= base_url()?>public/assetsfront/img/portfolio/1.jpg" class="img-fluid"
+                        <img src="<?= base_url('uploads/projets/' . $projet['IMAGE']) ?>" class="img-fluid"
                             alt="portfolio" />
-                        <h1>01</h1>
-                        <h2>Website Design Agency</h2>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                            been the industry standard dummy text ever since the when an unknown printer took a galley
-                            of type and scrambled it to make a type specimen book. It is a long established fact that a
-                            reader.</p>
+                        <h1><?= $i++ ?></h1>
+
+                        <h2><?= $projet['TITRE'] ?></h2>
+                        <p><?= character_limiter(strip_tags($projet['DESCRIPTION']), 100) ?></p>
                         <a class="btn_one" href="single_project.html">View Project</a>
                     </div>
                 </div>
-                <!--- END COL -->
-                <div class="col-lg-12 col-sm-12 col-xs-12">
-                    <div class="single_project">
-                        <img src="<?= base_url()?>public/assetsfront/img/portfolio/2.jpg" class="img-fluid"
-                            alt="portfolio" />
-                        <h1>02</h1>
-                        <h2>Product Marketing</h2>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                            been the industry standard dummy text ever since the when an unknown printer took a galley
-                            of type and scrambled it to make a type specimen book. It is a long established fact that a
-                            reader.</p>
-                        <a class="btn_one" href="single_project.html">View Project</a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-12 col-sm-12 col-xs-12">
-                    <div class="single_project">
-                        <img src="<?= base_url()?>public/assetsfront/img/portfolio/3.jpg" class="img-fluid"
-                            alt="portfolio" />
-                        <h1>03</h1>
-                        <h2>App Development</h2>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                            been the industry standard dummy text ever since the when an unknown printer took a galley
-                            of type and scrambled it to make a type specimen book. It is a long established fact that a
-                            reader.</p>
-                        <a class="btn_one" href="single_project.html">View Project</a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-12 col-sm-12 col-xs-12">
-                    <div class="single_project">
-                        <img src="<?= base_url()?>public/assetsfront/img/portfolio/4.jpg" class="img-fluid"
-                            alt="portfolio" />
-                        <h1>04</h1>
-                        <h2>Business Strategy</h2>
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-                            been the industry standard dummy text ever since the when an unknown printer took a galley
-                            of type and scrambled it to make a type specimen book. It is a long established fact that a
-                            reader.</p>
-                        <a class="btn_one" href="single_project.html">View Project</a>
-                    </div>
-                </div>
+
+                <?php endforeach; ?>
+                <?php endif; ?>
                 <!--- END COL -->
             </div>
             <!--- END ROW -->

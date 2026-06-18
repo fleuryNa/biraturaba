@@ -46,28 +46,18 @@
             <div class="row">
                 <div class="col-lg-4 col-sm-4 col-xs-12 text-center">
                     <div class="single_address">
-                        <h4>New York</h4>
-                        <p class="mr_20">133rd Ave Jamaica, <br /> New York(NY)</p>
-                        <p><a href="tel:415 256 365">+415 256 365</a></p>
-                        <p><a href="mailto:">admin@monoline.com</a></p>
+                        <h4>Envoyez nous des commentaires</h4>
+
+                        <p><a href="tel:415 256 365">+257 2227181</a></p>
+                        <p><a href="mailto:">info@biraturaba.bi</a></p>
                     </div>
                 </div>
-                <!--- END COL -->
                 <div class="col-lg-4 col-sm-4 col-xs-12 text-center">
                     <div class="single_address">
-                        <h4>Los Angeles</h4>
-                        <p class="mr_20">E 49th St Los Angeles, <br /> California(CA), 90011</p>
-                        <p><a href="tel:415 256 365">+415 256 365</a></p>
-                        <p><a href="mailto:">support@monoline.com</a></p>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-4 col-sm-4 col-xs-12 text-center">
-                    <div class="single_address">
-                        <h4>San Francisco</h4>
-                        <p class="mr_20">61 Rudden Ave San <br />Francisco, California</p>
-                        <p><a href="tel:415 256 365">+415 256 365</a></p>
-                        <p><a href="mailto:">info@monoline.com</a></p>
+                        <h4>Adresse Physique</h4>
+                        <p class="mr_20">MUKAZA, ROHERO I <br /> Avenue de l'amitie n°8</p>
+                        <!-- <p><a href="tel:415 256 365">+415 256 365</a></p>
+                        <p><a href="mailto:">admin@monoline.com</a></p> -->
                     </div>
                 </div>
                 <!--- END COL -->
@@ -78,21 +68,12 @@
     </section>
     <!-- END ADDRESS -->
 
-    <!-- START MAP -->
-    <div class="map">
-        <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.957183635167!2d-74.00402768559431!3d40.71895904512855!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2598a1316e7a7%3A0x47bb20eb6074b3f0!2sNew%20Work%20City%20-%20(CLOSED)!5e0!3m2!1sbn!2sbd!4v1600305497356!5m2!1sbn!2sbd"
-            style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-    </div>
-    <!-- START MAP -->
-
     <!-- CONTACT -->
     <div id="contact" class="contact_area section-padding">
         <div class="container">
             <div class="section-title text-center">
-                <h2 class="section-title-white">Get in touch.</h2>
-                <p class="section-title-white">It is a long established fact that a reader will be distracted by the
-                    readable content of a page when looking at its layout.</p>
+                <h2 class="section-title-white">Dites bonjour, commençons quelque chose de nouveau</h2>
+                <p class="section-title-white"></p>
             </div>
             <div class="row">
                 <div class="offset-lg-1 col-lg-10 col-sm-12 col-xs-12 text-center wow fadeInUp" data-wow-duration="1s"
@@ -119,7 +100,9 @@
                                 </div>
                                 <div class="col-md-12 text-center">
                                     <button type="submit" value="Send message" name="submit" id="submitButton"
-                                        class="contact_btn" title="Submit Your Message!">Send Message</button>
+                                        class="contact_btn" title="Submit Your Message!">Envoyer le message</button>
+
+                                    <div id="result"></div>
                                 </div>
                             </div>
                         </form>
@@ -131,66 +114,59 @@
     </div>
     <!-- END CONTACT -->
 
-    <!-- START PARTNER LOGO -->
-    <div class="partner-logo section-padding">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.1s" data-wow-offset="0">
-                    <div class="single_logo single_logo_bm">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/1.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.2s" data-wow-offset="0">
-                    <div class="single_logo">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/2.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.3s" data-wow-offset="0">
-                    <div class="single_logo single_logo_bm">
-                        <a href="#"><img src="assetsfront/img/partner/3.png" alt="" class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.4s" data-wow-offset="0">
-                    <div class="single_logo">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/4.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.5s" data-wow-offset="0">
-                    <div class="single_logo">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/5.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-                <div class="col-lg-2 col-sm-4 col-xs-12 no-padding wow fadeInUp" data-wow-duration="1s"
-                    data-wow-delay="0.6s" data-wow-offset="0">
-                    <div class="single_logo">
-                        <a href="#"><img src="<?= base_url()?>public/assetsfront/img/partner/6.png" alt=""
-                                class="img-fluid" /></a>
-                    </div>
-                </div>
-                <!--- END COL -->
-            </div>
-            <!--- END ROW -->
-        </div>
-        <!--- END CONTAINER -->
-    </div>
-    <!-- END PARTNER LOGO -->
 
-    <!-- START FOOTER -->
+
     <?php echo view('includes/frontend/footer') ?>
+
+
+    <script>
+    $('#contact-form').submit(function(e) {
+
+        e.preventDefault();
+
+        $.ajax({
+            url: "<?= base_url('contact/save') ?>",
+            type: "POST",
+            data: $(this).serialize(),
+            dataType: "json",
+
+            beforeSend: function() {
+                $('#submitButton')
+                    .prop('disabled', true)
+                    .text('Envoi...');
+            },
+
+            success: function(response) {
+
+                if (response.status) {
+
+                    $('#result').html(
+                        '<div class="alert alert-success">' +
+                        response.message +
+                        '</div>'
+                    );
+
+                    $('#contact-form')[0].reset();
+                }
+            },
+
+            error: function() {
+                $('#result').html(
+                    '<div class="alert alert-danger">' +
+                    'Erreur lors de l\'envoi' +
+                    '</div>'
+                );
+            },
+
+            complete: function() {
+                $('#submitButton')
+                    .prop('disabled', false)
+                    .text('Send Message');
+            }
+        });
+
+    });
+    </script>
 </body>
 
 </html>

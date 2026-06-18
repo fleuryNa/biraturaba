@@ -8,20 +8,20 @@ class Home extends BaseController
     {
         
         $data['projets'] =$this->model->getRequete("SELECT p.*FROM projet p
-        GROUP BY p.ID_PROJET");
+        GROUP BY p.ID_PROJET LIMIT 3");
 
 
        $data['services'] =$this->model->getRequete("SELECT p.*FROM service p
-        GROUP BY p.ID_SERVICE ");
+        GROUP BY p.ID_SERVICE LIMIT 3");
 
         $data['testimonials'] =$this->model->getRequete("SELECT p.*FROM testimonials p
         GROUP BY p.ID_TESTMONIAL ");
 
         $data['partenaires'] =$this->model->getRequete("SELECT p.*FROM partners p
-        GROUP BY p.ID_PARTNERS ");
+        GROUP BY p.ID_PARTNERS LIMIT 6");
 
         $data['blogs'] =$this->model->getRequete("SELECT p.*FROM blogs p
-        GROUP BY p.ID_BLOG ");
+        GROUP BY p.ID_BLOG LIMIT 3");
 
           $data['video'] =$this->model->getRequeteOne("SELECT p.*FROM video_home p
         GROUP BY p.ID_VIDEO 

@@ -8,8 +8,12 @@ $routes->get('/', 'Home::index');
 $routes->get('identite', 'NosIdentite::index');
 $routes->get('histoire', 'Histoire::index');
 $routes->get('finance', 'Finance::index');
+$routes->get('finance/financeByYear', 'Finance::financeByYear');
+$routes->get('finance/financeByType', 'Finance::financeByType');
 $routes->get('equipe', 'Equipe::index');
 $routes->get('contact', 'Contact::index');
+$routes->post('contact/save', 'Contact::save');
+$routes->get('blog/detail/(:num)', 'Documentation::detail/$1');
 
 
 $routes->get('solution', 'Resolution::index');
@@ -21,8 +25,9 @@ $routes->get('part', 'Particularite::index');
 $routes->get('documentation', 'Documentation::index');
 
 $routes->get('backend', 'Login::index');
-$routes->post('login', 'Login::doLogin');
-$routes->get('logout', 'Login::doLogout');
+$routes->post('login', 'Login::do_login');
+
+$routes->get('logout', 'Login::logout');
 $routes->get('checkSession', 'Login::checkSession');
 $routes->get('createPassword/(:any)', 'Login::indexCP/$1');
 $routes->post('savenewpassword', 'Login::createPassWord'); 
@@ -181,6 +186,38 @@ $routes->get('getOne/(:num)', 'VideoForme::getOne/$1');
 $routes->post('delete', 'VideoForme::delete');
 });
 
+
+$routes->group('administration', ['namespace' => '\App\Modules\Administration\Controllers'],static function ($routes) {
+
+    $routes->get('user', 'User::index');
+
+    $routes->match(['get', 'post'], 'user/liste', 'User::listing');
+
+    $routes->get('user/ajouter', 'User::ajouter');
+    $routes->post('user/add', 'User::add');
+
+    $routes->get('user/index_update/(:num)', 'User::index_update/$1');
+    $routes->post('user/update', 'User::update');
+
+    $routes->get('user/desactiver/(:num)', 'User::desactiver/$1');
+    $routes->get('user/reactiver/(:num)', 'User::reactiver/$1');
+});
+
+
+$routes->group('administration', ['namespace' => 'App\Modules\Administration\Controllers'], function ($routes) {
+
+    // Profil & Droits
+    $routes->get('profil-droit', 'ProfilDroit::index');
+    $routes->post('profil-droit/listing', 'ProfilDroit::listing');
+
+    $routes->get('profil-droit/ajouter', 'ProfilDroit::ajouter');
+    $routes->post('profil-droit/add', 'ProfilDroit::add');
+
+    $routes->get('profil-droit/update/(:num)', 'ProfilDroit::index_update/$1');
+    $routes->post('profil-droit/update', 'ProfilDroit::update');
+
+    $routes->get('profil-droit/suppression/(:num)', 'ProfilDroit::suppression/$1');
+});
 // ============================
 // ABOUT MODULE ROUTES
 // ============================
@@ -222,4 +259,100 @@ $routes->group('team', ['namespace' => 'App\Modules\Features\Controllers'], stat
 
     // Suppression
     $routes->post('delete', 'Team::delete');
+});
+
+
+$routes->group('finances', ['namespace' => 'App\Modules\Features\Controllers'],static function ($routes) {
+
+    // Vue principale
+    $routes->get('/', 'Finance::index');
+
+    // DataTable
+    $routes->post('liste', 'Finance::getList');
+
+    // Ajouter / Modifier
+    $routes->post('store', 'Finance::save');
+
+    // Récupérer une ligne
+    $routes->get('getOne/(:num)', 'Finance::getOne/$1');
+
+    // Supprimer
+    $routes->post('delete', 'Finance::delete');
+});
+
+
+// OBJECTIFS
+$routes->group('objectifs', ['namespace' => 'App\Modules\Strategie\Controllers'],static function ($routes) {
+
+    $routes->get('/', 'Strategie::index');
+
+    $routes->post('liste', 'Strategie::getList');
+
+    $routes->post('store', 'Strategie::save');
+
+    $routes->get('getOne/(:num)', 'Strategie::getOne/$1');
+
+    $routes->post('delete', 'Strategie::delete');
+});
+
+$routes->group('activites', ['namespace' => 'App\Modules\Strategie\Controllers'],static function ($routes) {
+
+    $routes->get('/', 'ApprocheBackend::index');
+
+    $routes->post('liste', 'ApprocheBackend::getList');
+
+    $routes->post('store', 'ApprocheBackend::save');
+
+    $routes->get('getOne/(:num)', 'ApprocheBackend::getOne/$1');
+
+    $routes->post('delete', 'ApprocheBackend::delete');
+});
+
+
+$routes->group('systeme-suivi', ['namespace' => 'App\Modules\Strategie\Controllers'],static function ($routes) {
+
+    $routes->get('/', 'SystemeSuivi::index');
+
+    $routes->post('liste', 'SystemeSuivi::getList');
+
+    $routes->post('store', 'SystemeSuivi::save');
+
+    $routes->get('getOne/(:num)', 'SystemeSuivi::getOne/$1');
+
+    $routes->post('delete', 'SystemeSuivi::delete');
+});
+
+
+
+$routes->group('impacts', ['namespace' => 'App\Modules\Strategie\Controllers'],static function ($routes) {
+
+    $routes->get('/', 'ImpactBackend::index');
+
+    $routes->post('liste', 'ImpactBackend::getList');
+
+    $routes->post('store', 'ImpactBackend::save');
+
+    $routes->get('getOne/(:num)', 'ImpactBackend::getOne/$1');
+
+    $routes->post('delete', 'ImpactBackend::delete');
+
+    $routes->post('changeStatut', 'ImpactBackend::changeStatut');
+});
+
+
+
+
+$routes->group('particularites', ['namespace' => 'App\Modules\Strategie\Controllers'],static function ($routes) {
+
+    $routes->get('/', 'Particularite::index');
+
+    $routes->post('liste', 'Particularite::getList');
+
+    $routes->post('store', 'Particularite::save');
+
+    $routes->get('getOne/(:num)', 'Particularite::getOne/$1');
+
+    $routes->post('delete', 'Particularite::delete');
+
+    $routes->post('changeStatut', 'Particularite::changeStatut');
 });

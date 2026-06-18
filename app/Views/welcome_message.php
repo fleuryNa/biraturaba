@@ -5,6 +5,51 @@
 echo view('includes/frontend/header');
 ?>
 
+<style>
+.blog-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.blog-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.blog-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.blog-content h2 {
+    min-height: 60px;
+}
+
+.blog-content h2 a {
+    display: block;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.blog-excerpt {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    /* 3 lignes max */
+    -webkit-box-orient: vertical;
+    line-height: 1.6;
+    min-height: 75px;
+}
+
+.blog-btn {
+    margin-top: auto;
+}
+</style>
+
 <body data-spy="scroll" data-offset="80">
 
     <!-- START PRELOADER -->
@@ -57,11 +102,10 @@ echo view('includes/frontend/header');
         <div class="container">
             <div class="row feature_bg">
                 <div class="section-title text-center">
-                    <h2>A propos de nous</h2>
-                    <p>Biraturaba est une organisation burundaise qui promeut la réalisation des droits citoyens,
-                        commençant par l’autonomisation des familles pauvres (droits économiques, sociaux et
-                        culturels) et évoluant vers la participation citoyenne et la redevabilité (droits civils et
-                        politiques).</p>
+                    <h2>Ce que nous faisons</h2>
+                    <p>Biraturaba renforce les capacités des acteurs locaux (communautés, OSC et autorités locales) leur
+                        permettant de jouer pleinement leurs rôles et facilite la création des cadres d’échange
+                        permettant leur collaboration et leur travail en synergie.</p>
                 </div>
                 <?php foreach($services as $service): ?>
 
@@ -73,7 +117,7 @@ echo view('includes/frontend/header');
 
                         <h4><?= $service['NOM'] ?></h4>
 
-                        <p><?= $service['DESCRIPTION'] ?></p>
+                        <p> <?= character_limiter(strip_tags($service['DESCRIPTION']), 100) ?></p>
 
                     </div>
                 </div>
@@ -191,13 +235,6 @@ echo view('includes/frontend/header');
             </div>
             <div class="col-lg-12 text-center">
                 <div class="portfolio_filter">
-                    <ul>
-                        <li class="active filter" data-filter="all">Tous</li>
-                        <li class="filter" data-filter=".branding">SILC</li>
-                        <li class="filter" data-filter=".webtemplate">Reseaux</li>
-                        <li class="filter" data-filter=".seo">CGE</li>
-                        <li class="filter" data-filter=".digital">Club scolaire</li>
-                    </ul>
                 </div>
             </div>
             <div class="portfolio-grid">
@@ -262,7 +299,7 @@ echo view('includes/frontend/header');
                             <p>Pour 1$ investit dans les SILC, Biraturaba permet à un bénéficiaire d’accéder à 3.6$
                                 (1.2$ de fonds propre et 2.4$ de crédit).</p>
                         </div>
-                        <div class="skill_bar">
+                        <!-- <div class="skill_bar">
                             <div class="progress-bar-linear">
                                 <p class="progress-bar-text">SILC
                                     <span>85%</span>
@@ -287,7 +324,7 @@ echo view('includes/frontend/header');
                                     <span data-percent="60"></span>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div><!-- END COL -->
             </div><!-- END ROW -->
@@ -317,7 +354,7 @@ echo view('includes/frontend/header');
 
     <!-- TESTIMONIALS -->
 
-    <div class="testimonial_area section-padding">
+    <!-- <div class="testimonial_area section-padding">
 
         <div class="container">
 
@@ -381,7 +418,7 @@ echo view('includes/frontend/header');
 
         </div>
 
-    </div>
+    </div> -->
     <!-- END TESTIMONIALS -->
 
     <!-- BLOG -->
@@ -394,42 +431,44 @@ echo view('includes/frontend/header');
                 <p>Découvrez nos dernières publications et informations.</p>
             </div>
 
-            <div class="row text-center">
+            <div class="row align-items-stretch">
 
-                <?php foreach($blogs as $blog): ?>
+                <?php foreach ($blogs as $blog): ?>
 
-                <div class="col-lg-4 col-sm-6 col-xs-12 wow fadeInUp">
+                <div class="col-lg-4 col-md-6 mb-4 wow fadeInUp">
 
-                    <div class="home_single_blog">
+                    <div class="home_single_blog blog-card">
 
-                        <img src="<?= base_url('uploads/blogs/'.$blog['IMAGE_BLOG']) ?>" class="img-fluid"
-                            alt="<?= esc($blog['TITLE']) ?>" />
+                        <img src="<?= base_url('uploads/blogs/' . $blog['IMAGE_BLOG']) ?>"
+                            alt="<?= esc($blog['TITLE']) ?>">
 
-                        <div class="home_blog_content">
+                        <div class="home_blog_content blog-content">
 
                             <div class="blog_title_info">
 
                                 <h2>
-                                    <a href="<?= base_url('blog/detail/'.$blog['ID_BLOG']) ?>">
+                                    <a href="<?= base_url('blog/detail/' . $blog['ID_BLOG']) ?>">
                                         <?= esc($blog['TITLE']) ?>
                                     </a>
                                 </h2>
 
-                                <span>
-                                    <?= date('d/m/Y', strtotime($blog['DATE_INSERTION'])) ?>
-                                </span>
-
-                                <span>
-                                    <?= esc($blog['CATEGORIE_BLOG']) ?>
-                                </span>
+                                <div class="mb-2">
+                                    <span>
+                                        <?= date('d/m/Y', strtotime($blog['DATE_INSERTION'])) ?>
+                                    </span>
+                                    |
+                                    <span>
+                                        <?= esc($blog['CATEGORIE_BLOG']) ?>
+                                    </span>
+                                </div>
 
                             </div>
 
-                            <p>
-                                <?= substr(strip_tags($blog['CONTENT']), 0, 120) ?>...
+                            <p class="blog-excerpt">
+                                <?= strip_tags($blog['CONTENT']) ?>
                             </p>
 
-                            <a class="home_b_btn" href="<?= base_url('blog/detail/'.$blog['ID_BLOG']) ?>">
+                            <a class="home_b_btn blog-btn" href="<?= base_url('blog/detail/' . $blog['ID_BLOG']) ?>">
                                 En savoir plus
                             </a>
 
@@ -479,7 +518,9 @@ echo view('includes/frontend/header');
                                 </div>
                                 <div class="col-md-12 text-center">
                                     <button type="submit" value="Send message" name="submit" id="submitButton"
-                                        class="contact_btn" title="Submit Your Message!">Send Message</button>
+                                        class="contact_btn" title="Submit Your Message!">Envoyer le message</button>
+
+                                    <div id="result"></div>
                                 </div>
                             </div>
                         </form>
@@ -494,6 +535,56 @@ echo view('includes/frontend/header');
 
 
     <?php echo view('includes/frontend/footer') ?>
+
+
+    <script>
+    $('#contact-form').submit(function(e) {
+
+        e.preventDefault();
+
+        $.ajax({
+            url: "<?= base_url('contact/save') ?>",
+            type: "POST",
+            data: $(this).serialize(),
+            dataType: "json",
+
+            beforeSend: function() {
+                $('#submitButton')
+                    .prop('disabled', true)
+                    .text('Envoi...');
+            },
+
+            success: function(response) {
+
+                if (response.status) {
+
+                    $('#result').html(
+                        '<div class="alert alert-success">' +
+                        response.message +
+                        '</div>'
+                    );
+
+                    $('#contact-form')[0].reset();
+                }
+            },
+
+            error: function() {
+                $('#result').html(
+                    '<div class="alert alert-danger">' +
+                    'Erreur lors de l\'envoi' +
+                    '</div>'
+                );
+            },
+
+            complete: function() {
+                $('#submitButton')
+                    .prop('disabled', false)
+                    .text('Send Message');
+            }
+        });
+
+    });
+    </script>
 </body>
 
 </html>

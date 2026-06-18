@@ -332,6 +332,11 @@
             reader.readAsDataURL(file);
         }
     });
+
+
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
     </script>
 
 
