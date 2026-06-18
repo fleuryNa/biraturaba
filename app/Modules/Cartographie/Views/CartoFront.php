@@ -601,7 +601,7 @@
                 Statistiques par type de structure
                 <span id="statsFilterInfo" style="font-size: 12px; font-weight: 400; color: #888; margin-left: 10px;"></span>
             </h4>
-            <div id="statsContainer">
+            <div id="statsContainer" style="max-width: 1300px; max-height: 200px;overflow-y:auto;">
                 <!-- Les statistiques seront générées dynamiquement en JavaScript -->
                 <div class="text-center text-muted" style="padding: 20px 0;">
                     <i class="fa fa-spinner fa-spin" style="font-size: 24px;"></i>
