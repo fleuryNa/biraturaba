@@ -934,78 +934,80 @@
     let markersCluster = null;
     let currentTypeFilter = 'all';
 
-    function createCustomColoredMarker(point, type) {
-        const colorConfig = markerColors[type];
+   function createCustomColoredMarker(point, type) {
+    const colorConfig = markerColors[type];
+    
+    const markerHtml = `
+        <svg width="25" height="41" viewBox="0 0 25 41" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="grad-${type}" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:${colorConfig.bg};stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:${colorConfig.bg};stop-opacity:0.8" />
+                </linearGradient>
+                <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.3"/>
+                </filter>
+            </defs>
+            <g filter="url(#shadow)">
+                <path d="M12.5 0C5.6 0 0 5.6 0 12.5C0 21.875 12.5 41 12.5 41C12.5 41 25 21.875 25 12.5C25 5.6 19.4 0 12.5 0Z" 
+                      fill="url(#grad-${type})" stroke="white" stroke-width="1.5"/>
+                <circle cx="12.5" cy="12.5" r="4" fill="white" opacity="0.3"/>
+            </g>
+        </svg>
+    `;
+    
+    const icon = L.divIcon({
+        html: markerHtml,
+        className: 'custom-marker',
+        iconSize: [25, 41],
+        iconAnchor: [12.5, 41],
+        popupAnchor: [0, -35]
+    });
+    
+    const marker = L.marker([point.lat, point.lng], { icon: icon });
+    
+    let buttonDetail = '';
+    let descriptionHtml = '';
+    
+    if (type === 'colline') {
+        buttonDetail = `<button class="btn-detail" onclick="showDetails('${point.id}')">📊 Voir les détails</button>`;
         
-        const markerHtml = `
-            <svg width="25" height="41" viewBox="0 0 25 41" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="grad-${type}" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:${colorConfig.bg};stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:${colorConfig.bg};stop-opacity:0.8" />
-                    </linearGradient>
-                    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.3"/>
-                    </filter>
-                </defs>
-                <g filter="url(#shadow)">
-                    <path d="M12.5 0C5.6 0 0 5.6 0 12.5C0 21.875 12.5 41 12.5 41C12.5 41 25 21.875 25 12.5C25 5.6 19.4 0 12.5 0Z" 
-                          fill="url(#grad-${type})" stroke="white" stroke-width="1.5"/>
-                    <circle cx="12.5" cy="12.5" r="4" fill="white" opacity="0.3"/>
-                </g>
-            </svg>
-        `;
-        
-        const icon = L.divIcon({
-            html: markerHtml,
-            className: 'custom-marker',
-            iconSize: [25, 41],
-            iconAnchor: [12.5, 41],
-            popupAnchor: [0, -35]
-        });
-        
-        const marker = L.marker([point.lat, point.lng], { icon: icon });
-        
-        let buttonDetail = '';
-        let descriptionHtml = '';
-        
-        if (type === 'colline') {
-            buttonDetail = `<button class="btn-detail" onclick="showDetails('${point.id}')">📊 Voir les détails</button>`;
-            
-            if (point.description && point.description.trim() !== '') {
-                let description = point.description;
-                if (description.length > 150) {
-                    description = description.substring(0, 150) + '...';
-                }
-                descriptionHtml = `
-                    <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
-                        <strong><i class="fa fa-align-left"></i> Description:</strong>
-                        <p style="margin-top: 5px; font-size: 12px; line-height: 1.4; color: #555;">${escapeHtml(description)}</p>
-                    </div>
-                `;
+        if (point.description && point.description.trim() !== '') {
+            let description = point.description;
+            if (description.length > 150) {
+                description = description.substring(0, 150) + '...';
             }
+            descriptionHtml = `
+                <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
+                    <strong><i class="fa fa-align-left"></i> Description:</strong>
+                    <p style="margin-top: 5px; font-size: 12px; line-height: 1.4; color: #555;">${escapeHtml(description)}</p>
+                </div>
+            `;
         }
-        
-        const popupContent = `
-            <div style="min-width: 280px; max-width: 350px;">
-                <div style="background: ${colorConfig.bg}; color: white; padding: 10px 12px; border-radius: 12px 12px 0 0;">
-                    ${point.nom}
-                </div>
-                <div style="padding: 12px;">
-                    <p><strong>Info:</strong> ${point.info || 'Non renseignée'}</p>
-                    ${point.detail ? `<p><strong>Détail:</strong> ${point.detail}</p>` : ''}
-                    ${descriptionHtml}
-                    ${buttonDetail}
-                </div>
-                <div style="background: #f8f9fa; padding: 8px 12px; border-radius: 0 0 12px 12px; font-size: 11px; color: #666;">
-                    📍 ${point.lat.toFixed(6)}, ${point.lng.toFixed(6)}
-                </div>
-            </div>
-        `;
-        marker.bindPopup(popupContent);
-        return marker;
     }
-
+    
+    // Récupérer le nom du point de manière sécurisée
+    const pointName = point.nom || point.label || point.value || 'Point sans nom';
+    
+    const popupContent = `
+        <div style="min-width: 280px; max-width: 350px;">
+            <div style="background: ${colorConfig.bg}; color: white; padding: 10px 12px; border-radius: 12px 12px 0 0;">
+                ${escapeHtml(pointName)}
+            </div>
+            <div style="padding: 12px;">
+                <p><strong>Info:</strong> ${point.info || 'Non renseignée'}</p>
+                ${point.detail ? `<p><strong>Détail:</strong> ${point.detail}</p>` : ''}
+                ${descriptionHtml}
+                ${buttonDetail}
+            </div>
+            <div style="background: #f8f9fa; padding: 8px 12px; border-radius: 0 0 12px 12px; font-size: 11px; color: #666;">
+                📍 ${point.lat.toFixed(6)}, ${point.lng.toFixed(6)}
+            </div>
+        </div>
+    `;
+    marker.bindPopup(popupContent);
+    return marker;
+}
     let totalCollinesCount = 0;
     
     function initMarkers() {
