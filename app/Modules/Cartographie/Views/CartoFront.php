@@ -584,12 +584,12 @@
                         <h5 style="color: white; margin: 0 0 8px 0;"><i class="fa fa-info-circle"></i> Comment utiliser
                             cette carte ?</h5>
                         <p style="color: #ccc; margin: 0; font-size: 13px;">
-                            🗺️ Cette carte montre l'ensemble des zones d'intervention de Biraturaba ASBL.<br>
-                            • Provinces (rouge) - Communes (vert) - Zones (bleu) - Collines (violet)<br>
-                            • Cliquez sur les marqueurs pour voir les détails de chaque site.<br>
-                            • Utilisez les filtres ci-contre pour affiner votre recherche par province, commune, zone ou
+                            Cette carte montre l'ensemble des zones d'intervention de Biraturaba ASBL.<br>
+                            - Provinces (rouge) - Communes (vert) - Zones (bleu) - Collines (violet)<br>
+                            - Cliquez sur les marqueurs pour voir les détails de chaque site.<br>
+                            - Utilisez les filtres ci-contre pour affiner votre recherche par province, commune, zone ou
                             type de structure.<br>
-                            • Les clusters (cercles avec chiffres) regroupent les points proches - cliquez dessus pour
+                            - Les clusters (cercles avec chiffres) regroupent les points proches - cliquez dessus pour
                             les déployer.
                         </p>
                         <div class="legend-icons" style="display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap;">
@@ -632,7 +632,6 @@
                 </div>
             </div>
 
-
             <div class="row">
                 <div class="col-md-8 map-col">
                     <div id="map"></div>
@@ -649,21 +648,18 @@
                                 <div>Points d'intervention (Collines)</div>
                             </div>
 
-
                             <div class="type-structure-filter">
-                                <h4><i class="fa fa-tags"></i> Filtrer par type de structure
-                                </h4>
+                                <h4><i class="fa fa-tags"></i> Filtrer par type de structure</h4>
                                 <select id="typeStructureSelect" class="form-control">
                                     <option value="all">Tous les types</option>
                                     <?php foreach ($types_structure as $type): ?>
-                                    <option value="<?= esc($type['nom']) ?>">
-                                        <?= esc($type['nom']) ?></option>
+                                    <option value="<?= esc($type['nom']) ?>"><?= esc($type['nom']) ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
 
                             <div class="filter-box">
-                                <h4>🔍 Filtres hiérarchiques</h4>
+                                <h4>Filtres hierarchiques</h4>
                                 <div class="filter-group">
                                     <label>Province</label>
                                     <select id="filterProvince">
@@ -688,7 +684,7 @@
                                         <option value="all">Toutes les collines</option>
                                     </select>
                                 </div>
-                                <button id="resetFilters">🔄 Réinitialiser</button>
+                                <button id="resetFilters">Reinitialiser</button>
                             </div>
                         </div>
                     </div>
@@ -700,14 +696,14 @@
 
     <?php echo view('includes/frontend/footer'); ?>
 
-    <!-- Modal (gardé ici car il fait partie du contenu de la page) -->
+    <!-- Modal -->
     <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="detailModalLabel">
-                        <i class="fa fa-chart-bar"></i> Statistiques détaillées
+                        <i class="fa fa-chart-bar"></i> Statistiques detaillees
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -723,13 +719,13 @@
         </div>
     </div>
 
-    <!-- Styles additionnels pour Leaflet et DataTables (ne pas les mettre dans le footer) -->
+    <!-- Styles additionnels pour Leaflet et DataTables -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
 
-    <!-- Scripts additionnels (Leaflet et DataTables) -->
+    <!-- Scripts additionnels -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
@@ -768,9 +764,6 @@
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
 
-    /**
-     * Récupère les valeurs UNIQUES par nom
-     */
     function getUniqueByName(data) {
         const uniqueMap = new Map();
         data.forEach(item => {
@@ -796,9 +789,6 @@
         return Array.from(uniqueMap.values());
     }
 
-    /**
-     * Met à jour un select avec des options
-     */
     function populateSelect(selectElement, items, defaultText = 'Tous') {
         const currentValue = selectElement.value;
         selectElement.innerHTML = `<option value="all">${defaultText}</option>`;
@@ -808,7 +798,6 @@
             selectElement.innerHTML += `<option value="${value}">${escapeHtml(text)}</option>`;
         });
         selectElement.disabled = false;
-        // Restaurer la valeur si elle existe encore
         if (currentValue && Array.from(selectElement.options).some(opt => opt.value === currentValue)) {
             selectElement.value = currentValue;
         } else {
@@ -1006,9 +995,31 @@
         let buttonDetail = '';
         let descriptionHtml = '';
 
+        // Déterminer le label info en fonction du type
+        let infoLabel = 'Info';
+        if (type === 'province') {
+            infoLabel = 'Communes';
+        } else if (type === 'commune') {
+            infoLabel = 'Province';
+        } else if (type === 'zone') {
+            infoLabel = 'Commune';
+        } else if (type === 'colline') {
+            infoLabel = 'Zone';
+        }
+
+        let detailLabel = '';
+        if (type === 'province') {
+            detailLabel = 'Detail';
+        } else if (type === 'commune') {
+            detailLabel = 'Statistiques';
+        } else if (type === 'zone') {
+            detailLabel = 'Statistiques';
+        } else if (type === 'colline') {
+            detailLabel = 'Detail';
+        }
+
         if (type === 'colline') {
-            buttonDetail =
-                `<button class="btn-detail" onclick="showDetails('${point.id}')">📊 Voir les détails</button>`;
+            buttonDetail = `<button class="btn-detail" onclick="showDetails('${point.id}')">Voir les détails</button>`;
 
             if (point.description && point.description.trim() !== '') {
                 let description = point.description;
@@ -1017,26 +1028,28 @@
                 }
                 descriptionHtml = `
                     <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
-                        <strong><i class="fa fa-align-left"></i> Description:</strong>
+                        <strong>Description:</strong>
                         <p style="margin-top: 5px; font-size: 12px; line-height: 1.4; color: #555;">${escapeHtml(description)}</p>
                     </div>
                 `;
             }
         }
 
+        const pointName = point.nom || point.label || point.value || 'Point sans nom';
+
         const popupContent = `
             <div style="min-width: 280px; max-width: 350px;">
                 <div style="background: ${colorConfig.bg}; color: white; padding: 10px 12px; border-radius: 12px 12px 0 0;">
-                    ${point.nom}
+                    ${escapeHtml(pointName)}
                 </div>
                 <div style="padding: 12px;">
-                    <p><strong>Info:</strong> ${point.info || 'Non renseignée'}</p>
-                    ${point.detail ? `<p><strong>Détail:</strong> ${point.detail}</p>` : ''}
+                    <p><strong>${infoLabel}:</strong> ${point.info || 'Non renseignée'}</p>
+                    ${point.detail ? `<p><strong>${detailLabel}:</strong> ${point.detail}</p>` : ''}
                     ${descriptionHtml}
                     ${buttonDetail}
                 </div>
                 <div style="background: #f8f9fa; padding: 8px 12px; border-radius: 0 0 12px 12px; font-size: 11px; color: #666;">
-                    📍 ${point.lat.toFixed(6)}, ${point.lng.toFixed(6)}
+                    ${point.lat.toFixed(6)}, ${point.lng.toFixed(6)}
                 </div>
             </div>
         `;
@@ -1122,7 +1135,7 @@
     }
 
     // ============================================
-    // FILTRES HIÉRARCHIQUES - CORRECTION TOTALE
+    // FILTRES HIÉRARCHIQUES
     // ============================================
 
     function initFilters() {
@@ -1131,15 +1144,11 @@
         const zoneSelect = document.getElementById('filterZone');
         const collineSelect = document.getElementById('filterColline');
 
-        // === Remplir les selects avec les données uniques ===
         populateSelect(provinceSelect, uniqueProvinces, 'Toutes les provinces');
         populateSelect(communeSelect, uniqueCommunes, 'Toutes les communes');
         populateSelect(zoneSelect, uniqueZones, 'Toutes les zones');
         populateSelect(collineSelect, uniqueCollines, 'Toutes les collines');
 
-        // === ÉVÉNEMENTS ===
-
-        // 1. Changement de province -> filtre les communes, zones et collines
         provinceSelect.addEventListener('change', function() {
             const provinceId = this.value;
             console.log('Province sélectionnée:', provinceId);
@@ -1147,11 +1156,9 @@
             let communesFiltered, zonesFiltered, collinesFiltered;
 
             if (provinceId !== 'all') {
-                // Trouver l'ID de la province sélectionnée
                 const selectedProvince = provinces.find(p => p.nom === provinceId);
                 const provinceIdValue = selectedProvince ? selectedProvince.id : null;
 
-                // Filtrer par province_id
                 communesFiltered = getUniqueByName(communes.filter(c => c.province_id == provinceIdValue));
                 zonesFiltered = getUniqueByName(zones.filter(z => z.province_id == provinceIdValue));
                 collinesFiltered = getUniqueByName(collines.filter(c => c.province_id == provinceIdValue));
@@ -1172,7 +1179,6 @@
             applyFilters();
         });
 
-        // 2. Changement de commune -> filtre les zones et collines
         communeSelect.addEventListener('change', function() {
             const communeId = this.value;
             const provinceId = provinceSelect.value;
@@ -1206,7 +1212,6 @@
             applyFilters();
         });
 
-        // 3. Changement de zone -> filtre les collines
         zoneSelect.addEventListener('change', function() {
             const zoneId = this.value;
             const communeId = communeSelect.value;
@@ -1240,19 +1245,16 @@
             applyFilters();
         });
 
-        // 4. Changement de colline
         collineSelect.addEventListener('change', function() {
             applyFilters();
         });
 
-        // 5. Filtrer par type de structure
         const typeSelect = document.getElementById('typeStructureSelect');
         typeSelect.addEventListener('change', function() {
             currentTypeFilter = this.value;
             applyFilters();
         });
 
-        // 6. Bouton de réinitialisation
         document.getElementById('resetFilters').addEventListener('click', function() {
             provinceSelect.value = 'all';
             communeSelect.value = 'all';
@@ -1293,7 +1295,6 @@
 
         let filtered = [...allPoints];
 
-        // Filtrage par type de structure
         if (currentTypeFilter !== 'all') {
             filtered = filtered.filter(point => {
                 if (point.type === 'colline') {
@@ -1303,7 +1304,6 @@
             });
         }
 
-        // Filtrage hiérarchique
         if (collineId !== 'all') {
             filtered = filtered.filter(p => p.type === 'colline' && p.nom === collineId);
         } else if (zoneId !== 'all') {
@@ -1383,52 +1383,22 @@
         const colline = collines.find(c => c.id == collineId);
         if (!colline) return;
 
-        const communeCollines = collines.filter(c => c.commune_nom === colline.commune_nom);
+        let totalCollines = 1;
+        let totalMembres = colline.nb_membres || 0;
+        let totalHommes = colline.nb_hommes || 0;
+        let totalFemmes = colline.nb_femmes || 0;
+        let totalStructures = colline.nb_structures || 0;
 
-        const zonesStats = new Map();
-        communeCollines.forEach(c => {
-            if (!zonesStats.has(c.zone_nom)) {
-                zonesStats.set(c.zone_nom, {
-                    zone: c.zone_nom,
-                    collineCount: 0,
-                    nb_membres: 0,
-                    nb_hommes: 0,
-                    nb_femmes: 0,
-                    nb_structures: 0
-                });
-            }
-            const stat = zonesStats.get(c.zone_nom);
-            stat.collineCount++;
-            stat.nb_membres += c.nb_membres;
-            stat.nb_hommes += c.nb_hommes;
-            stat.nb_femmes += c.nb_femmes;
-            stat.nb_structures += c.nb_structures;
-        });
-
-        let tableRows = '';
-        let totalCollines = 0,
-            totalMembres = 0,
-            totalHommes = 0,
-            totalFemmes = 0,
-            totalStructures = 0;
-
-        zonesStats.forEach(stat => {
-            tableRows += `
-                <tr>
-                    <td style="text-align: left; font-weight: 500;">${escapeHtml(stat.zone)}</td>
-                    <td style="text-align: center;">${stat.collineCount}</td>
-                    <td style="text-align: center;">${formatNumber(stat.nb_membres)}</td>
-                    <td style="text-align: center;">${formatNumber(stat.nb_hommes)}</td>
-                    <td style="text-align: center;">${formatNumber(stat.nb_femmes)}</td>
-                    <td style="text-align: center;">${stat.nb_structures}</td>
-                </tr>
-            `;
-            totalCollines += stat.collineCount;
-            totalMembres += stat.nb_membres;
-            totalHommes += stat.nb_hommes;
-            totalFemmes += stat.nb_femmes;
-            totalStructures += stat.nb_structures;
-        });
+        let tableRows = `
+            <tr>
+                <td style="text-align: left; font-weight: 500;">${escapeHtml(colline.zone_nom || 'N/A')}</td>
+                <td style="text-align: center;">1</td>
+                <td style="text-align: center;">${formatNumber(totalMembres)}</td>
+                <td style="text-align: center;">${formatNumber(totalHommes)}</td>
+                <td style="text-align: center;">${formatNumber(totalFemmes)}</td>
+                <td style="text-align: center;">${totalStructures}</td>
+            </tr>
+        `;
 
         tableRows += `
             <tr class="total-row">
@@ -1448,26 +1418,26 @@
         if (colline.description && colline.description.trim() !== '') {
             descriptionHtml = `
                 <div class="description-box">
-                    <p><i class="fa fa-align-left" style="color: #667eea; margin-right: 8px;"></i>${escapeHtml(colline.description)}</p>
+                    <p>${escapeHtml(colline.description)}</p>
                 </div>
             `;
         }
 
         const modalContent = `
             <div class="colline-detail-header">
-                <h4><i class="fa fa-map-marker"></i> ${escapeHtml(colline.nom)}</h4>
+                <h4>${escapeHtml(colline.nom)}</h4>
                 <div class="detail-info-grid">
                     <div class="detail-info-item">
                         <label>Zone</label>
-                        <div class="value">${escapeHtml(colline.zone_nom)}</div>
+                        <div class="value">${escapeHtml(colline.zone_nom || 'N/A')}</div>
                     </div>
                     <div class="detail-info-item">
                         <label>Commune</label>
-                        <div class="value">${escapeHtml(colline.commune_nom)}</div>
+                        <div class="value">${escapeHtml(colline.commune_nom || 'N/A')}</div>
                     </div>
                     <div class="detail-info-item">
                         <label>Province</label>
-                        <div class="value">${escapeHtml(colline.province_nom)}</div>
+                        <div class="value">${escapeHtml(colline.province_nom || 'N/A')}</div>
                     </div>
                     <div class="detail-info-item">
                         <label>Type de structure</label>
@@ -1491,14 +1461,14 @@
             </div>
             ${descriptionHtml}
             <div class="stats-section">
-                <h5><i class="fa fa-pie-chart"></i> Statistiques de la commune: ${escapeHtml(colline.commune_nom)}</h5>
+                <h5>Statistiques de la colline: ${escapeHtml(colline.nom)}</h5>
                 <div class="stats-table-wrapper">
                     <table class="stats-table" id="detailsTable" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th style="text-align: left;">Zone</th>
                                 <th style="text-align: center;">Collines</th>
-                                <th style="text-align: center;">Bénéficiaires</th>
+                                <th style="text-align: center;">Beneficiaires</th>
                                 <th style="text-align: center;">Hommes</th>
                                 <th style="text-align: center;">Femmes</th>
                                 <th style="text-align: center;">Structures</th>
