@@ -1038,6 +1038,8 @@
             allPoints.push({ ...z, type: 'zone' });
         });
         
+        // Utiliser les collines dédupliquées par COLLINE_ID
+        // On garde toutes les collines uniques (déjà dédupliquées dans le PHP)
         collines.forEach(c => {
             allPoints.push({ 
                 ...c, 
@@ -1046,10 +1048,11 @@
             });
         });
         
+        // totalCollinesCount = nombre de collines uniques (déjà calculé dans le PHP)
         totalCollinesCount = collines.length;
         
         console.log('Total points à afficher:', allPoints.length);
-        console.log('Total collines:', totalCollinesCount);
+        console.log('Total collines uniques:', totalCollinesCount);
         
         if (markersCluster) {
             map.removeLayer(markersCluster);
