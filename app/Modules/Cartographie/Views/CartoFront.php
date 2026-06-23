@@ -1321,158 +1321,143 @@
     // SHOW DETAILS
     // ============================================
 
-    window.showDetails = function(collineId) {
-        const colline = collines.find(c => c.id == collineId);
-        if (!colline) return;
-        
-        const communeCollines = collines.filter(c => c.commune_nom === colline.commune_nom);
-        
-        const zonesStats = new Map();
-        communeCollines.forEach(c => {
-            if (!zonesStats.has(c.zone_nom)) {
-                zonesStats.set(c.zone_nom, {
-                    zone: c.zone_nom,
-                    collineCount: 0,
-                    nb_membres: 0,
-                    nb_hommes: 0,
-                    nb_femmes: 0,
-                    nb_structures: 0
-                });
-            }
-            const stat = zonesStats.get(c.zone_nom);
-            stat.collineCount++;
-            stat.nb_membres += c.nb_membres;
-            stat.nb_hommes += c.nb_hommes;
-            stat.nb_femmes += c.nb_femmes;
-            stat.nb_structures += c.nb_structures;
-        });
-        
-        let tableRows = '';
-        let totalCollines = 0, totalMembres = 0, totalHommes = 0, totalFemmes = 0, totalStructures = 0;
-        
-        zonesStats.forEach(stat => {
-            tableRows += `
-                <tr>
-                    <td style="text-align: left; font-weight: 500;">${escapeHtml(stat.zone)}</td>
-                    <td style="text-align: center;">${stat.collineCount}</td>
-                    <td style="text-align: center;">${formatNumber(stat.nb_membres)}</td>
-                    <td style="text-align: center;">${formatNumber(stat.nb_hommes)}</td>
-                    <td style="text-align: center;">${formatNumber(stat.nb_femmes)}</td>
-                    <td style="text-align: center;">${stat.nb_structures}</td>
-                </tr>
-            `;
-            totalCollines += stat.collineCount;
-            totalMembres += stat.nb_membres;
-            totalHommes += stat.nb_hommes;
-            totalFemmes += stat.nb_femmes;
-            totalStructures += stat.nb_structures;
-        });
-        
-        tableRows += `
-            <tr class="total-row">
-                <td style="text-align: left; font-weight: 700;"><strong>TOTAL</strong></td>
-                <td style="text-align: center;"><strong>${totalCollines}</strong></td>
-                <td style="text-align: center;"><strong>${formatNumber(totalMembres)}</strong></td>
-                <td style="text-align: center;"><strong>${formatNumber(totalHommes)}</strong></td>
-                <td style="text-align: center;"><strong>${formatNumber(totalFemmes)}</strong></td>
-                <td style="text-align: center;"><strong>${totalStructures}</strong></td>
-            </tr>
+    // ============================================
+// SHOW DETAILS - Version corrigée (une seule colline)
+// ============================================
+
+window.showDetails = function(collineId) {
+    const colline = collines.find(c => c.id == collineId);
+    if (!colline) return;
+    
+    // ===== STATISTIQUES UNIQUEMENT POUR CETTE COLLINE =====
+    // On ne filtre que les données de cette colline spécifique
+    const collineData = [colline];
+    
+    // Calculer les statistiques pour cette colline
+    let totalCollines = 1;
+    let totalMembres = colline.nb_membres || 0;
+    let totalHommes = colline.nb_hommes || 0;
+    let totalFemmes = colline.nb_femmes || 0;
+    let totalStructures = colline.nb_structures || 0;
+    
+    // Construction du tableau avec une seule ligne
+    let tableRows = `
+        <tr>
+            <td style="text-align: left; font-weight: 500;">${escapeHtml(colline.zone_nom || 'N/A')}</td>
+            <td style="text-align: center;">1</td>
+            <td style="text-align: center;">${formatNumber(totalMembres)}</td>
+            <td style="text-align: center;">${formatNumber(totalHommes)}</td>
+            <td style="text-align: center;">${formatNumber(totalFemmes)}</td>
+            <td style="text-align: center;">${totalStructures}</td>
+        </tr>
+    `;
+    
+    // Ligne de total
+    tableRows += `
+        <tr class="total-row">
+            <td style="text-align: left; font-weight: 700;"><strong>TOTAL</strong></td>
+            <td style="text-align: center;"><strong>${totalCollines}</strong></td>
+            <td style="text-align: center;"><strong>${formatNumber(totalMembres)}</strong></td>
+            <td style="text-align: center;"><strong>${formatNumber(totalHommes)}</strong></td>
+            <td style="text-align: center;"><strong>${formatNumber(totalFemmes)}</strong></td>
+            <td style="text-align: center;"><strong>${totalStructures}</strong></td>
+        </tr>
+    `;
+    
+    const typeBadgeClass = colline.type_structure_nom === 'SLC' ? 'badge-slc' : 'badge-fonctionnel';
+    const typeBadgeText = colline.type_structure_nom || 'Non défini';
+    
+    let descriptionHtml = '';
+    if (colline.description && colline.description.trim() !== '') {
+        descriptionHtml = `
+            <div class="description-box">
+                <p><i class="fa fa-align-left" style="color: #667eea; margin-right: 8px;"></i>${escapeHtml(colline.description)}</p>
+            </div>
         `;
-        
-        const typeBadgeClass = colline.type_structure_nom === 'SLC' ? 'badge-slc' : 'badge-fonctionnel';
-        const typeBadgeText = colline.type_structure_nom || 'Non défini';
-        
-        let descriptionHtml = '';
-        if (colline.description && colline.description.trim() !== '') {
-            descriptionHtml = `
-                <div class="description-box">
-                    <p><i class="fa fa-align-left" style="color: #667eea; margin-right: 8px;"></i>${escapeHtml(colline.description)}</p>
+    }
+    
+    const modalContent = `
+        <div class="colline-detail-header">
+            <h4><i class="fa fa-map-marker"></i> ${escapeHtml(colline.nom)}</h4>
+            <div class="detail-info-grid">
+                <div class="detail-info-item">
+                    <label>Zone</label>
+                    <div class="value">${escapeHtml(colline.zone_nom || 'N/A')}</div>
                 </div>
-            `;
+                <div class="detail-info-item">
+                    <label>Commune</label>
+                    <div class="value">${escapeHtml(colline.commune_nom || 'N/A')}</div>
+                </div>
+                <div class="detail-info-item">
+                    <label>Province</label>
+                    <div class="value">${escapeHtml(colline.province_nom || 'N/A')}</div>
+                </div>
+                <div class="detail-info-item">
+                    <label>Type de structure</label>
+                    <div class="value">
+                        <span class="badge-type ${typeBadgeClass}">${escapeHtml(typeBadgeText)}</span>
+                    </div>
+                </div>
+                <div class="detail-info-item">
+                    <label>Membres</label>
+                    <div class="value">${formatNumber(colline.nb_membres)}</div>
+                </div>
+                <div class="detail-info-item">
+                    <label>Hommes / Femmes</label>
+                    <div class="value">${formatNumber(colline.nb_hommes)} / ${formatNumber(colline.nb_femmes)}</div>
+                </div>
+                <div class="detail-info-item">
+                    <label>Structures</label>
+                    <div class="value">${colline.nb_structures}</div>
+                </div>
+            </div>
+        </div>
+        ${descriptionHtml}
+        <div class="stats-section">
+            <h5><i class="fa fa-pie-chart"></i> Statistiques de la colline: ${escapeHtml(colline.nom)}</h5>
+            <div class="stats-table-wrapper">
+                <table class="stats-table" id="detailsTable" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th style="text-align: left;">Zone</th>
+                            <th style="text-align: center;">Collines</th>
+                            <th style="text-align: center;">Bénéficiaires</th>
+                            <th style="text-align: center;">Hommes</th>
+                            <th style="text-align: center;">Femmes</th>
+                            <th style="text-align: center;">Structures</th>
+                        </tr>
+                    </thead>
+                    <tbody>${tableRows}</tbody>
+                </table>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('modalCollineInfo').innerHTML = modalContent;
+    
+    setTimeout(() => {
+        if ($.fn.DataTable.isDataTable('#detailsTable')) {
+            $('#detailsTable').DataTable().destroy();
         }
-        
-        const modalContent = `
-            <div class="colline-detail-header">
-                <h4><i class="fa fa-map-marker"></i> ${escapeHtml(colline.nom)}</h4>
-                <div class="detail-info-grid">
-                    <div class="detail-info-item">
-                        <label>Zone</label>
-                        <div class="value">${escapeHtml(colline.zone_nom)}</div>
-                    </div>
-                    <div class="detail-info-item">
-                        <label>Commune</label>
-                        <div class="value">${escapeHtml(colline.commune_nom)}</div>
-                    </div>
-                    <div class="detail-info-item">
-                        <label>Province</label>
-                        <div class="value">${escapeHtml(colline.province_nom)}</div>
-                    </div>
-                    <div class="detail-info-item">
-                        <label>Type de structure</label>
-                        <div class="value">
-                            <span class="badge-type ${typeBadgeClass}">${escapeHtml(typeBadgeText)}</span>
-                        </div>
-                    </div>
-                    <div class="detail-info-item">
-                        <label>Membres</label>
-                        <div class="value">${formatNumber(colline.nb_membres)}</div>
-                    </div>
-                    <div class="detail-info-item">
-                        <label>Hommes / Femmes</label>
-                        <div class="value">${formatNumber(colline.nb_hommes)} / ${formatNumber(colline.nb_femmes)}</div>
-                    </div>
-                    <div class="detail-info-item">
-                        <label>Structures</label>
-                        <div class="value">${colline.nb_structures}</div>
-                    </div>
-                </div>
-            </div>
-            ${descriptionHtml}
-            <div class="stats-section">
-                <h5><i class="fa fa-pie-chart"></i> Statistiques de la commune: ${escapeHtml(colline.commune_nom)}</h5>
-                <div class="stats-table-wrapper">
-                    <table class="stats-table" id="detailsTable" style="width: 100%;">
-                        <thead>
-                            <tr>
-                                <th style="text-align: left;">Zone</th>
-                                <th style="text-align: center;">Collines</th>
-                                <th style="text-align: center;">Bénéficiaires</th>
-                                <th style="text-align: center;">Hommes</th>
-                                <th style="text-align: center;">Femmes</th>
-                                <th style="text-align: center;">Structures</th>
-                            </tr>
-                        </thead>
-                        <tbody>${tableRows}</tbody>
-                    </table>
-                </div>
-            </div>
-        `;
-        
-        document.getElementById('modalCollineInfo').innerHTML = modalContent;
-        
-        setTimeout(() => {
-            if ($.fn.DataTable.isDataTable('#detailsTable')) {
-                $('#detailsTable').DataTable().destroy();
-            }
-            $('#detailsTable').DataTable({
-                language: { 
-                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json',
-                    search: "Rechercher:",
-                    lengthMenu: "Afficher _MENU_ entrées",
-                    info: "Affichage de _START_ à _END_ sur _TOTAL_ zones"
-                },
-                pageLength: 10,
-                scrollX: false,
-                autoWidth: true,
-                columnDefs: [
-                    { targets: 0, className: 'dt-left', orderable: true },
-                    { targets: [1,2,3,4,5], className: 'dt-center', orderable: true }
-                ]
-            });
-        }, 100);
-        
-        $('#detailModal').modal('show');
-    };
+        $('#detailsTable').DataTable({
+            language: { 
+                url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json',
+                search: "Rechercher:",
+                lengthMenu: "Afficher _MENU_ entrées",
+                info: "Affichage de _START_ à _END_ sur _TOTAL_ zones"
+            },
+            pageLength: 10,
+            scrollX: false,
+            autoWidth: true,
+            columnDefs: [
+                { targets: 0, className: 'dt-left', orderable: true },
+                { targets: [1,2,3,4,5], className: 'dt-center', orderable: true }
+            ]
+        });
+    }, 100);
+    
+    $('#detailModal').modal('show');
+};
 
     // ============================================
     // INITIALISATION
