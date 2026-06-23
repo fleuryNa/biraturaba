@@ -67,65 +67,11 @@
                 <ul class="nav-2-level collapse">
 
                     <li>
-                        <a href="<?= base_url('projet')?>">Projets</a>
+                        <a href="<?= base_url('type-groupe')?>">Type groupe</a>
                     </li>
                     <li>
                         <a href="<?= base_url('partenaire')?>">Partenaires</a>
                     </li>
-
-                    <li>
-                        <a href="<?= base_url('features')?>">Caracteristiques</a>
-                    </li>
-
-                    <li>
-                        <a href="<?= base_url('services')?>">Services</a>
-                    </li>
-
-                    <li>
-                        <a href="<?= base_url('testimonials')?>">Témoignages</a>
-                    </li>
-                    <li>
-                        <a href="<?= base_url('contacts')?>">Messages de contact</a>
-                    </li>
-                    <li>
-                        <a href="<?= base_url('blogs')?>">Blogs</a>
-                    </li>
-                    <li>
-                        <a href="<?= base_url('videos')?>">Vidéos</a>
-                    </li>
-
-                    <li>
-                        <a href="<?= base_url('about')?>">À propos</a>
-                    </li>
-
-                    <li>
-                        <a href="<?= base_url('team')?>">Équipe</a>
-                    </li>
-
-                    <li>
-                        <a href="<?= base_url('finances')?>">Finance</a>
-                    </li>
-
-                    <li>
-                        <a href="<?= base_url('objectifs')?>">Strategie</a>
-                    </li>
-                    <li>
-                        <a href="<?= base_url('activites')?>">Approches</a>
-                    </li>
-                    <li>
-                        <a href="<?= base_url('systeme-suivi')?>">Système de suivi</a>
-                    </li>
-
-                    <li>
-                        <a href="<?= base_url('impacts')?>">Impact</a>
-                    </li>
-
-
-                    <li>
-                        <a href="<?= base_url('particularites')?>">Particularités</a>
-                    </li>
-
-
 
                 </ul>
             </li>

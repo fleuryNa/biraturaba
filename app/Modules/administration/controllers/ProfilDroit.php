@@ -3,7 +3,7 @@
 namespace App\Modules\Administration\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\BiraturabaModel;
+// use App\Models\BiraturabaModel;
 
 class ProfilDroit extends BaseController
 {
@@ -11,7 +11,7 @@ class ProfilDroit extends BaseController
 
     public function __construct()
     {
-        $this->model = new BiraturabaModel();
+        // $this->model = new BiraturabaModel();
         helper(['form', 'url']);
     }
 

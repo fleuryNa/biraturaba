@@ -39,11 +39,12 @@
                   </a>
 
                   <ul class="dropdown-menu dropdown-menu-right user-dropdown">
-                      <!-- <li>
-                          <a class="dropdown-item" href="<?= base_url()?>/Login/forgotPassword">
+                      <li>
+                          <a class="dropdown-item"
+                              href="<?= base_url('forgotPassword/'.session()->get('SUPERBAT_ID_USER'))?>">
                               <i class="fa fa-support"></i> Changer mot de passe
                           </a>
-                      </li> -->
+                      </li>
                       <li class="dropdown-divider"></li>
                       <li>
                           <a class="dropdown-item" href="<?= base_url('logout')?>">

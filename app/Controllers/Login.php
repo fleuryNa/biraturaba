@@ -79,8 +79,71 @@ class Login extends BaseController
         return redirect()->to(site_url('backend'));
     }
 
-    public function forgotPassword()
+    public function forgotPassword($id)
     {
-        return view('App\Modules\Administration\Views\mot_de_passe_oublier');
+        
+        $data['id_user']=$id;
+        return view('MotPasseInconnuView',$data);
     }
+
+public function modifierPassword()
+{
+    $id_user = $this->request->getPost('ID_USER');
+
+    $oldPassword     = trim($this->request->getPost('OLDPASSWORD'));
+    $newPassword     = trim($this->request->getPost('NEWPASSWORD'));
+    $confirmPassword = trim($this->request->getPost('CONFIRMPASSWORD'));
+
+    $db = \Config\Database::connect();
+
+    $user = $db->table('admin_user')
+               ->select('ID_USER,PASSWORD')
+               ->where('ID_USER', $id_user)
+               ->get()
+               ->getRowArray();
+
+    if (empty($user)) {
+        return redirect()->back()->with(
+            'message',
+            '<div class="alert alert-danger">
+                Utilisateur introuvable.
+            </div>'
+        );
+    }
+
+    if (md5($oldPassword) != $user['PASSWORD']) {
+        return redirect()->back()->with(
+            'message',
+            '<div class="alert alert-danger">
+                Ancien mot de passe incorrect.
+            </div>'
+        );
+    }
+
+    if ($newPassword != $confirmPassword) {
+        return redirect()->back()->with(
+            'message',
+            '<div class="alert alert-danger">
+                Les mots de passe ne correspondent pas.
+            </div>'
+        );
+    }
+
+   $db->table('admin_user')
+   ->where('ID_USER', $id_user)
+   ->update([
+       'PASSWORD' => md5($newPassword)
+   ]);
+
+        session()->destroy();
+
+        return redirect()->to(site_url('backend'))->with(
+            'message',
+            '<div class="alert alert-success">
+                Votre mot de passe a été modifié avec succès. Veuillez vous reconnecter.
+            </div>'
+        );
+}
+
+
 }

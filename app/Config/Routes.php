@@ -31,6 +31,9 @@ $routes->get('logout', 'Login::logout');
 $routes->get('checkSession', 'Login::checkSession');
 $routes->get('createPassword/(:any)', 'Login::indexCP/$1');
 $routes->post('savenewpassword', 'Login::createPassWord'); 
+$routes->get('forgotPassword/(:any)', 'Login::forgotPassword/$1');
+$routes->post('modifierPassword', 'Login::modifierPassword');
+
  
 // $routes->get('/', 'Accueil_Backend::index');
 $routes->get('accueil', 'AccueilBackend::index');
@@ -355,4 +358,20 @@ $routes->group('particularites', ['namespace' => 'App\Modules\Strategie\Controll
     $routes->post('delete', 'Particularite::delete');
 
     $routes->post('changeStatut', 'Particularite::changeStatut');
+});
+
+
+$routes->group('type-groupe', ['namespace' => 'App\Modules\administration\Controllers'],static function ($routes) {
+
+    $routes->get('/', 'TypeConfig::index');
+
+    $routes->post('liste', 'TypeConfig::getList');
+
+    $routes->post('store', 'TypeConfig::save');
+
+    $routes->get('getOne/(:num)', 'TypeConfig::getOne/$1');
+
+    $routes->post('delete', 'TypeConfig::delete');
+
+     $routes->post('changeStatut', 'TypeConfig::changeStatut');
 });
