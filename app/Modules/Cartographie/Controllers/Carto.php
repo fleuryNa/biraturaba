@@ -93,6 +93,7 @@ class Carto extends BaseController
     $membres_data = $this->db->query($sql)->getResultArray();
      
         // ==================== RÉCUPÉRATION DU NOMBRE DE COMMUNES PAR PROVINCE (BASE DE DONNÉES) ====================
+        // Cette requête compte le nombre de communes par province qui ont des données dans membres_inscrits
         $sql_communes_count = "
             SELECT 
                 p.PROVINCE_ID,
@@ -286,73 +287,58 @@ class Carto extends BaseController
         }
         $zones = array_values($zones_temp);
         
-        // 4. Données des collines avec membres - DÉDUPLICATION PAR COLLINE_ID
-        $collines_temp = [];
-        $collines_uniques = [];
+        // 4. Données des collines avec membres
+        $collines = [];
         
         foreach ($membres_data as $row) {
-            $colline_id = $row['COLLINE_ID'];
+            $lat = $row['colline_lat'];
+            $lng = $row['colline_lng'];
+            $coord_modifiee = false;
             
-            // Si la colline n'a pas encore été ajoutée, on l'ajoute
-            if (!isset($collines_temp[$colline_id])) {
-                $lat = $row['colline_lat'];
-                $lng = $row['colline_lng'];
-                $coord_modifiee = false;
-                
-                if ($lat == -1 || $lat == 2 || empty($lat) || $lng == -1 || $lng == 2 || empty($lng)) {
-                    $coord_modifiee = true;
-                    if ($row['zone_lat'] != -1 && $row['zone_lat'] != 2 && !empty($row['zone_lat']) &&
-                        $row['zone_lng'] != -1 && $row['zone_lng'] != 2 && !empty($row['zone_lng'])) {
-                        $lat = $row['zone_lat'];
-                        $lng = $row['zone_lng'];
-                    }
-                    elseif ($row['commune_lat'] != -1 && $row['commune_lat'] != 2 && !empty($row['commune_lat']) &&
-                            $row['commune_lng'] != -1 && $row['commune_lng'] != 2 && !empty($row['commune_lng'])) {
-                        $lat = $row['commune_lat'];
-                        $lng = $row['commune_lng'];
-                    }
-                    elseif ($row['province_lat'] != -1 && $row['province_lat'] != 2 && !empty($row['province_lat']) &&
-                            $row['province_lng'] != -1 && $row['province_lng'] != 2 && !empty($row['province_lng'])) {
-                        $lat = $row['province_lat'];
-                        $lng = $row['province_lng'];
-                    }
-                    else {
-                        $lat = -3.3804751;
-                        $lng = 29.3604533;
-                    }
+            if ($lat == -1 || $lat == 2 || empty($lat) || $lng == -1 || $lng == 2 || empty($lng)) {
+                $coord_modifiee = true;
+                if ($row['zone_lat'] != -1 && $row['zone_lat'] != 2 && !empty($row['zone_lat']) &&
+                    $row['zone_lng'] != -1 && $row['zone_lng'] != 2 && !empty($row['zone_lng'])) {
+                    $lat = $row['zone_lat'];
+                    $lng = $row['zone_lng'];
                 }
-                
-                $collines_temp[$colline_id] = [
-                    'id' => $row['membres_id'],
-                    'COLLINE_ID' => $row['COLLINE_ID'],
-                    'nom' => $row['colline_nom'],
-                    'lat' => (float)$lat,
-                    'lng' => (float)$lng,
-                    'description' => $row['description'] ?? '',
-                    'coord_modifiee' => $coord_modifiee,
-                    'type_structure_nom' => $row['type_structure_nom'] ?? 'Non défini',
-                    'zone_nom' => $row['zone_nom'],
-                    'zone_id' => $row['ZONE_ID'],
-                    'commune_nom' => $row['commune_nom'],
-                    'commune_id' => $row['COMMUNE_ID'],
-                    'province_nom' => $row['province_nom'],
-                    'province_id' => $row['PROVINCE_ID'],
-                    'nb_membres' => 0,
-                    'nb_hommes' => 0,
-                    'nb_femmes' => 0,
-                    'nb_structures' => 0
-                ];
+                elseif ($row['commune_lat'] != -1 && $row['commune_lat'] != 2 && !empty($row['commune_lat']) &&
+                        $row['commune_lng'] != -1 && $row['commune_lng'] != 2 && !empty($row['commune_lng'])) {
+                    $lat = $row['commune_lat'];
+                    $lng = $row['commune_lng'];
+                }
+                elseif ($row['province_lat'] != -1 && $row['province_lat'] != 2 && !empty($row['province_lat']) &&
+                        $row['province_lng'] != -1 && $row['province_lng'] != 2 && !empty($row['province_lng'])) {
+                    $lat = $row['province_lat'];
+                    $lng = $row['province_lng'];
+                }
+                else {
+                    $lat = -3.3804751;
+                    $lng = 29.3604533;
+                }
             }
             
-            // On additionne les données de toutes les entrées de cette colline
-            $collines_temp[$colline_id]['nb_membres'] += (int)$row['nb_membres'];
-            $collines_temp[$colline_id]['nb_hommes'] += (int)$row['nb_hommes'];
-            $collines_temp[$colline_id]['nb_femmes'] += (int)$row['nb_femmes'];
-            $collines_temp[$colline_id]['nb_structures'] += (int)$row['nb_structures'];
+           $collines[] = [
+                'id' => $row['membres_id'],
+                'COLLINE_ID' => $row['COLLINE_ID'],
+                'nom' => $row['colline_nom'],
+                'lat' => (float)$lat,
+                'lng' => (float)$lng,
+                'description' => $row['description'] ?? '',
+                'coord_modifiee' => $coord_modifiee,
+                'type_structure_nom' => $row['type_structure_nom'] ?? 'Non défini',
+                'zone_nom' => $row['zone_nom'],
+                'zone_id' => $row['ZONE_ID'],
+                'commune_nom' => $row['commune_nom'],
+                'commune_id' => $row['COMMUNE_ID'],
+                'province_nom' => $row['province_nom'],
+                'province_id' => $row['PROVINCE_ID'],
+                'nb_membres' => (int)$row['nb_membres'],
+                'nb_hommes' => (int)$row['nb_hommes'],
+                'nb_femmes' => (int)$row['nb_femmes'],
+                'nb_structures' => (int)$row['nb_structures']
+            ];
         }
-        
-        // Convertir en tableau simple
-        $collines = array_values($collines_temp);
 
         // ==================== CONSTRUCTION DES DONNEES POUR LA VUE ====================
         $provinces_list = [];
@@ -364,6 +350,7 @@ class Carto extends BaseController
             $lat = ($province['lat'] != -1 && !empty($province['lat'])) ? (float)$province['lat'] : -3.38;
             $lng = ($province['lng'] != -1 && !empty($province['lng'])) ? (float)$province['lng'] : 29.36;
             
+            // Récupérer le nombre de communes avec données pour cette province (depuis la base de données)
             $nb_communes = $nb_communes_par_province[$province['id']] ?? 0;
             
             $provinces_list[] = [
@@ -387,7 +374,8 @@ class Carto extends BaseController
                 'lat' => $lat,
                 'lng' => $lng,
                 'info' => $commune['province_nom'],
-                'detail' => $commune['nb_zones'] . " zones | " . $commune['nb_collines'] . " collines | " . $commune['total_groupes'] . " groupes | " . $commune['types_groupes'],
+                // ✅ MODIFICATION ICI : "groupes" devient "structures"
+                'detail' => $commune['nb_zones'] . " zones | " . $commune['nb_collines'] . " collines | " . $commune['total_groupes'] . " structures | " . $commune['types_groupes'],
                 'province_id' => $commune['province_id'],
                 'nb_zones' => $commune['nb_zones'],
                 'nb_collines' => $commune['nb_collines'],
@@ -406,14 +394,15 @@ class Carto extends BaseController
                 'lat' => $lat,
                 'lng' => $lng,
                 'info' => $zone['commune_nom'],
-                'detail' => $zone['nb_collines'] . " collines | " . $zone['total_groupes'] . " groupes | " . $zone['types_groupes'],
+                // ✅ MODIFICATION ICI : "groupes" devient "structures"
+                'detail' => $zone['nb_collines'] . " collines | " . $zone['total_groupes'] . " structures | " . $zone['types_groupes'],
                 'commune_id' => $zone['commune_id'],
                 'nb_collines' => $zone['nb_collines'],
                 'total_groupes' => $zone['total_groupes'],
                 'types_groupes' => $zone['types_groupes']
             ];
         }
-
+        
         foreach ($collines as $colline) {
             $collines_list[] = [
                 'id' => $colline['id'],
@@ -437,9 +426,10 @@ class Carto extends BaseController
                 'nb_structures' => $colline['nb_structures']
             ];
         }
-
-        // Calcul du nombre total de collines UNIQUES (sans doublons)
-        $total_collines_uniques = count($collines_list);
+        $unique_colline_ids = array_unique(array_column($collines_list, 'COLLINE_ID'));
+        $total_collines_uniques = count($unique_colline_ids);
+        // $val=count($collines_list);
+        // print_r($total_collines_uniques);exit();
 
         $data = [
             'title' => 'Cartographie',

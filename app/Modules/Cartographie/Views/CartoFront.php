@@ -715,6 +715,7 @@
     const zones = <?= $zones ?: '[]' ?>;
     const collines = <?= $collines ?: '[]' ?>;
     const stats = <?= json_encode($stats) ?: '{}' ?>;
+    const totalCollinesFromDb = stats.total_sites || 0;
 
     console.log('Données reçues:');
     console.log('Provinces:', provinces);
@@ -987,13 +988,18 @@
             
             if (point.description && point.description.trim() !== '') {
                 let description = point.description;
-                if (description.length > 150) {
-                    description = description.substring(0, 150) + '...';
+                // Limiter à 120 caractères pour la prévisualisation
+                let shortDescription = description;
+                let hasMore = false;
+                if (description.length > 120) {
+                    shortDescription = description.substring(0, 120) + '...';
+                    hasMore = true;
                 }
                 descriptionHtml = `
-                    <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
+                    <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #e0e0e0; max-height: 80px; overflow-y: auto; scrollbar-width: thin;">
                         <strong>Description:</strong>
-                        <p style="margin-top: 5px; font-size: 12px; line-height: 1.4; color: #555;">${escapeHtml(description)}</p>
+                        <p style="margin-top: 5px; font-size: 12px; line-height: 1.4; color: #555; margin-bottom: 5px;">${escapeHtml(shortDescription)}</p>
+                        ${hasMore ? '<span style="font-size: 10px; color: #667eea; font-style: italic;">(Cliquez sur "Voir les détails" pour lire la suite)</span>' : ''}
                     </div>
                 `;
             }
@@ -1038,8 +1044,6 @@
             allPoints.push({ ...z, type: 'zone' });
         });
         
-        // Utiliser les collines dédupliquées par COLLINE_ID
-        // On garde toutes les collines uniques (déjà dédupliquées dans le PHP)
         collines.forEach(c => {
             allPoints.push({ 
                 ...c, 
@@ -1047,12 +1051,10 @@
                 description: c.description || ''
             });
         });
-        
-        // totalCollinesCount = nombre de collines uniques (déjà calculé dans le PHP)
-        totalCollinesCount = collines.length;
+        totalCollinesCount = totalCollinesFromDb > 0 ? totalCollinesFromDb : collines.length;        
         
         console.log('Total points à afficher:', allPoints.length);
-        console.log('Total collines uniques:', totalCollinesCount);
+        console.log('Total collines:', totalCollinesFromDb);
         
         if (markersCluster) {
             map.removeLayer(markersCluster);
