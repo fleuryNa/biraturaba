@@ -610,111 +610,91 @@
                 </div>
             </div>
 
-            <!-- TABLEAU DE BORD DES STATISTIQUES PAR TYPE DE STRUCTURE (version barres) -->
-            <<<<<<< HEAD <!-- TABLEAU DE BORD DES STATISTIQUES PAR TYPE DE STRUCTURE (DYNAMIQUE) -->
-                <div class="row mb-4">
-                    <div class="col-md-12">
-                        <div class="stats-dashboard"
-                            style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
-                            <h4 style="color: #1a1a2e; margin-bottom: 20px; font-weight: 600;">
-                                <i class="fa fa-pie-chart" style="color: #667eea;"></i>
-                                Statistiques par type de structure
-                                <span id="statsFilterInfo"
-                                    style="font-size: 12px; font-weight: 400; color: #888; margin-left: 10px;"></span>
-                            </h4>
-                            <div id="statsContainer">
-                                <!-- Les statistiques seront générées dynamiquement en JavaScript -->
-                                <div class="text-center text-muted" style="padding: 20px 0;">
-                                    <i class="fa fa-spinner fa-spin" style="font-size: 24px;"></i>
-                                    <p style="margin-top: 10px;">Chargement des statistiques...</p>
-                                </div>
+            <!-- TABLEAU DE BORD DES STATISTIQUES PAR TYPE DE STRUCTURE (DYNAMIQUE) -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="stats-dashboard"
+                        style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+                        <h4 style="color: #1a1a2e; margin-bottom: 20px; font-weight: 600;">
+                            <i class="fa fa-pie-chart" style="color: #667eea;"></i>
+                            Statistiques par type de structure
+                            <span id="statsFilterInfo"
+                                style="font-size: 12px; font-weight: 400; color: #888; margin-left: 10px;"></span>
+                        </h4>
+                        <div id="statsContainer">
+                            <!-- Les statistiques seront générées dynamiquement en JavaScript -->
+                            <div class="text-center text-muted" style="padding: 20px 0;">
+                                <i class="fa fa-spinner fa-spin" style="font-size: 24px;"></i>
+                                <p style="margin-top: 10px;">Chargement des statistiques...</p>
                             </div>
                         </div>
-                        =======
-                        <!-- TABLEAU DE BORD DES STATISTIQUES PAR TYPE DE STRUCTURE (DYNAMIQUE) -->
-                        <div class="row mb-4">
-                            <div class="col-md-12">
-                                <div class="stats-dashboard"
-                                    style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
-                                    <h4 style="color: #1a1a2e; margin-bottom: 20px; font-weight: 600;">
-                                        <i class="fa fa-pie-chart" style="color: #667eea;"></i>
-                                        Statistiques par type de structure
-                                        <span id="statsFilterInfo"
-                                            style="font-size: 12px; font-weight: 400; color: #888; margin-left: 10px;"></span>
-                                    </h4>
-                                    <div id="statsContainer"
-                                        style="max-width: 1300px; max-height: 200px;overflow-y:auto;">
-                                        <!-- Les statistiques seront générées dynamiquement en JavaScript -->
-                                        <div class="text-center text-muted" style="padding: 20px 0;">
-                                            <i class="fa fa-spinner fa-spin" style="font-size: 24px;"></i>
-                                            <p style="margin-top: 10px;">Chargement des statistiques...</p>
-                                            >>>>>>> origin/gazos
-                                        </div>
-                                    </div>
+                    </div>
+                </div>
+            </div>
 
 
-                                    <div class="row">
-                                        <div class="col-md-8 map-col">
-                                            <div id="map"></div>
-                                        </div>
+            <div class="row">
+                <div class="col-md-8 map-col">
+                    <div id="map"></div>
+                </div>
 
-                                        <div class="col-md-4 legend-col">
-                                            <div class="legend-panel">
-                                                <div class="legend-header">
-                                                    <h3><i class="fa fa-dashboard"></i> Tableau de bord</h3>
-                                                </div>
-                                                <div class="legend-body">
-                                                    <div class="total-stats">
-                                                        <div class="big-number" id="totalPointsDisplay">0</div>
-                                                        <div>Points d'intervention (Collines)</div>
-                                                    </div>
+                <div class="col-md-4 legend-col">
+                    <div class="legend-panel">
+                        <div class="legend-header">
+                            <h3><i class="fa fa-dashboard"></i> Tableau de bord</h3>
+                        </div>
+                        <div class="legend-body">
+                            <div class="total-stats">
+                                <div class="big-number" id="totalPointsDisplay">0</div>
+                                <div>Points d'intervention (Collines)</div>
+                            </div>
 
 
-                                                    <div class="type-structure-filter">
-                                                        <h4><i class="fa fa-tags"></i> Filtrer par type de structure
-                                                        </h4>
-                                                        <select id="typeStructureSelect" class="form-control">
-                                                            <option value="all">Tous les types</option>
-                                                            <?php foreach ($types_structure as $type): ?>
-                                                            <option value="<?= esc($type['nom']) ?>">
-                                                                <?= esc($type['nom']) ?></option>
-                                                            <?php endforeach; ?>
-                                                        </select>
-                                                    </div>
+                            <div class="type-structure-filter">
+                                <h4><i class="fa fa-tags"></i> Filtrer par type de structure
+                                </h4>
+                                <select id="typeStructureSelect" class="form-control">
+                                    <option value="all">Tous les types</option>
+                                    <?php foreach ($types_structure as $type): ?>
+                                    <option value="<?= esc($type['nom']) ?>">
+                                        <?= esc($type['nom']) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
 
-                                                    <div class="filter-box">
-                                                        <h4>🔍 Filtres hiérarchiques</h4>
-                                                        <div class="filter-group">
-                                                            <label>Province</label>
-                                                            <select id="filterProvince">
-                                                                <option value="all">Toutes les provinces</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="filter-group">
-                                                            <label>Commune</label>
-                                                            <select id="filterCommune" disabled>
-                                                                <option value="all">Toutes les communes</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="filter-group">
-                                                            <label>Zone</label>
-                                                            <select id="filterZone" disabled>
-                                                                <option value="all">Toutes les zones</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="filter-group">
-                                                            <label>Colline</label>
-                                                            <select id="filterColline" disabled>
-                                                                <option value="all">Toutes les collines</option>
-                                                            </select>
-                                                        </div>
-                                                        <button id="resetFilters">🔄 Réinitialiser</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="filter-box">
+                                <h4>🔍 Filtres hiérarchiques</h4>
+                                <div class="filter-group">
+                                    <label>Province</label>
+                                    <select id="filterProvince">
+                                        <option value="all">Toutes les provinces</option>
+                                    </select>
                                 </div>
+                                <div class="filter-group">
+                                    <label>Commune</label>
+                                    <select id="filterCommune" disabled>
+                                        <option value="all">Toutes les communes</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Zone</label>
+                                    <select id="filterZone" disabled>
+                                        <option value="all">Toutes les zones</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Colline</label>
+                                    <select id="filterColline" disabled>
+                                        <option value="all">Toutes les collines</option>
+                                    </select>
+                                </div>
+                                <button id="resetFilters">🔄 Réinitialiser</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
     <!-- END MAP SECTION -->
 
