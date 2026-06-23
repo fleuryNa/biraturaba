@@ -711,698 +711,783 @@
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
-    <script>
-        // Données PHP converties en JSON
-        const provinces = <?= $provinces ?: '[]' ?>;
-        const communes = <?= $communes ?: '[]' ?>;
-        const zones = <?= $zones ?: '[]' ?>;
-        const collines = <?= $collines ?: '[]' ?>;
-        const stats = <?= json_encode($stats) ?: '{}' ?>;
-        // ============================================
-// FONCTIONS POUR LES STATISTIQUES DYNAMIQUES
-// ============================================
+<script>
+    // Données PHP converties en JSON
+    const provinces = <?= $provinces ?: '[]' ?>;
+    const communes = <?= $communes ?: '[]' ?>;
+    const zones = <?= $zones ?: '[]' ?>;
+    const collines = <?= $collines ?: '[]' ?>;
+    const stats = <?= json_encode($stats) ?: '{}' ?>;
 
-/**
- * Calcule les statistiques par type de structure en fonction des données filtrées
- */
-function calculateStatsByType(filteredCollines) {
-    const statsMap = new Map();
-    
-    // Parcourir toutes les collines filtrées
-    filteredCollines.forEach(colline => {
-        const type = colline.type_structure_nom || 'Non défini';
-        
-        if (!statsMap.has(type)) {
-            statsMap.set(type, {
-                type_structure: type,
-                nb_collines: 0,
-                total_membres: 0,
-                total_hommes: 0,
-                total_femmes: 0,
-                total_structures: 0
-            });
-        }
-        
-        const stat = statsMap.get(type);
-        stat.nb_collines++;
-        stat.total_membres += colline.nb_membres || 0;
-        stat.total_hommes += colline.nb_hommes || 0;
-        stat.total_femmes += colline.nb_femmes || 0;
-        stat.total_structures += colline.nb_structures || 0;
-    });
-    
-    // Convertir en tableau et trier par nombre de membres décroissant
-    return Array.from(statsMap.values()).sort((a, b) => b.total_membres - a.total_membres);
-}
+    console.log('Données reçues:');
+    console.log('Provinces:', provinces);
+    console.log('Communes:', communes);
+    console.log('Zones:', zones);
+    console.log('Collines:', collines);
 
-/**
- * Détermine la couleur d'un type de structure
- */
-function getTypeColor(type) {
-    const typeLower = type ? type.toLowerCase() : '';
-    if (typeLower.includes('slc') || typeLower.includes('silc')) {
-        return '#3498db';
-    } else if (typeLower.includes('fonctionnel')) {
-        return '#e67e22';
-    } else if (typeLower.includes('coop')) {
-        return '#27ae60';
-    } else {
-        return '#667eea';
+    // ============================================
+    // FONCTIONS UTILITAIRES
+    // ============================================
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        return text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/\n/g, '<br>');
     }
-}
 
-/**
- * Met à jour l'affichage du tableau de bord des statistiques
- */
-function updateStatsDashboard(filteredCollines) {
-    const statsContainer = document.getElementById('statsContainer');
-    const statsFilterInfo = document.getElementById('statsFilterInfo');
-    
-    if (!statsContainer) return;
-    
-    // Calculer les statistiques
-    const stats = calculateStatsByType(filteredCollines);
-    
-    // Mettre à jour l'info du filtre
-    if (statsFilterInfo) {
-        const totalCollines = filteredCollines.length;
-        statsFilterInfo.textContent = `(${totalCollines} collines affichées)`;
+    function formatNumber(num) {
+        if (!num && num !== 0) return '0';
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
-    
-    if (stats.length === 0) {
-        statsContainer.innerHTML = `
-            <div class="text-center text-muted" style="padding: 30px 0;">
-                <i class="fa fa-info-circle" style="font-size: 24px;"></i>
-                <p style="margin-top: 10px;">Aucune donnée correspondant aux filtres actuels</p>
-            </div>
-        `;
-        return;
-    }
-    
-    // Générer le HTML
-    let html = '<div class="row">';
-    
-    stats.forEach(stat => {
-        const badgeColor = getTypeColor(stat.type_structure);
-        
-        html += `
-            <div class="col-md-4 col-sm-6 mb-3">
-                <div class="stat-card" style="background: ${badgeColor}; border-radius: 12px; padding: 18px; color: white; height: 100%; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                        <span style="font-size: 14px; font-weight: 500; opacity: 0.9;">
-                            <i class="fa fa-tag"></i> ${escapeHtml(stat.type_structure)}
-                        </span>
-                        <span style="background: rgba(255,255,255,0.2); padding: 2px 12px; border-radius: 20px; font-size: 12px;">
-                            ${stat.nb_collines} collines
-                        </span>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                        <div>
-                            <div style="font-size: 22px; font-weight: 700;">${formatNumber(stat.total_membres)}</div>
-                            <div style="font-size: 11px; opacity: 0.8;">Total membres</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 22px; font-weight: 700;">${formatNumber(stat.total_structures)}</div>
-                            <div style="font-size: 11px; opacity: 0.8;">Structures</div>
-                        </div>
-                    </div>
-                    <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.2); display: flex; justify-content: space-between; font-size: 13px;">
-                        <span><i class="fa fa-male"></i> Hommes: ${formatNumber(stat.total_hommes)}</span>
-                        <span><i class="fa fa-female"></i> Femmes: ${formatNumber(stat.total_femmes)}</span>
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-    
-    html += '</div>';
-    statsContainer.innerHTML = html;
-}
-        
-        function escapeHtml(text) {
-            if (!text) return '';
-            return text
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;')
-                .replace(/\n/g, '<br>');
-        }
-        
-        function formatNumber(num) {
-            if (!num && num !== 0) return '0';
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-        }
-        
-        console.log('Provinces:', provinces.length);
-        console.log('Communes:', communes.length);
-        console.log('Zones:', zones.length);
-        console.log('Collines:', collines.length);
 
-        const markerColors = {
-            province: { bg: '#FF0000', name: 'Province' },
-            commune: { bg: '#00FF00', name: 'Commune' },
-            zone: { bg: '#0000FF', name: 'Zone' },
-            colline: { bg: '#800080', name: 'Colline' }
-        };
-
-        const map = L.map('map').setView([-3.3858874, 28.6053531], 8);
-        
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-            subdomains: 'abcd',
-            maxZoom: 19
-        }).addTo(map);
-
-        let allPoints = [];
-        let markersCluster = null;
-        let currentTypeFilter = 'all';
-
-        function createCustomColoredMarker(point, type) {
-            const colorConfig = markerColors[type];
-            
-            const markerHtml = `
-                <svg width="25" height="41" viewBox="0 0 25 41" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="grad-${type}" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:${colorConfig.bg};stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:${colorConfig.bg};stop-opacity:0.8" />
-                        </linearGradient>
-                        <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-                            <feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.3"/>
-                        </filter>
-                    </defs>
-                    <g filter="url(#shadow)">
-                        <path d="M12.5 0C5.6 0 0 5.6 0 12.5C0 21.875 12.5 41 12.5 41C12.5 41 25 21.875 25 12.5C25 5.6 19.4 0 12.5 0Z" 
-                              fill="url(#grad-${type})" stroke="white" stroke-width="1.5"/>
-                        <circle cx="12.5" cy="12.5" r="4" fill="white" opacity="0.3"/>
-                    </g>
-                </svg>
-            `;
-            
-            const icon = L.divIcon({
-                html: markerHtml,
-                className: 'custom-marker',
-                iconSize: [25, 41],
-                iconAnchor: [12.5, 41],
-                popupAnchor: [0, -35]
-            });
-            
-            const marker = L.marker([point.lat, point.lng], { icon: icon });
-            
-            let buttonDetail = '';
-            let descriptionHtml = '';
-            
-            if (type === 'colline') {
-                buttonDetail = `<button class="btn-detail" onclick="showDetails('${point.id}')">📊 Voir les détails</button>`;
-                
-                if (point.description && point.description.trim() !== '') {
-                    let description = point.description;
-                    if (description.length > 150) {
-                        description = description.substring(0, 150) + '...';
-                    }
-                    descriptionHtml = `
-                        <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
-                            <strong><i class="fa fa-align-left"></i> Description:</strong>
-                            <p style="margin-top: 5px; font-size: 12px; line-height: 1.4; color: #555;">${escapeHtml(description)}</p>
-                        </div>
-                    `;
-                }
-            }
-            
-            const popupContent = `
-                <div style="min-width: 280px; max-width: 350px;">
-                    <div style="background: ${colorConfig.bg}; color: white; padding: 10px 12px; border-radius: 12px 12px 0 0;">
-                        ${point.nom}
-                    </div>
-                    <div style="padding: 12px;">
-                        <p><strong>Info:</strong> ${point.info || 'Non renseignée'}</p>
-                        ${point.detail ? `<p><strong>Détail:</strong> ${point.detail}</p>` : ''}
-                        ${descriptionHtml}
-                        ${buttonDetail}
-                    </div>
-                    <div style="background: #f8f9fa; padding: 8px 12px; border-radius: 0 0 12px 12px; font-size: 11px; color: #666;">
-                        📍 ${point.lat.toFixed(6)}, ${point.lng.toFixed(6)}
-                    </div>
-                </div>
-            `;
-            marker.bindPopup(popupContent);
-            return marker;
-        }
-
-        let totalCollinesCount = 0;
-        function initMarkers() {
-            allPoints = [];
-            
-            provinces.forEach(p => {
-                allPoints.push({ ...p, type: 'province' });
-            });
-            
-            communes.forEach(c => {
-                allPoints.push({ ...c, type: 'commune' });
-            });
-            
-            zones.forEach(z => {
-                allPoints.push({ ...z, type: 'zone' });
-            });
-            
-            collines.forEach(c => {
-                allPoints.push({ 
-                    ...c, 
-                    type: 'colline',
-                    description: c.description || ''
+    /**
+     * Récupère les valeurs UNIQUES par nom
+     */
+    function getUniqueByName(data) {
+        const uniqueMap = new Map();
+        data.forEach(item => {
+            const name = item.nom;
+            if (name && !uniqueMap.has(name)) {
+                uniqueMap.set(name, {
+                    value: name,
+                    label: name,
+                    id: item.id,
+                    lat: item.lat,
+                    lng: item.lng,
+                    province_nom: item.province_nom || null,
+                    province_id: item.province_id || null,
+                    commune_nom: item.commune_nom || null,
+                    commune_id: item.commune_id || null,
+                    zone_nom: item.zone_nom || null,
+                    zone_id: item.zone_id || null,
+                    info: item.info || null,
+                    detail: item.detail || null
                 });
-            });
-            
-            totalCollinesCount = collines.length;
-            
-            console.log('Total points à afficher:', allPoints.length);
-            console.log('Total collines:', totalCollinesCount);
-            
-            if (markersCluster) {
-                map.removeLayer(markersCluster);
             }
-            
-            markersCluster = L.markerClusterGroup({
-                spiderfyOnMaxZoom: true,
-                showCoverageOnHover: false,
-                zoomToBoundsOnClick: true,
-                maxClusterRadius: 60,
-                iconCreateFunction: function(cluster) {
-                    const count = cluster.getChildCount();
-                    let size = 40;
-                    if (count >= 10) size = 50;
-                    if (count >= 50) size = 60;
-                    return L.divIcon({
-                        html: `<div style="background: linear-gradient(135deg, #667eea, #764ba2); width: ${size}px; height: ${size}px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: ${size > 45 ? '16px' : '12px'};">${count}</div>`,
-                        className: 'custom-marker',
-                        iconSize: L.point(size, size),
-                        iconAnchor: L.point(size/2, size/2)
-                    });
-                }
-            });
-            
-            allPoints.forEach(point => {
-                markersCluster.addLayer(createCustomColoredMarker(point, point.type));
-            });
-            
-            map.addLayer(markersCluster);
-            
-            document.getElementById('totalPointsDisplay').innerText = totalCollinesCount;
-            
-            if (allPoints.length > 0 && markersCluster.getBounds().isValid()) {
-                map.fitBounds(markersCluster.getBounds(), { padding: [50, 50] });
-            }
-        }
-
-      function applyFilters() {
-    if (!markersCluster) return;
-    
-    const provinceId = document.getElementById('filterProvince').value;
-    const communeId = document.getElementById('filterCommune').value;
-    const zoneId = document.getElementById('filterZone').value;
-    const collineId = document.getElementById('filterColline').value;
-    
-    let filtered = [...allPoints];
-    
-    // Filtrage par type de structure
-    if (currentTypeFilter !== 'all') {
-        filtered = filtered.filter(point => {
-            if (point.type === 'colline') {
-                return point.type_structure_nom === currentTypeFilter;
-            }
-            if (point.type === 'province') {
-                return collines.some(c => c.province_nom === point.nom && c.type_structure_nom === currentTypeFilter);
-            }
-            if (point.type === 'commune') {
-                return collines.some(c => c.commune_nom === point.nom && c.type_structure_nom === currentTypeFilter);
-            }
-            if (point.type === 'zone') {
-                return collines.some(c => c.zone_nom === point.nom && c.type_structure_nom === currentTypeFilter);
-            }
-            return true;
         });
+        return Array.from(uniqueMap.values());
     }
-    
-    // Filtrage hiérarchique
-    if (collineId !== 'all') {
-        filtered = filtered.filter(p => p.type === 'colline' && p.id == collineId);
-    } else if (zoneId !== 'all') {
-        filtered = filtered.filter(p => (p.type === 'zone' && p.id == zoneId) || (p.type === 'colline' && p.zone_id == zoneId));
-    } else if (communeId !== 'all') {
-        filtered = filtered.filter(p => (p.type === 'commune' && p.id == communeId) || (p.type === 'zone' && p.commune_id == communeId) || (p.type === 'colline' && p.commune_id == communeId));
-    } else if (provinceId !== 'all') {
-        filtered = filtered.filter(p => (p.type === 'province' && p.id == provinceId) || (p.type === 'commune' && p.province_id == provinceId) || (p.type === 'zone' && p.province_id == provinceId) || (p.type === 'colline' && p.province_id == provinceId));
-    }
-    
-    // Mettre à jour les marqueurs sur la carte
-    markersCluster.clearLayers();
-    filtered.forEach(point => {
-        markersCluster.addLayer(createCustomColoredMarker(point, point.type));
-    });
-    map.addLayer(markersCluster);
-    
-    // Mettre à jour le compteur total
-    const filteredCollinesCount = filtered.filter(point => point.type === 'colline').length;
-    document.getElementById('totalPointsDisplay').innerText = filteredCollinesCount;
-    
-    // ============================================
-    // METTRE À JOUR LE TABLEAU DE BORD DES STATISTIQUES
-    // ============================================
-    // Extraire uniquement les collines filtrées
-    const filteredCollines = filtered.filter(p => p.type === 'colline');
-    
-    // Mettre à jour le tableau de bord avec les données filtrées
-    updateStatsDashboard(filteredCollines);
-}
 
-        function initFilters() {
-            const provinceSelect = document.getElementById('filterProvince');
-            const communeSelect = document.getElementById('filterCommune');
-            const zoneSelect = document.getElementById('filterZone');
-            const collineSelect = document.getElementById('filterColline');
-            
-            provinceSelect.innerHTML = '<option value="all">Toutes les provinces</option>';
-            provinces.forEach(p => {
-                provinceSelect.innerHTML += `<option value="${p.id}">${p.nom}</option>`;
-            });
-            
-            communeSelect.innerHTML = '<option value="all">Toutes les communes</option>';
-            communes.forEach(c => {
-                communeSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
-            });
-            communeSelect.disabled = false;
-            
-            zoneSelect.innerHTML = '<option value="all">Toutes les zones</option>';
-            zones.forEach(z => {
-                zoneSelect.innerHTML += `<option value="${z.id}">${z.nom}</option>`;
-            });
-            zoneSelect.disabled = false;
-            
-            collineSelect.innerHTML = '<option value="all">Toutes les collines</option>';
-            collines.forEach(c => {
-                collineSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
-            });
-            collineSelect.disabled = false;
-            
-            provinceSelect.addEventListener('change', function() {
-                const provinceId = this.value;
-                communeSelect.innerHTML = '<option value="all">Toutes les communes</option>';
-                zoneSelect.innerHTML = '<option value="all">Toutes les zones</option>';
-                collineSelect.innerHTML = '<option value="all">Toutes les collines</option>';
-                
-                if (provinceId !== 'all') {
-                    const communesFiltered = communes.filter(c => c.province_id == provinceId);
-                    communesFiltered.forEach(c => {
-                        communeSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
-                    });
-                    
-                    const zonesFiltered = zones.filter(z => z.province_id == provinceId);
-                    zonesFiltered.forEach(z => {
-                        zoneSelect.innerHTML += `<option value="${z.id}">${z.nom}</option>`;
-                    });
-                    
-                    const collinesFiltered = collines.filter(c => c.province_id == provinceId);
-                    collinesFiltered.forEach(c => {
-                        collineSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
-                    });
-                } else {
-                    communes.forEach(c => {
-                        communeSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
-                    });
-                    zones.forEach(z => {
-                        zoneSelect.innerHTML += `<option value="${z.id}">${z.nom}</option>`;
-                    });
-                    collines.forEach(c => {
-                        collineSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
-                    });
-                }
-                applyFilters();
-            });
-            
-            communeSelect.addEventListener('change', function() {
-                const communeId = this.value;
-                zoneSelect.innerHTML = '<option value="all">Toutes les zones</option>';
-                collineSelect.innerHTML = '<option value="all">Toutes les collines</option>';
-                
-                if (communeId !== 'all') {
-                    const zonesFiltered = zones.filter(z => z.commune_id == communeId);
-                    zonesFiltered.forEach(z => {
-                        zoneSelect.innerHTML += `<option value="${z.id}">${z.nom}</option>`;
-                    });
-                    
-                    const collinesFiltered = collines.filter(c => c.commune_id == communeId);
-                    collinesFiltered.forEach(c => {
-                        collineSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
-                    });
-                } else {
-                    zones.forEach(z => {
-                        zoneSelect.innerHTML += `<option value="${z.id}">${z.nom}</option>`;
-                    });
-                    collines.forEach(c => {
-                        collineSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
-                    });
-                }
-                applyFilters();
-            });
-            
-            zoneSelect.addEventListener('change', function() {
-                const zoneId = this.value;
-                collineSelect.innerHTML = '<option value="all">Toutes les collines</option>';
-                
-                if (zoneId !== 'all') {
-                    const collinesFiltered = collines.filter(c => c.zone_id == zoneId);
-                    collinesFiltered.forEach(c => {
-                        collineSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
-                    });
-                } else {
-                    collines.forEach(c => {
-                        collineSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
-                    });
-                }
-                applyFilters();
-            });
-            
-            collineSelect.addEventListener('change', function() {
-                applyFilters();
-            });
-            
-            const typeSelect = document.getElementById('typeStructureSelect');
-            typeSelect.addEventListener('change', function() {
-                currentTypeFilter = this.value;
-                applyFilters();
-            });
-            
-            document.getElementById('resetFilters').addEventListener('click', function() {
-                provinceSelect.value = 'all';
-                communeSelect.value = 'all';
-                zoneSelect.value = 'all';
-                collineSelect.value = 'all';
-                typeSelect.value = 'all';
-                currentTypeFilter = 'all';
-                
-                communeSelect.innerHTML = '<option value="all">Toutes les communes</option>';
-                zoneSelect.innerHTML = '<option value="all">Toutes les zones</option>';
-                collineSelect.innerHTML = '<option value="all">Toutes les collines</option>';
-                
-                communes.forEach(c => {
-                    communeSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
-                });
-                zones.forEach(z => {
-                    zoneSelect.innerHTML += `<option value="${z.id}">${z.nom}</option>`;
-                });
-                collines.forEach(c => {
-                    collineSelect.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
-                });
-                
-                applyFilters();
-                if (markersCluster && markersCluster.getBounds().isValid()) {
-                    map.fitBounds(markersCluster.getBounds(), { padding: [50, 50] });
-                }
-            });
+    /**
+     * Met à jour un select avec des options
+     */
+    function populateSelect(selectElement, items, defaultText = 'Tous') {
+        const currentValue = selectElement.value;
+        selectElement.innerHTML = `<option value="all">${defaultText}</option>`;
+        items.forEach(item => {
+            const value = item.value || item.nom;
+            const text = item.label || item.nom;
+            selectElement.innerHTML += `<option value="${value}">${escapeHtml(text)}</option>`;
+        });
+        selectElement.disabled = false;
+        // Restaurer la valeur si elle existe encore
+        if (currentValue && Array.from(selectElement.options).some(opt => opt.value === currentValue)) {
+            selectElement.value = currentValue;
+        } else {
+            selectElement.value = 'all';
         }
+    }
 
-        function flyToGroup(groupType) {
-            let points = [];
-            if (groupType === 'province') points = provinces;
-            else if (groupType === 'commune') points = communes;
-            else if (groupType === 'zone') points = zones;
-            else if (groupType === 'colline') points = collines;
+    // ============================================
+    // DONNÉES UNIQUES PAR NOM
+    // ============================================
+    
+    const uniqueProvinces = getUniqueByName(provinces);
+    const uniqueCommunes = getUniqueByName(communes);
+    const uniqueZones = getUniqueByName(zones);
+    const uniqueCollines = getUniqueByName(collines);
+
+    console.log('Données uniques:');
+    console.log('Provinces uniques:', uniqueProvinces.length);
+    console.log('Communes uniques:', uniqueCommunes.length);
+    console.log('Zones uniques:', uniqueZones.length);
+    console.log('Collines uniques:', uniqueCollines.length);
+
+    // ============================================
+    // STATISTIQUES DYNAMIQUES
+    // ============================================
+
+    function calculateStatsByType(filteredCollines) {
+        const statsMap = new Map();
+        
+        filteredCollines.forEach(colline => {
+            const type = colline.type_structure_nom || 'Non défini';
             
-            if (points.length > 0) {
-                const bounds = L.latLngBounds(points.map(p => [p.lat, p.lng]));
-                map.fitBounds(bounds, { padding: [50, 50] });
+            if (!statsMap.has(type)) {
+                statsMap.set(type, {
+                    type_structure: type,
+                    nb_collines: 0,
+                    total_membres: 0,
+                    total_hommes: 0,
+                    total_femmes: 0,
+                    total_structures: 0
+                });
             }
+            
+            const stat = statsMap.get(type);
+            stat.nb_collines++;
+            stat.total_membres += colline.nb_membres || 0;
+            stat.total_hommes += colline.nb_hommes || 0;
+            stat.total_femmes += colline.nb_femmes || 0;
+            stat.total_structures += colline.nb_structures || 0;
+        });
+        
+        return Array.from(statsMap.values()).sort((a, b) => b.total_membres - a.total_membres);
+    }
+
+    function getTypeColor(type) {
+        const typeLower = type ? type.toLowerCase() : '';
+        if (typeLower.includes('slc') || typeLower.includes('silc')) {
+            return '#3498db';
+        } else if (typeLower.includes('fonctionnel')) {
+            return '#e67e22';
+        } else if (typeLower.includes('coop')) {
+            return '#27ae60';
+        } else {
+            return '#667eea';
+        }
+    }
+
+    function updateStatsDashboard(filteredCollines) {
+        const statsContainer = document.getElementById('statsContainer');
+        const statsFilterInfo = document.getElementById('statsFilterInfo');
+        
+        if (!statsContainer) return;
+        
+        const stats = calculateStatsByType(filteredCollines);
+        
+        if (statsFilterInfo) {
+            statsFilterInfo.textContent = `(${filteredCollines.length} collines affichées)`;
         }
         
-        window.showDetails = function(collineId) {
-            const colline = collines.find(c => c.id == collineId);
-            if (!colline) return;
-            
-            const communeCollines = collines.filter(c => c.commune_nom === colline.commune_nom);
-            
-            const zonesStats = new Map();
-            communeCollines.forEach(c => {
-                if (!zonesStats.has(c.zone_nom)) {
-                    zonesStats.set(c.zone_nom, {
-                        zone: c.zone_nom,
-                        collineCount: 0,
-                        nb_membres: 0,
-                        nb_hommes: 0,
-                        nb_femmes: 0,
-                        nb_structures: 0
-                    });
-                }
-                const stat = zonesStats.get(c.zone_nom);
-                stat.collineCount++;
-                stat.nb_membres += c.nb_membres;
-                stat.nb_hommes += c.nb_hommes;
-                stat.nb_femmes += c.nb_femmes;
-                stat.nb_structures += c.nb_structures;
-            });
-            
-            let tableRows = '';
-            let totalCollines = 0, totalMembres = 0, totalHommes = 0, totalFemmes = 0, totalStructures = 0;
-            
-            zonesStats.forEach(stat => {
-                tableRows += `
-                    <tr>
-                        <td style="text-align: left; font-weight: 500;">${escapeHtml(stat.zone)}</td>
-                        <td style="text-align: center;">${stat.collineCount}</td>
-                        <td style="text-align: center;">${formatNumber(stat.nb_membres)}</td>
-                        <td style="text-align: center;">${formatNumber(stat.nb_hommes)}</td>
-                        <td style="text-align: center;">${formatNumber(stat.nb_femmes)}</td>
-                        <td style="text-align: center;">${stat.nb_structures}</td>
-                    </tr>
-                `;
-                totalCollines += stat.collineCount;
-                totalMembres += stat.nb_membres;
-                totalHommes += stat.nb_hommes;
-                totalFemmes += stat.nb_femmes;
-                totalStructures += stat.nb_structures;
-            });
-            
-            tableRows += `
-                <tr class="total-row">
-                    <td style="text-align: left; font-weight: 700;"><strong>TOTAL</strong></td>
-                    <td style="text-align: center;"><strong>${totalCollines}</strong></td>
-                    <td style="text-align: center;"><strong>${formatNumber(totalMembres)}</strong></td>
-                    <td style="text-align: center;"><strong>${formatNumber(totalHommes)}</strong></td>
-                    <td style="text-align: center;"><strong>${formatNumber(totalFemmes)}</strong></td>
-                    <td style="text-align: center;"><strong>${totalStructures}</strong></td>
-                </tr>
+        if (stats.length === 0) {
+            statsContainer.innerHTML = `
+                <div class="text-center text-muted" style="padding: 30px 0;">
+                    <i class="fa fa-info-circle" style="font-size: 24px;"></i>
+                    <p style="margin-top: 10px;">Aucune donnée correspondant aux filtres actuels</p>
+                </div>
             `;
-            
-            const typeBadgeClass = colline.type_structure_nom === 'SLC' ? 'badge-slc' : 'badge-fonctionnel';
-            const typeBadgeText = colline.type_structure_nom || 'Non défini';
-            
-            let descriptionHtml = '';
-            if (colline.description && colline.description.trim() !== '') {
-                descriptionHtml = `
-                    <div class="description-box">
-                        <p><i class="fa fa-align-left" style="color: #667eea; margin-right: 8px;"></i>${escapeHtml(colline.description)}</p>
-                    </div>
-                `;
-            }
-            
-            const modalContent = `
-                <div class="colline-detail-header">
-                    <h4><i class="fa fa-map-marker"></i> ${escapeHtml(colline.nom)}</h4>
-                    <div class="detail-info-grid">
-                        <div class="detail-info-item">
-                            <label>Zone</label>
-                            <div class="value">${escapeHtml(colline.zone_nom)}</div>
+            return;
+        }
+        
+        let html = '<div class="row">';
+        stats.forEach(stat => {
+            const badgeColor = getTypeColor(stat.type_structure);
+            html += `
+                <div class="col-md-4 col-sm-6 mb-3">
+                    <div class="stat-card" style="background: ${badgeColor}; border-radius: 12px; padding: 18px; color: white; height: 100%; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <span style="font-size: 14px; font-weight: 500; opacity: 0.9;">
+                                <i class="fa fa-tag"></i> ${escapeHtml(stat.type_structure)}
+                            </span>
+                            <span style="background: rgba(255,255,255,0.2); padding: 2px 12px; border-radius: 20px; font-size: 12px;">
+                                ${stat.nb_collines} collines
+                            </span>
                         </div>
-                        <div class="detail-info-item">
-                            <label>Commune</label>
-                            <div class="value">${escapeHtml(colline.commune_nom)}</div>
-                        </div>
-                        <div class="detail-info-item">
-                            <label>Province</label>
-                            <div class="value">${escapeHtml(colline.province_nom)}</div>
-                        </div>
-                        <div class="detail-info-item">
-                            <label>Type de structure</label>
-                            <div class="value">
-                                <span class="badge-type ${typeBadgeClass}">${escapeHtml(typeBadgeText)}</span>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <div>
+                                <div style="font-size: 22px; font-weight: 700;">${formatNumber(stat.total_membres)}</div>
+                                <div style="font-size: 11px; opacity: 0.8;">Total membres</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 22px; font-weight: 700;">${formatNumber(stat.total_structures)}</div>
+                                <div style="font-size: 11px; opacity: 0.8;">Structures</div>
                             </div>
                         </div>
-                        <div class="detail-info-item">
-                            <label>Membres</label>
-                            <div class="value">${formatNumber(colline.nb_membres)}</div>
+                        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.2); display: flex; justify-content: space-between; font-size: 13px;">
+                            <span><i class="fa fa-male"></i> Hommes: ${formatNumber(stat.total_hommes)}</span>
+                            <span><i class="fa fa-female"></i> Femmes: ${formatNumber(stat.total_femmes)}</span>
                         </div>
-                        <div class="detail-info-item">
-                            <label>Hommes / Femmes</label>
-                            <div class="value">${formatNumber(colline.nb_hommes)} / ${formatNumber(colline.nb_femmes)}</div>
-                        </div>
-                        <div class="detail-info-item">
-                            <label>Structures</label>
-                            <div class="value">${colline.nb_structures}</div>
-                        </div>
-                    </div>
-                </div>
-                ${descriptionHtml}
-                <div class="stats-section">
-                    <h5><i class="fa fa-pie-chart"></i> Statistiques de la commune: ${escapeHtml(colline.commune_nom)}</h5>
-                    <div class="stats-table-wrapper">
-                        <table class="stats-table" id="detailsTable" style="width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th style="text-align: left;">Zone</th>
-                                    <th style="text-align: center;">Collines</th>
-                                    <th style="text-align: center;">Bénéficiaires</th>
-                                    <th style="text-align: center;">Hommes</th>
-                                    <th style="text-align: center;">Femmes</th>
-                                    <th style="text-align: center;">Structures</th>
-                                </tr>
-                            </thead>
-                            <tbody>${tableRows}</tbody>
-                        </table>
                     </div>
                 </div>
             `;
-            
-            document.getElementById('modalCollineInfo').innerHTML = modalContent;
-            
-            setTimeout(() => {
-                if ($.fn.DataTable.isDataTable('#detailsTable')) {
-                    $('#detailsTable').DataTable().destroy();
-                }
-                $('#detailsTable').DataTable({
-                    language: { 
-                        url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json',
-                        search: "Rechercher:",
-                        lengthMenu: "Afficher _MENU_ entrées",
-                        info: "Affichage de _START_ à _END_ sur _TOTAL_ zones"
-                    },
-                    pageLength: 10,
-                    scrollX: false,
-                    autoWidth: true,
-                    columnDefs: [
-                        { targets: 0, className: 'dt-left', orderable: true },
-                        { targets: [1,2,3,4,5], className: 'dt-center', orderable: true }
-                    ]
-                });
-            }, 100);
-            
-            // Utilisation de Bootstrap JS qui est déjà chargé par le footer
-            $('#detailModal').modal('show');
-        };
-        
-        // Attendre que le DOM soit chargé
-       document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('preloader').style.display = 'none';
-    initMarkers();
-    initFilters();
+        });
+        html += '</div>';
+        statsContainer.innerHTML = html;
+    }
+
+    // ============================================
+    // CARTE ET MARQUEURS
+    // ============================================
+
+    const markerColors = {
+        province: { bg: '#FF0000', name: 'Province' },
+        commune: { bg: '#00FF00', name: 'Commune' },
+        zone: { bg: '#0000FF', name: 'Zone' },
+        colline: { bg: '#800080', name: 'Colline' }
+    };
+
+    const map = L.map('map').setView([-3.3858874, 28.6053531], 8);
     
-    // Initialiser le tableau de bord avec toutes les collines
-    setTimeout(function() {
-        // Récupérer toutes les collines depuis les données
-        const allCollines = collines.map(c => ({ ...c, type: 'colline' }));
-        updateStatsDashboard(allCollines);
-    }, 300);
-});
-    </script>
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+    }).addTo(map);
+
+    let allPoints = [];
+    let markersCluster = null;
+    let currentTypeFilter = 'all';
+
+    function createCustomColoredMarker(point, type) {
+        const colorConfig = markerColors[type];
+        
+        const markerHtml = `
+            <svg width="25" height="41" viewBox="0 0 25 41" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="grad-${type}" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:${colorConfig.bg};stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:${colorConfig.bg};stop-opacity:0.8" />
+                    </linearGradient>
+                    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.3"/>
+                    </filter>
+                </defs>
+                <g filter="url(#shadow)">
+                    <path d="M12.5 0C5.6 0 0 5.6 0 12.5C0 21.875 12.5 41 12.5 41C12.5 41 25 21.875 25 12.5C25 5.6 19.4 0 12.5 0Z" 
+                          fill="url(#grad-${type})" stroke="white" stroke-width="1.5"/>
+                    <circle cx="12.5" cy="12.5" r="4" fill="white" opacity="0.3"/>
+                </g>
+            </svg>
+        `;
+        
+        const icon = L.divIcon({
+            html: markerHtml,
+            className: 'custom-marker',
+            iconSize: [25, 41],
+            iconAnchor: [12.5, 41],
+            popupAnchor: [0, -35]
+        });
+        
+        const marker = L.marker([point.lat, point.lng], { icon: icon });
+        
+        let buttonDetail = '';
+        let descriptionHtml = '';
+        
+        if (type === 'colline') {
+            buttonDetail = `<button class="btn-detail" onclick="showDetails('${point.id}')">📊 Voir les détails</button>`;
+            
+            if (point.description && point.description.trim() !== '') {
+                let description = point.description;
+                if (description.length > 150) {
+                    description = description.substring(0, 150) + '...';
+                }
+                descriptionHtml = `
+                    <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #e0e0e0;">
+                        <strong><i class="fa fa-align-left"></i> Description:</strong>
+                        <p style="margin-top: 5px; font-size: 12px; line-height: 1.4; color: #555;">${escapeHtml(description)}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        const popupContent = `
+            <div style="min-width: 280px; max-width: 350px;">
+                <div style="background: ${colorConfig.bg}; color: white; padding: 10px 12px; border-radius: 12px 12px 0 0;">
+                    ${point.nom}
+                </div>
+                <div style="padding: 12px;">
+                    <p><strong>Info:</strong> ${point.info || 'Non renseignée'}</p>
+                    ${point.detail ? `<p><strong>Détail:</strong> ${point.detail}</p>` : ''}
+                    ${descriptionHtml}
+                    ${buttonDetail}
+                </div>
+                <div style="background: #f8f9fa; padding: 8px 12px; border-radius: 0 0 12px 12px; font-size: 11px; color: #666;">
+                    📍 ${point.lat.toFixed(6)}, ${point.lng.toFixed(6)}
+                </div>
+            </div>
+        `;
+        marker.bindPopup(popupContent);
+        return marker;
+    }
+
+    let totalCollinesCount = 0;
+    
+    function initMarkers() {
+        allPoints = [];
+        
+        uniqueProvinces.forEach(p => {
+            allPoints.push({ ...p, type: 'province' });
+        });
+        
+        uniqueCommunes.forEach(c => {
+            allPoints.push({ ...c, type: 'commune' });
+        });
+        
+        uniqueZones.forEach(z => {
+            allPoints.push({ ...z, type: 'zone' });
+        });
+        
+        collines.forEach(c => {
+            allPoints.push({ 
+                ...c, 
+                type: 'colline',
+                description: c.description || ''
+            });
+        });
+        
+        totalCollinesCount = collines.length;
+        
+        console.log('Total points à afficher:', allPoints.length);
+        console.log('Total collines:', totalCollinesCount);
+        
+        if (markersCluster) {
+            map.removeLayer(markersCluster);
+        }
+        
+        markersCluster = L.markerClusterGroup({
+            spiderfyOnMaxZoom: true,
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: true,
+            maxClusterRadius: 60,
+            iconCreateFunction: function(cluster) {
+                const count = cluster.getChildCount();
+                let size = 40;
+                if (count >= 10) size = 50;
+                if (count >= 50) size = 60;
+                return L.divIcon({
+                    html: `<div style="background: linear-gradient(135deg, #667eea, #764ba2); width: ${size}px; height: ${size}px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: ${size > 45 ? '16px' : '12px'};">${count}</div>`,
+                    className: 'custom-marker',
+                    iconSize: L.point(size, size),
+                    iconAnchor: L.point(size/2, size/2)
+                });
+            }
+        });
+        
+        allPoints.forEach(point => {
+            markersCluster.addLayer(createCustomColoredMarker(point, point.type));
+        });
+        
+        map.addLayer(markersCluster);
+        
+        document.getElementById('totalPointsDisplay').innerText = totalCollinesCount;
+        
+        if (allPoints.length > 0 && markersCluster.getBounds().isValid()) {
+            map.fitBounds(markersCluster.getBounds(), { padding: [50, 50] });
+        }
+    }
+
+    // ============================================
+    // FILTRES HIÉRARCHIQUES - CORRECTION TOTALE
+    // ============================================
+
+    function initFilters() {
+        const provinceSelect = document.getElementById('filterProvince');
+        const communeSelect = document.getElementById('filterCommune');
+        const zoneSelect = document.getElementById('filterZone');
+        const collineSelect = document.getElementById('filterColline');
+        
+        // === Remplir les selects avec les données uniques ===
+        populateSelect(provinceSelect, uniqueProvinces, 'Toutes les provinces');
+        populateSelect(communeSelect, uniqueCommunes, 'Toutes les communes');
+        populateSelect(zoneSelect, uniqueZones, 'Toutes les zones');
+        populateSelect(collineSelect, uniqueCollines, 'Toutes les collines');
+        
+        // === ÉVÉNEMENTS ===
+        
+        // 1. Changement de province -> filtre les communes, zones et collines
+        provinceSelect.addEventListener('change', function() {
+            const provinceId = this.value;
+            console.log('Province sélectionnée:', provinceId);
+            
+            let communesFiltered, zonesFiltered, collinesFiltered;
+            
+            if (provinceId !== 'all') {
+                // Trouver l'ID de la province sélectionnée
+                const selectedProvince = provinces.find(p => p.nom === provinceId);
+                const provinceIdValue = selectedProvince ? selectedProvince.id : null;
+                
+                // Filtrer par province_id
+                communesFiltered = getUniqueByName(communes.filter(c => c.province_id == provinceIdValue));
+                zonesFiltered = getUniqueByName(zones.filter(z => z.province_id == provinceIdValue));
+                collinesFiltered = getUniqueByName(collines.filter(c => c.province_id == provinceIdValue));
+            } else {
+                communesFiltered = uniqueCommunes;
+                zonesFiltered = uniqueZones;
+                collinesFiltered = uniqueCollines;
+            }
+            
+            populateSelect(communeSelect, communesFiltered, 'Toutes les communes');
+            populateSelect(zoneSelect, zonesFiltered, 'Toutes les zones');
+            populateSelect(collineSelect, collinesFiltered, 'Toutes les collines');
+            
+            communeSelect.value = 'all';
+            zoneSelect.value = 'all';
+            collineSelect.value = 'all';
+            
+            applyFilters();
+        });
+        
+        // 2. Changement de commune -> filtre les zones et collines
+        communeSelect.addEventListener('change', function() {
+            const communeId = this.value;
+            const provinceId = provinceSelect.value;
+            console.log('Commune sélectionnée:', communeId);
+            
+            let zonesFiltered, collinesFiltered;
+            
+            if (communeId !== 'all') {
+                const selectedCommune = communes.find(c => c.nom === communeId);
+                const communeIdValue = selectedCommune ? selectedCommune.id : null;
+                
+                zonesFiltered = getUniqueByName(zones.filter(z => z.commune_id == communeIdValue));
+                collinesFiltered = getUniqueByName(collines.filter(c => c.commune_id == communeIdValue));
+            } else if (provinceId !== 'all') {
+                const selectedProvince = provinces.find(p => p.nom === provinceId);
+                const provinceIdValue = selectedProvince ? selectedProvince.id : null;
+                
+                zonesFiltered = getUniqueByName(zones.filter(z => z.province_id == provinceIdValue));
+                collinesFiltered = getUniqueByName(collines.filter(c => c.province_id == provinceIdValue));
+            } else {
+                zonesFiltered = uniqueZones;
+                collinesFiltered = uniqueCollines;
+            }
+            
+            populateSelect(zoneSelect, zonesFiltered, 'Toutes les zones');
+            populateSelect(collineSelect, collinesFiltered, 'Toutes les collines');
+            
+            zoneSelect.value = 'all';
+            collineSelect.value = 'all';
+            
+            applyFilters();
+        });
+        
+        // 3. Changement de zone -> filtre les collines
+        zoneSelect.addEventListener('change', function() {
+            const zoneId = this.value;
+            const communeId = communeSelect.value;
+            const provinceId = provinceSelect.value;
+            console.log('Zone sélectionnée:', zoneId);
+            
+            let collinesFiltered;
+            
+            if (zoneId !== 'all') {
+                const selectedZone = zones.find(z => z.nom === zoneId);
+                const zoneIdValue = selectedZone ? selectedZone.id : null;
+                
+                collinesFiltered = getUniqueByName(collines.filter(c => c.zone_id == zoneIdValue));
+            } else if (communeId !== 'all') {
+                const selectedCommune = communes.find(c => c.nom === communeId);
+                const communeIdValue = selectedCommune ? selectedCommune.id : null;
+                
+                collinesFiltered = getUniqueByName(collines.filter(c => c.commune_id == communeIdValue));
+            } else if (provinceId !== 'all') {
+                const selectedProvince = provinces.find(p => p.nom === provinceId);
+                const provinceIdValue = selectedProvince ? selectedProvince.id : null;
+                
+                collinesFiltered = getUniqueByName(collines.filter(c => c.province_id == provinceIdValue));
+            } else {
+                collinesFiltered = uniqueCollines;
+            }
+            
+            populateSelect(collineSelect, collinesFiltered, 'Toutes les collines');
+            collineSelect.value = 'all';
+            
+            applyFilters();
+        });
+        
+        // 4. Changement de colline
+        collineSelect.addEventListener('change', function() {
+            applyFilters();
+        });
+        
+        // 5. Filtrer par type de structure
+        const typeSelect = document.getElementById('typeStructureSelect');
+        typeSelect.addEventListener('change', function() {
+            currentTypeFilter = this.value;
+            applyFilters();
+        });
+        
+        // 6. Bouton de réinitialisation
+        document.getElementById('resetFilters').addEventListener('click', function() {
+            provinceSelect.value = 'all';
+            communeSelect.value = 'all';
+            zoneSelect.value = 'all';
+            collineSelect.value = 'all';
+            typeSelect.value = 'all';
+            currentTypeFilter = 'all';
+            
+            populateSelect(provinceSelect, uniqueProvinces, 'Toutes les provinces');
+            populateSelect(communeSelect, uniqueCommunes, 'Toutes les communes');
+            populateSelect(zoneSelect, uniqueZones, 'Toutes les zones');
+            populateSelect(collineSelect, uniqueCollines, 'Toutes les collines');
+            
+            applyFilters();
+            
+            if (markersCluster && markersCluster.getBounds().isValid()) {
+                map.fitBounds(markersCluster.getBounds(), { padding: [50, 50] });
+            }
+        });
+    }
+
+    function applyFilters() {
+        if (!markersCluster) return;
+        
+        const provinceId = document.getElementById('filterProvince').value;
+        const communeId = document.getElementById('filterCommune').value;
+        const zoneId = document.getElementById('filterZone').value;
+        const collineId = document.getElementById('filterColline').value;
+        
+        console.log('Filtres appliqués:', { provinceId, communeId, zoneId, collineId });
+        
+        let filtered = [...allPoints];
+        
+        // Filtrage par type de structure
+        if (currentTypeFilter !== 'all') {
+            filtered = filtered.filter(point => {
+                if (point.type === 'colline') {
+                    return point.type_structure_nom === currentTypeFilter;
+                }
+                return true;
+            });
+        }
+        
+        // Filtrage hiérarchique
+        if (collineId !== 'all') {
+            filtered = filtered.filter(p => p.type === 'colline' && p.nom === collineId);
+        } else if (zoneId !== 'all') {
+            const selectedZone = zones.find(z => z.nom === zoneId);
+            const zoneIdValue = selectedZone ? selectedZone.id : null;
+            
+            filtered = filtered.filter(p => 
+                (p.type === 'zone' && p.nom === zoneId) || 
+                (p.type === 'colline' && p.zone_id == zoneIdValue)
+            );
+        } else if (communeId !== 'all') {
+            const selectedCommune = communes.find(c => c.nom === communeId);
+            const communeIdValue = selectedCommune ? selectedCommune.id : null;
+            
+            filtered = filtered.filter(p => 
+                (p.type === 'commune' && p.nom === communeId) || 
+                (p.type === 'zone' && p.commune_id == communeIdValue) || 
+                (p.type === 'colline' && p.commune_id == communeIdValue)
+            );
+        } else if (provinceId !== 'all') {
+            const selectedProvince = provinces.find(p => p.nom === provinceId);
+            const provinceIdValue = selectedProvince ? selectedProvince.id : null;
+            
+            filtered = filtered.filter(p => 
+                (p.type === 'province' && p.nom === provinceId) || 
+                (p.type === 'commune' && p.province_id == provinceIdValue) || 
+                (p.type === 'zone' && p.province_id == provinceIdValue) || 
+                (p.type === 'colline' && p.province_id == provinceIdValue)
+            );
+        }
+        
+        console.log('Points filtrés:', filtered.length);
+        
+        markersCluster.clearLayers();
+        filtered.forEach(point => {
+            markersCluster.addLayer(createCustomColoredMarker(point, point.type));
+        });
+        map.addLayer(markersCluster);
+        
+        const filteredCollinesCount = filtered.filter(point => point.type === 'colline').length;
+        document.getElementById('totalPointsDisplay').innerText = filteredCollinesCount;
+        
+        const filteredCollines = filtered.filter(p => p.type === 'colline');
+        updateStatsDashboard(filteredCollines);
+    }
+
+    // ============================================
+    // FLY TO GROUP
+    // ============================================
+
+    function flyToGroup(groupType) {
+        let points = [];
+        
+        if (groupType === 'province') {
+            points = uniqueProvinces;
+        } else if (groupType === 'commune') {
+            points = uniqueCommunes;
+        } else if (groupType === 'zone') {
+            points = uniqueZones;
+        } else if (groupType === 'colline') {
+            points = uniqueCollines;
+        }
+        
+        if (points.length > 0) {
+            const bounds = L.latLngBounds(points.map(p => [p.lat, p.lng]));
+            map.fitBounds(bounds, { padding: [50, 50] });
+        }
+    }
+
+    // ============================================
+    // SHOW DETAILS
+    // ============================================
+
+    window.showDetails = function(collineId) {
+        const colline = collines.find(c => c.id == collineId);
+        if (!colline) return;
+        
+        const communeCollines = collines.filter(c => c.commune_nom === colline.commune_nom);
+        
+        const zonesStats = new Map();
+        communeCollines.forEach(c => {
+            if (!zonesStats.has(c.zone_nom)) {
+                zonesStats.set(c.zone_nom, {
+                    zone: c.zone_nom,
+                    collineCount: 0,
+                    nb_membres: 0,
+                    nb_hommes: 0,
+                    nb_femmes: 0,
+                    nb_structures: 0
+                });
+            }
+            const stat = zonesStats.get(c.zone_nom);
+            stat.collineCount++;
+            stat.nb_membres += c.nb_membres;
+            stat.nb_hommes += c.nb_hommes;
+            stat.nb_femmes += c.nb_femmes;
+            stat.nb_structures += c.nb_structures;
+        });
+        
+        let tableRows = '';
+        let totalCollines = 0, totalMembres = 0, totalHommes = 0, totalFemmes = 0, totalStructures = 0;
+        
+        zonesStats.forEach(stat => {
+            tableRows += `
+                <tr>
+                    <td style="text-align: left; font-weight: 500;">${escapeHtml(stat.zone)}</td>
+                    <td style="text-align: center;">${stat.collineCount}</td>
+                    <td style="text-align: center;">${formatNumber(stat.nb_membres)}</td>
+                    <td style="text-align: center;">${formatNumber(stat.nb_hommes)}</td>
+                    <td style="text-align: center;">${formatNumber(stat.nb_femmes)}</td>
+                    <td style="text-align: center;">${stat.nb_structures}</td>
+                </tr>
+            `;
+            totalCollines += stat.collineCount;
+            totalMembres += stat.nb_membres;
+            totalHommes += stat.nb_hommes;
+            totalFemmes += stat.nb_femmes;
+            totalStructures += stat.nb_structures;
+        });
+        
+        tableRows += `
+            <tr class="total-row">
+                <td style="text-align: left; font-weight: 700;"><strong>TOTAL</strong></td>
+                <td style="text-align: center;"><strong>${totalCollines}</strong></td>
+                <td style="text-align: center;"><strong>${formatNumber(totalMembres)}</strong></td>
+                <td style="text-align: center;"><strong>${formatNumber(totalHommes)}</strong></td>
+                <td style="text-align: center;"><strong>${formatNumber(totalFemmes)}</strong></td>
+                <td style="text-align: center;"><strong>${totalStructures}</strong></td>
+            </tr>
+        `;
+        
+        const typeBadgeClass = colline.type_structure_nom === 'SLC' ? 'badge-slc' : 'badge-fonctionnel';
+        const typeBadgeText = colline.type_structure_nom || 'Non défini';
+        
+        let descriptionHtml = '';
+        if (colline.description && colline.description.trim() !== '') {
+            descriptionHtml = `
+                <div class="description-box">
+                    <p><i class="fa fa-align-left" style="color: #667eea; margin-right: 8px;"></i>${escapeHtml(colline.description)}</p>
+                </div>
+            `;
+        }
+        
+        const modalContent = `
+            <div class="colline-detail-header">
+                <h4><i class="fa fa-map-marker"></i> ${escapeHtml(colline.nom)}</h4>
+                <div class="detail-info-grid">
+                    <div class="detail-info-item">
+                        <label>Zone</label>
+                        <div class="value">${escapeHtml(colline.zone_nom)}</div>
+                    </div>
+                    <div class="detail-info-item">
+                        <label>Commune</label>
+                        <div class="value">${escapeHtml(colline.commune_nom)}</div>
+                    </div>
+                    <div class="detail-info-item">
+                        <label>Province</label>
+                        <div class="value">${escapeHtml(colline.province_nom)}</div>
+                    </div>
+                    <div class="detail-info-item">
+                        <label>Type de structure</label>
+                        <div class="value">
+                            <span class="badge-type ${typeBadgeClass}">${escapeHtml(typeBadgeText)}</span>
+                        </div>
+                    </div>
+                    <div class="detail-info-item">
+                        <label>Membres</label>
+                        <div class="value">${formatNumber(colline.nb_membres)}</div>
+                    </div>
+                    <div class="detail-info-item">
+                        <label>Hommes / Femmes</label>
+                        <div class="value">${formatNumber(colline.nb_hommes)} / ${formatNumber(colline.nb_femmes)}</div>
+                    </div>
+                    <div class="detail-info-item">
+                        <label>Structures</label>
+                        <div class="value">${colline.nb_structures}</div>
+                    </div>
+                </div>
+            </div>
+            ${descriptionHtml}
+            <div class="stats-section">
+                <h5><i class="fa fa-pie-chart"></i> Statistiques de la commune: ${escapeHtml(colline.commune_nom)}</h5>
+                <div class="stats-table-wrapper">
+                    <table class="stats-table" id="detailsTable" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Zone</th>
+                                <th style="text-align: center;">Collines</th>
+                                <th style="text-align: center;">Bénéficiaires</th>
+                                <th style="text-align: center;">Hommes</th>
+                                <th style="text-align: center;">Femmes</th>
+                                <th style="text-align: center;">Structures</th>
+                            </tr>
+                        </thead>
+                        <tbody>${tableRows}</tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('modalCollineInfo').innerHTML = modalContent;
+        
+        setTimeout(() => {
+            if ($.fn.DataTable.isDataTable('#detailsTable')) {
+                $('#detailsTable').DataTable().destroy();
+            }
+            $('#detailsTable').DataTable({
+                language: { 
+                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json',
+                    search: "Rechercher:",
+                    lengthMenu: "Afficher _MENU_ entrées",
+                    info: "Affichage de _START_ à _END_ sur _TOTAL_ zones"
+                },
+                pageLength: 10,
+                scrollX: false,
+                autoWidth: true,
+                columnDefs: [
+                    { targets: 0, className: 'dt-left', orderable: true },
+                    { targets: [1,2,3,4,5], className: 'dt-center', orderable: true }
+                ]
+            });
+        }, 100);
+        
+        $('#detailModal').modal('show');
+    };
+
+    // ============================================
+    // INITIALISATION
+    // ============================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('preloader').style.display = 'none';
+        initMarkers();
+        initFilters();
+        
+        setTimeout(function() {
+            const allCollines = collines.map(c => ({ ...c, type: 'colline' }));
+            updateStatsDashboard(allCollines);
+        }, 300);
+    });
+</script>
 </body>
 </html>
