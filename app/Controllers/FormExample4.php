@@ -17,7 +17,6 @@ class FormExample extends BaseController
     public function __construct()
     {
         helper('form');
-        helper('filesystem');
         $this->membreModel = new MembreModel();
         $this->typeGroupeModel = new TypeGroupeModel();
     }
@@ -28,7 +27,7 @@ class FormExample extends BaseController
         $db = \Config\Database::connect();
         
         $membres = $db->table('membres_inscrits m')
-            ->select('m.ID_MEMBRES, m.DESCRIPTION, m.PHOTO, c.COMMUNE_NAME, z.ZONE_NAME, col.COLLINE_NAME, m.NB_MEMBRE_INSCRITS, m.NOMBRE_HOMME, m.NOMBRE_FEMME, m.NB_GROUPE, m.ID_TYPE_GROUPE, tg.DESC_GROUPE as TYPE_GROUPE')
+            ->select('m.ID_MEMBRES, m.DESCRIPTION, c.COMMUNE_NAME, z.ZONE_NAME, col.COLLINE_NAME, m.NB_MEMBRE_INSCRITS, m.NOMBRE_HOMME, m.NOMBRE_FEMME, m.NB_GROUPE, m.ID_TYPE_GROUPE, tg.DESC_GROUPE as TYPE_GROUPE')
             ->join('collines col', 'col.COLLINE_ID = m.COLLINE_ID', 'left')
             ->join('zones z', 'z.ZONE_ID = col.ZONE_ID', 'left')
             ->join('communes c', 'c.COMMUNE_ID = z.COMMUNE_ID', 'left')
@@ -174,44 +173,6 @@ class FormExample extends BaseController
                 ]);
         }
 
-        // Traitement de l'upload d'image
-        $photoName = null;
-        $file = $this->request->getFile('photo');
-        
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            // Vérifier la taille (200 KB max)
-            if ($file->getSize() > 200 * 1024) {
-                return redirect()->back()
-                    ->withInput()
-                    ->with('errors', [
-                        'photo' => 'La taille de l\'image ne doit pas dépasser 200 Ko.'
-                    ]);
-            }
-            
-            // Vérifier que c'est bien une image
-            if (!in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'image/gif', 'image/webp'])) {
-                return redirect()->back()
-                    ->withInput()
-                    ->with('errors', [
-                        'photo' => 'Le fichier doit être une image (JPEG, PNG, GIF, WEBP).'
-                    ]);
-            }
-            
-            // Générer un nom unique
-            $newName = $file->getRandomName();
-            
-            // Déplacer le fichier dans le dossier uploads
-            if ($file->move(WRITEPATH . 'uploads', $newName)) {
-                $photoName = $newName;
-            } else {
-                return redirect()->back()
-                    ->withInput()
-                    ->with('errors', [
-                        'photo' => 'Erreur lors de l\'upload de l\'image.'
-                    ]);
-            }
-        }
-
         $data = [
             'COLLINE_ID' => $this->request->getPost('colline_id'),
             'DESCRIPTION' => $this->request->getPost('description'),
@@ -220,7 +181,6 @@ class FormExample extends BaseController
             'NOMBRE_FEMME' => $nombre_femme,
             'NB_GROUPE' => $this->request->getPost('nb_groupe'),
             'ID_TYPE_GROUPE' => $this->request->getPost('id_type_groupe'),
-            'PHOTO' => $photoName,
         ];
 
         $this->membreModel->insert($data);
@@ -324,9 +284,9 @@ class FormExample extends BaseController
                 'integer'  => 'Le nombre de structures doit être un nombre valide.'
             ],
             'id_type_groupe' => [
-                'required' => 'Le type de structures est obligatoire.',
-                'integer'  => 'Le type de structures doit être un nombre valide.'
-            ]
+    'required' => 'Le type de structures est obligatoire.',
+    'integer'  => 'Le type de structures doit être un nombre valide.'
+]
         ];
 
         if (! $this->validate($rules, $messages)) {
@@ -346,52 +306,6 @@ class FormExample extends BaseController
                 ]);
         }
 
-        // Récupérer les données actuelles pour l'image
-        $currentMembre = $this->membreModel->find($id);
-        $photoName = $currentMembre['PHOTO'] ?? null;
-
-        // Traitement de l'upload d'image
-        $file = $this->request->getFile('photo');
-        
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            // Vérifier la taille (200 KB max)
-            if ($file->getSize() > 200 * 1024) {
-                return redirect()->back()
-                    ->withInput()
-                    ->with('errors', [
-                        'photo' => 'La taille de l\'image ne doit pas dépasser 200 Ko.'
-                    ]);
-            }
-            
-            // Vérifier que c'est bien une image
-            if (!in_array($file->getMimeType(), ['image/jpeg', 'image/png', 'image/gif', 'image/webp'])) {
-                return redirect()->back()
-                    ->withInput()
-                    ->with('errors', [
-                        'photo' => 'Le fichier doit être une image (JPEG, PNG, GIF, WEBP).'
-                    ]);
-            }
-            
-            // Supprimer l'ancienne image si elle existe
-            if ($photoName && file_exists(WRITEPATH . 'uploads/' . $photoName)) {
-                unlink(WRITEPATH . 'uploads/' . $photoName);
-            }
-            
-            // Générer un nom unique
-            $newName = $file->getRandomName();
-            
-            // Déplacer le fichier dans le dossier uploads
-            if ($file->move(WRITEPATH . 'uploads', $newName)) {
-                $photoName = $newName;
-            } else {
-                return redirect()->back()
-                    ->withInput()
-                    ->with('errors', [
-                        'photo' => 'Erreur lors de l\'upload de l\'image.'
-                    ]);
-            }
-        }
-
         $data = [
             'COLLINE_ID' => $this->request->getPost('colline_id'),
             'DESCRIPTION' => $this->request->getPost('description'),
@@ -400,7 +314,6 @@ class FormExample extends BaseController
             'NOMBRE_FEMME' => $nombre_femme,
             'NB_GROUPE' => $this->request->getPost('nb_groupe'),
             'ID_TYPE_GROUPE' => $this->request->getPost('id_type_groupe'),
-            'PHOTO' => $photoName,
         ];
 
         $this->membreModel->update($id, $data);
@@ -412,15 +325,6 @@ class FormExample extends BaseController
     public function delete($id = null)
     {
         if ($id) {
-            // Récupérer les données pour supprimer l'image
-            $membre = $this->membreModel->find($id);
-            if ($membre && !empty($membre['PHOTO'])) {
-                $photoPath = WRITEPATH . 'uploads/' . $membre['PHOTO'];
-                if (file_exists($photoPath)) {
-                    unlink($photoPath);
-                }
-            }
-            
             $this->membreModel->delete($id);
             return redirect()->to('/formexample')->with('success', 'Membre supprimé avec succès');
         }

@@ -8,24 +8,24 @@
     <meta name="description" content="Biraturaba - Cartographie">
     <meta name="keywords" content="cartographie, burundi, intervention">
     <title>Biraturaba - Cartographie</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="<?= base_url('public/assetsfront/logo/favicon.ico') ?>">
-    
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?= base_url('public/assetsfront/bootstrap/css/bootstrap.min.css') ?>">
-    
+
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="<?= base_url('public/assetsfront/fonts/font-awesome.min.css') ?>">
     <link rel="stylesheet" href="<?= base_url('public/assetsfront/fonts/themify-icons.css') ?>">
-    
+
     <!-- Owl Carousel -->
     <link rel="stylesheet" href="<?= base_url('public/assetsfront/owlcarousel/css/owl.carousel.css') ?>">
     <link rel="stylesheet" href="<?= base_url('public/assetsfront/owlcarousel/css/owl.theme.css') ?>">
-    
+
     <!-- Other CSS -->
     <link rel="stylesheet" href="<?= base_url('public/assetsfront/css/fonts.css') ?>">
     <link rel="stylesheet" href="<?= base_url('public/assetsfront/css/animate.css') ?>">
@@ -33,81 +33,81 @@
     <link rel="stylesheet" href="<?= base_url('public/assetsfront/css/menu.css') ?>">
     <link rel="stylesheet" href="<?= base_url('public/assetsfront/css/style.css') ?>">
     <link rel="stylesheet" href="<?= base_url('public/assetsfront/css/responsive.css') ?>">
-    
+
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
-    
+
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
-    
+
     <style>
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
-    
+
     body {
         font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
         color: #555;
         line-height: 1.6;
     }
-    
+
     #map {
         width: 100%;
         height: 115vh;
         border-radius: 16px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-        border: 1px solid rgba(255,255,255,0.3);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
     }
-    
+
     .legend-panel {
         background: white;
         border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         overflow: hidden;
         height: auto;
         display: flex;
         flex-direction: column;
     }
-    
+
     .legend-header {
         background: linear-gradient(135deg, #1a1a2e, #16213e);
         color: white;
         padding: 18px 20px;
     }
-    
+
     .legend-header h3 {
         margin: 0;
         font-size: 18px;
         font-weight: 600;
         color: white !important;
     }
-    
+
     .legend-body {
         flex: 1;
         padding: 20px;
         overflow-y: auto;
         max-height: 600px;
     }
-    
+
     .legend-levels {
         background: #f0f2f5;
         border-radius: 12px;
         padding: 15px;
         margin-bottom: 20px;
     }
-    
+
     .legend-levels h4 {
         font-size: 13px;
         margin-bottom: 12px;
         color: #1a1a2e;
         font-weight: 600;
     }
-    
+
     .legend-level-item {
         display: flex;
         align-items: center;
@@ -115,28 +115,28 @@
         padding: 8px 0;
         border-bottom: 1px solid #e0e0e0;
     }
-    
+
     .legend-level-item:last-child {
         border-bottom: none;
     }
-    
+
     .legend-color {
         width: 24px;
         height: 24px;
         border-radius: 50%;
         flex-shrink: 0;
     }
-    
+
     .legend-info {
         flex: 1;
     }
-    
+
     .legend-info strong {
         display: block;
         font-size: 13px;
         color: #1a1a2e;
     }
-    
+
     .total-stats {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         padding: 15px;
@@ -145,26 +145,26 @@
         text-align: center;
         margin-bottom: 20px;
     }
-    
+
     .total-stats .big-number {
         font-size: 28px;
         font-weight: 700;
     }
-    
+
     .type-structure-filter {
         background: #f0f2f5;
         border-radius: 12px;
         padding: 15px;
         margin-bottom: 20px;
     }
-    
+
     .type-structure-filter h4 {
         font-size: 13px;
         margin-bottom: 12px;
         color: #1a1a2e;
         font-weight: 600;
     }
-    
+
     #typeStructureSelect {
         width: 100%;
         padding: 10px 12px;
@@ -174,25 +174,25 @@
         background: white;
         cursor: pointer;
     }
-    
+
     .filter-box {
         background: #f0f2f5;
         border-radius: 12px;
         padding: 15px;
         margin-bottom: 20px;
     }
-    
+
     .filter-box h4 {
         font-size: 14px;
         margin-bottom: 12px;
         color: #1a1a2e;
         font-weight: 600;
     }
-    
+
     .filter-group {
         margin-bottom: 12px;
     }
-    
+
     .filter-group label {
         display: block;
         font-size: 11px;
@@ -200,7 +200,7 @@
         margin-bottom: 4px;
         color: #555;
     }
-    
+
     .filter-group select {
         width: 100%;
         padding: 8px 10px;
@@ -210,13 +210,13 @@
         background: white;
         cursor: pointer;
     }
-    
+
     .filter-group select:disabled {
         background: #e9ecef;
         cursor: not-allowed;
         opacity: 0.7;
     }
-    
+
     #resetFilters {
         width: 100%;
         margin-top: 10px;
@@ -228,7 +228,7 @@
         font-weight: 500;
         cursor: pointer;
     }
-    
+
     .btn-detail {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
@@ -239,25 +239,25 @@
         cursor: pointer;
         margin-top: 8px;
     }
-    
+
     /* Styles pour le modal amélioré */
     .modal-content {
         border-radius: 16px;
         overflow: hidden;
     }
-    
+
     .modal-header {
         background: linear-gradient(135deg, #1a1a2e, #16213e);
         border-bottom: none;
         padding: 20px 25px;
     }
-    
+
     .modal-header .modal-title {
         font-size: 1.25rem;
         font-weight: 600;
         color: white;
     }
-    
+
     .modal-header .close {
         color: white;
         opacity: 0.8;
@@ -270,22 +270,22 @@
         margin: 0;
         line-height: 1;
     }
-    
+
     .modal-header .close:hover {
         opacity: 1;
     }
-    
+
     .modal-body {
         padding: 25px;
         background: #f8f9fa;
     }
-    
+
     .modal-footer {
         border-top: 1px solid #e9ecef;
         padding: 15px 25px;
         background: white;
     }
-    
+
     .modal-footer .btn-secondary {
         background: #6c757d;
         border: none;
@@ -295,11 +295,11 @@
         transition: all 0.2s;
         cursor: pointer;
     }
-    
+
     .modal-footer .btn-secondary:hover {
         background: #5a6268;
     }
-    
+
     .colline-detail-header {
         background: linear-gradient(135deg, #667eea, #764ba2);
         border-radius: 12px;
@@ -307,25 +307,25 @@
         margin-bottom: 25px;
         color: white;
     }
-    
+
     .colline-detail-header h4 {
         margin: 0 0 15px 0;
         font-size: 1.1rem;
         font-weight: 600;
     }
-    
+
     .detail-info-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 12px;
     }
-    
+
     .detail-info-item {
-        background: rgba(255,255,255,0.15);
+        background: rgba(255, 255, 255, 0.15);
         border-radius: 8px;
         padding: 10px 12px;
     }
-    
+
     .detail-info-item label {
         display: block;
         font-size: 10px;
@@ -334,13 +334,13 @@
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
-    
+
     .detail-info-item .value {
         font-size: 14px;
         font-weight: 600;
         word-break: break-word;
     }
-    
+
     .badge-type {
         display: inline-block;
         padding: 4px 12px;
@@ -348,25 +348,25 @@
         font-size: 11px;
         font-weight: 600;
     }
-    
+
     .badge-slc {
         background: #3498db;
         color: white;
     }
-    
+
     .badge-fonctionnel {
         background: #e67e22;
         color: white;
     }
-    
+
     .stats-section {
         background: white;
         border-radius: 12px;
         padding: 20px;
         margin-top: 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     }
-    
+
     .stats-section h5 {
         color: #1a1a2e;
         font-size: 1rem;
@@ -375,22 +375,22 @@
         border-bottom: 2px solid #667eea;
         display: inline-block;
     }
-    
+
     .stats-table-wrapper {
         overflow-x: auto;
         margin-top: 15px;
     }
-    
+
     .stats-table {
         width: 100%;
         border-collapse: collapse;
         font-size: 13px;
     }
-    
+
     .stats-table thead tr {
         background: linear-gradient(135deg, #667eea, #764ba2);
     }
-    
+
     .stats-table thead th {
         padding: 12px 15px;
         color: white;
@@ -399,51 +399,51 @@
         text-align: center;
         border: none;
     }
-    
+
     .stats-table thead th:first-child {
         text-align: left;
         border-radius: 8px 0 0 0;
     }
-    
+
     .stats-table thead th:last-child {
         border-radius: 0 8px 0 0;
     }
-    
+
     .stats-table tbody tr {
         transition: background 0.2s ease;
         border-bottom: 1px solid #e9ecef;
     }
-    
+
     .stats-table tbody tr:hover {
         background: #f8f9fa;
     }
-    
+
     .stats-table tbody td {
         padding: 10px 15px;
         text-align: center;
         border: none;
     }
-    
+
     .stats-table tbody td:first-child {
         text-align: left;
         font-weight: 500;
     }
-    
+
     .stats-table .total-row {
         background: #e8e8e8;
         font-weight: 700;
         border-top: 2px solid #667eea;
     }
-    
+
     .stats-table .total-row td {
         padding: 10px 15px;
         font-weight: 700;
     }
-    
+
     .stats-table .total-row td:first-child {
         text-align: left;
     }
-    
+
     .description-box {
         background: #fff9e6;
         border-left: 4px solid #667eea;
@@ -451,14 +451,14 @@
         border-radius: 8px;
         margin-top: 15px;
     }
-    
+
     .description-box p {
         margin: 0;
         font-size: 13px;
         line-height: 1.6;
         color: #555;
     }
-    
+
     /* Styles DataTables personnalisés */
     .dataTables_wrapper .dataTables_length,
     .dataTables_wrapper .dataTables_filter,
@@ -467,233 +467,85 @@
         margin-top: 10px;
         margin-bottom: 10px;
     }
-    
+
     .dataTables_wrapper .dataTables_paginate .paginate_button {
         padding: 5px 10px;
         margin: 0 2px;
         border-radius: 4px;
     }
-    
+
     .dataTables_wrapper .dataTables_paginate .paginate_button.current {
         background: linear-gradient(135deg, #667eea, #764ba2);
         color: white !important;
         border: none;
     }
-    
+
     @media (max-width: 992px) {
         .detail-info-grid {
             grid-template-columns: repeat(2, 1fr);
         }
     }
-    
+
     @media (max-width: 768px) {
-        .map-col, .legend-col {
+
+        .map-col,
+        .legend-col {
             flex: 0 0 100%;
             width: 100%;
         }
+
         #map {
             height: 50vh;
         }
-        
+
         .detail-info-grid {
             grid-template-columns: 1fr;
             gap: 8px;
         }
-        
+
         .stats-table thead th,
         .stats-table tbody td {
             padding: 8px 10px;
             font-size: 11px;
         }
     }
+
     /* Styles pour le tableau de bord des statistiques par type */
-.stats-dashboard {
-    transition: all 0.3s ease;
-}
+    .stats-dashboard {
+        transition: all 0.3s ease;
+    }
 
-.stat-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: default;
-}
-
-.stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2) !important;
-}
-
-.stat-card .fa {
-    margin-right: 5px;
-}
-
-@media (max-width: 768px) {
     .stat-card {
-        padding: 14px !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: default;
     }
-    .stat-card div[style*="font-size: 22px"] {
-        font-size: 18px !important;
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2) !important;
     }
-}
-/* Styles pour les marqueurs multiples */
-.marker-badge {
-    display: inline-block;
-    background: #007bff;
-    color: white;
-    border-radius: 50%;
-    width: 28px;
-    height: 28px;
-    line-height: 28px;
-    text-align: center;
-    font-size: 12px;
-    font-weight: bold;
-}
 
-.marker-info {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    flex-wrap: wrap;
-}
+    .stat-card .fa {
+        margin-right: 5px;
+    }
 
-.marker-type {
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 500;
-    white-space: nowrap;
-}
+    @media (max-width: 768px) {
+        .stat-card {
+            padding: 14px !important;
+        }
 
-.marker-desc {
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.marker-desc:hover {
-    opacity: 0.7;
-}
-
-.badge-slc {
-    background: #3498db;
-    color: white;
-}
-
-.badge-fonctionnel {
-    background: #e67e22;
-    color: white;
-}
-
-.even-row {
-    background-color: #f8f9fa;
-}
-
-.odd-row {
-    background-color: #ffffff;
-}
-
-.total-row {
-    background-color: #e9ecef !important;
-    font-weight: bold;
-}
-
-.markers-count {
-    font-size: 14px;
-    color: #ccc;
-    font-weight: normal;
-}
-
-.description-item {
-    background: #f8f9fa;
-    padding: 10px 15px;
-    margin-bottom: 10px;
-    border-left: 4px solid #667eea;
-    border-radius: 4px;
-}
-
-.description-item p {
-    margin: 5px 0 0 0;
-    color: #495057;
-    font-size: 13px;
-    line-height: 1.5;
-}
-
-.photo-section img {
-    transition: transform 0.3s ease;
-}
-
-.photo-section img:hover {
-    transform: scale(1.02);
-}
-
-.stats-summary {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-    margin-top: 15px;
-}
-
-.stat-card {
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-    border: 1px solid #e9ecef;
-    transition: transform 0.2s ease;
-}
-
-.stat-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.btn-view-detail {
-    padding: 3px 12px;
-    font-size: 11px;
-    border-radius: 20px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
-
-.btn-view-detail:hover {
-    opacity: 0.8;
-}
-
-.btn-view-detail i {
-    margin-right: 3px;
-}
-
-#detailsTable tbody tr {
-    cursor: pointer;
-    transition: background 0.2s ease;
-}
-
-#detailsTable tbody tr:hover {
-    background-color: #e8f0fe !important;
-}
-
-/* Style pour le modal de photo */
-#photoModal .modal-content {
-    background: transparent;
-}
-
-#photoModal .modal-body {
-    padding: 0;
-}
-
-#photoModalImage {
-    max-width: 100%;
-    max-height: 80vh;
-    border-radius: 8px;
-}
+        .stat-card div[style*="font-size: 22px"] {
+            font-size: 18px !important;
+        }
+    }
     </style>
 </head>
 
 <body>
 
     <!-- START PRELOADER -->
-    <div class="preloader" id="preloader" style="position:fixed;top:0;left:0;width:100%;height:100%;background:white;z-index:9999;display:flex;align-items:center;justify-content:center;">
+    <div class="preloader" id="preloader"
+        style="position:fixed;top:0;left:0;width:100%;height:100%;background:white;z-index:9999;display:flex;align-items:center;justify-content:center;">
         <div class="spinner">
             <div class="double-bounce1"></div>
             <div class="double-bounce2"></div>
@@ -706,7 +558,8 @@
     <!-- END NAVBAR-->
 
     <!-- START SECTION TOP -->
-    <section class="section-top" style="background-image: url('<?= base_url('public/assetsfront/img/bg/section-top.png') ?>'); background-size: cover; background-position: center center; padding: 60px 0;">
+    <section class="section-top"
+        style="background-image: url('<?= base_url('public/assetsfront/img/bg/section-top.png') ?>'); background-size: cover; background-position: center center; padding: 60px 0;">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
@@ -726,20 +579,32 @@
             <!-- DESCRIPTION DE LA CARTE -->
             <div class="row mb-4">
                 <div class="col-md-12">
-                    <div class="info-banner" style="background: linear-gradient(135deg, #2c3e50, #1a1a2e); border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; color: white;">
-                        <h5 style="color: white; margin: 0 0 8px 0;"><i class="fa fa-info-circle"></i> Comment utiliser cette carte ?</h5>
+                    <div class="info-banner"
+                        style="background: linear-gradient(135deg, #2c3e50, #1a1a2e); border-radius: 12px; padding: 15px 20px; margin-bottom: 20px; color: white;">
+                        <h5 style="color: white; margin: 0 0 8px 0;"><i class="fa fa-info-circle"></i> Comment utiliser
+                            cette carte ?</h5>
                         <p style="color: #ccc; margin: 0; font-size: 13px;">
                             Cette carte montre l'ensemble des zones d'intervention de Biraturaba ASBL.<br>
                             - Provinces (rouge) - Communes (vert) - Zones (bleu) - Collines (violet)<br>
                             - Cliquez sur les marqueurs pour voir les détails de chaque site.<br>
-                            - Utilisez les filtres ci-contre pour affiner votre recherche par province, commune, zone ou type de structure.<br>
-                            - Les clusters (cercles avec chiffres) regroupent les points proches - cliquez dessus pour les déployer.
+                            - Utilisez les filtres ci-contre pour affiner votre recherche par province, commune, zone ou
+                            type de structure.<br>
+                            - Les clusters (cercles avec chiffres) regroupent les points proches - cliquez dessus pour
+                            les déployer.
                         </p>
                         <div class="legend-icons" style="display: flex; gap: 15px; margin-top: 10px; flex-wrap: wrap;">
-                            <span style="cursor: pointer;" onclick="flyToGroup('province')"><span style="background:#FF0000; width:12px;height:12px;display:inline-block;border-radius:50%;"></span> Provinces</span>
-                            <span style="cursor: pointer;" onclick="flyToGroup('commune')"><span style="background:#00FF00; width:12px;height:12px;display:inline-block;border-radius:50%;"></span> Communes</span>
-                            <span style="cursor: pointer;" onclick="flyToGroup('zone')"><span style="background:#0000FF; width:12px;height:12px;display:inline-block;border-radius:50%;"></span> Zones</span>
-                            <span style="cursor: pointer;" onclick="flyToGroup('colline')"><span style="background:#800080; width:12px;height:12px;display:inline-block;border-radius:50%;"></span> Collines</span>
+                            <span style="cursor: pointer;" onclick="flyToGroup('province')"><span
+                                    style="background:#FF0000; width:12px;height:12px;display:inline-block;border-radius:50%;"></span>
+                                Provinces</span>
+                            <span style="cursor: pointer;" onclick="flyToGroup('commune')"><span
+                                    style="background:#00FF00; width:12px;height:12px;display:inline-block;border-radius:50%;"></span>
+                                Communes</span>
+                            <span style="cursor: pointer;" onclick="flyToGroup('zone')"><span
+                                    style="background:#0000FF; width:12px;height:12px;display:inline-block;border-radius:50%;"></span>
+                                Zones</span>
+                            <span style="cursor: pointer;" onclick="flyToGroup('colline')"><span
+                                    style="background:#800080; width:12px;height:12px;display:inline-block;border-radius:50%;"></span>
+                                Collines</span>
                         </div>
                     </div>
                 </div>
@@ -748,13 +613,15 @@
             <!-- TABLEAU DE BORD DES STATISTIQUES PAR TYPE DE STRUCTURE (DYNAMIQUE) -->
             <div class="row mb-4">
                 <div class="col-md-12">
-                    <div class="stats-dashboard" style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+                    <div class="stats-dashboard"
+                        style="background: white; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
                         <h4 style="color: #1a1a2e; margin-bottom: 20px; font-weight: 600;">
-                            <i class="fa fa-pie-chart" style="color: #667eea;"></i> 
+                            <i class="fa fa-pie-chart" style="color: #667eea;"></i>
                             Statistiques par type de structure
-                            <span id="statsFilterInfo" style="font-size: 12px; font-weight: 400; color: #888; margin-left: 10px;"></span>
+                            <span id="statsFilterInfo"
+                                style="font-size: 12px; font-weight: 400; color: #888; margin-left: 10px;"></span>
                         </h4>
-                        <div id="statsContainer" style="max-width: 1300px; max-height: 200px;overflow-y:auto;">
+                        <div id="statsContainer">
                             <!-- Les statistiques seront générées dynamiquement en JavaScript -->
                             <div class="text-center text-muted" style="padding: 20px 0;">
                                 <i class="fa fa-spinner fa-spin" style="font-size: 24px;"></i>
@@ -769,7 +636,7 @@
                 <div class="col-md-8 map-col">
                     <div id="map"></div>
                 </div>
-                
+
                 <div class="col-md-4 legend-col">
                     <div class="legend-panel">
                         <div class="legend-header">
@@ -786,7 +653,7 @@
                                 <select id="typeStructureSelect" class="form-control">
                                     <option value="all">Tous les types</option>
                                     <?php foreach ($types_structure as $type): ?>
-                                        <option value="<?= esc($type['nom']) ?>"><?= esc($type['nom']) ?></option>
+                                    <option value="<?= esc($type['nom']) ?>"><?= esc($type['nom']) ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -830,7 +697,8 @@
     <?php echo view('includes/frontend/footer'); ?>
 
     <!-- Modal -->
-    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -863,30 +731,20 @@
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 
     <script>
-
     // Données PHP converties en JSON
-    // Données PHP converties en JSON
-const provinces = <?= $provinces ?: '[]' ?>;
-const communes = <?= $communes ?: '[]' ?>;
-const zones = <?= $zones ?: '[]' ?>;
-// Données pour les marqueurs (avec doublons)
-const collinesMarkers = <?= $collines_markers ?: '[]' ?>;
-// Données uniques pour les statistiques
-const collines = <?= $collines ?: '[]' ?>;
-const stats = <?= json_encode($stats) ?: '{}' ?>;
-const totalCollinesFromDb = stats.total_sites || 0;
+    const provinces = <?= $provinces ?: '[]' ?>;
+    const communes = <?= $communes ?: '[]' ?>;
+    const zones = <?= $zones ?: '[]' ?>;
+    const collines = <?= $collines ?: '[]' ?>;
+    const stats = <?= json_encode($stats) ?: '{}' ?>;
+    const totalCollinesFromDb = stats.total_sites || 0;
 
-console.log('Données reçues:');
-console.log('Provinces:', provinces);
-console.log('Communes:', communes);
-console.log('Zones:', zones);
-console.log('Collines (marqueurs avec doublons):', collinesMarkers);
-console.log('Collines (uniques pour stats):', collines);
-// Vérification spécifique des photos
-console.log('=== VÉRIFICATION DES PHOTOS ===');
-collinesMarkers.forEach((c, i) => {
-    console.log(`Marqueur #${i+1} (${c.nom}): photo =`, c.photo, 'type =', typeof c.photo);
-});
+    console.log('Données reçues:');
+    console.log('Provinces:', provinces);
+    console.log('Communes:', communes);
+    console.log('Zones:', zones);
+    console.log('Collines:', collines);
+
     // ============================================
     // FONCTIONS UTILITAIRES
     // ============================================
@@ -951,7 +809,7 @@ collinesMarkers.forEach((c, i) => {
     // ============================================
     // DONNÉES UNIQUES PAR NOM
     // ============================================
-    
+
     const uniqueProvinces = getUniqueByName(provinces);
     const uniqueCommunes = getUniqueByName(communes);
     const uniqueZones = getUniqueByName(zones);
@@ -969,10 +827,10 @@ collinesMarkers.forEach((c, i) => {
 
     function calculateStatsByType(filteredCollines) {
         const statsMap = new Map();
-        
+
         filteredCollines.forEach(colline => {
             const type = colline.type_structure_nom || 'Non défini';
-            
+
             if (!statsMap.has(type)) {
                 statsMap.set(type, {
                     type_structure: type,
@@ -983,7 +841,7 @@ collinesMarkers.forEach((c, i) => {
                     total_structures: 0
                 });
             }
-            
+
             const stat = statsMap.get(type);
             stat.nb_collines++;
             stat.total_membres += colline.nb_membres || 0;
@@ -991,7 +849,7 @@ collinesMarkers.forEach((c, i) => {
             stat.total_femmes += colline.nb_femmes || 0;
             stat.total_structures += colline.nb_structures || 0;
         });
-        
+
         return Array.from(statsMap.values()).sort((a, b) => b.total_membres - a.total_membres);
     }
 
@@ -1011,15 +869,15 @@ collinesMarkers.forEach((c, i) => {
     function updateStatsDashboard(filteredCollines) {
         const statsContainer = document.getElementById('statsContainer');
         const statsFilterInfo = document.getElementById('statsFilterInfo');
-        
+
         if (!statsContainer) return;
-        
+
         const stats = calculateStatsByType(filteredCollines);
-        
+
         if (statsFilterInfo) {
             statsFilterInfo.textContent = `(${filteredCollines.length} collines affichées)`;
         }
-        
+
         if (stats.length === 0) {
             statsContainer.innerHTML = `
                 <div class="text-center text-muted" style="padding: 30px 0;">
@@ -1029,7 +887,7 @@ collinesMarkers.forEach((c, i) => {
             `;
             return;
         }
-        
+
         let html = '<div class="row">';
         stats.forEach(stat => {
             const badgeColor = getTypeColor(stat.type_structure);
@@ -1071,14 +929,26 @@ collinesMarkers.forEach((c, i) => {
     // ============================================
 
     const markerColors = {
-        province: { bg: '#FF0000', name: 'Province' },
-        commune: { bg: '#00FF00', name: 'Commune' },
-        zone: { bg: '#0000FF', name: 'Zone' },
-        colline: { bg: '#800080', name: 'Colline' }
+        province: {
+            bg: '#FF0000',
+            name: 'Province'
+        },
+        commune: {
+            bg: '#00FF00',
+            name: 'Commune'
+        },
+        zone: {
+            bg: '#0000FF',
+            name: 'Zone'
+        },
+        colline: {
+            bg: '#800080',
+            name: 'Colline'
+        }
     };
 
     const map = L.map('map').setView([-3.3858874, 28.6053531], 8);
-    
+
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         subdomains: 'abcd',
@@ -1091,7 +961,7 @@ collinesMarkers.forEach((c, i) => {
 
     function createCustomColoredMarker(point, type) {
         const colorConfig = markerColors[type];
-        
+
         const markerHtml = `
             <svg width="25" height="41" viewBox="0 0 25 41" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -1110,7 +980,7 @@ collinesMarkers.forEach((c, i) => {
                 </g>
             </svg>
         `;
-        
+
         const icon = L.divIcon({
             html: markerHtml,
             className: 'custom-marker',
@@ -1118,12 +988,14 @@ collinesMarkers.forEach((c, i) => {
             iconAnchor: [12.5, 41],
             popupAnchor: [0, -35]
         });
-        
-        const marker = L.marker([point.lat, point.lng], { icon: icon });
-        
+
+        const marker = L.marker([point.lat, point.lng], {
+            icon: icon
+        });
+
         let buttonDetail = '';
         let descriptionHtml = '';
-        
+
         // Déterminer le label info en fonction du type
         let infoLabel = 'Info';
         if (type === 'province') {
@@ -1135,7 +1007,7 @@ collinesMarkers.forEach((c, i) => {
         } else if (type === 'colline') {
             infoLabel = 'Zone';
         }
-        
+
         let detailLabel = '';
         if (type === 'province') {
             detailLabel = 'Detail';
@@ -1146,10 +1018,10 @@ collinesMarkers.forEach((c, i) => {
         } else if (type === 'colline') {
             detailLabel = 'Detail';
         }
-        
+
         if (type === 'colline') {
-            buttonDetail = `<button class="btn-detail" onclick="showDetails('${point.COLLINE_ID}')">Voir les détails</button>`;
-            
+            buttonDetail = `<button class="btn-detail" onclick="showDetails('${point.id}')">Voir les détails</button>`;
+
             if (point.description && point.description.trim() !== '') {
                 let description = point.description;
                 // Limiter à 120 caractères pour la prévisualisation
@@ -1168,9 +1040,9 @@ collinesMarkers.forEach((c, i) => {
                 `;
             }
         }
-        
+
         const pointName = point.nom || point.label || point.value || 'Point sans nom';
-        
+
         const popupContent = `
             <div style="min-width: 280px; max-width: 350px;">
                 <div style="background: ${colorConfig.bg}; color: white; padding: 10px 12px; border-radius: 12px 12px 0 0;">
@@ -1192,41 +1064,47 @@ collinesMarkers.forEach((c, i) => {
     }
 
     let totalCollinesCount = 0;
-    
+
     function initMarkers() {
         allPoints = [];
-    
-    uniqueProvinces.forEach(p => {
-        allPoints.push({ ...p, type: 'province' });
-    });
-    
-    uniqueCommunes.forEach(c => {
-        allPoints.push({ ...c, type: 'commune' });
-    });
-    
-    uniqueZones.forEach(z => {
-        allPoints.push({ ...z, type: 'zone' });
-    });
-    
-        // Utiliser les données uniques pour les collines (pas de doublons)
-        collinesMarkers.forEach(c => {
-        allPoints.push({ 
-            ...c, 
-            type: 'colline',
-            description: c.description || ''
+
+        uniqueProvinces.forEach(p => {
+            allPoints.push({
+                ...p,
+                type: 'province'
+            });
         });
-    });
-    
-    // Le nombre total de collines uniques vient de la base de données
-    totalCollinesCount = totalCollinesFromDb;
-    
-    console.log('Total points à afficher (marqueurs):', allPoints.length);
-    console.log('Total collines uniques:', totalCollinesFromDb);
-        
+
+        uniqueCommunes.forEach(c => {
+            allPoints.push({
+                ...c,
+                type: 'commune'
+            });
+        });
+
+        uniqueZones.forEach(z => {
+            allPoints.push({
+                ...z,
+                type: 'zone'
+            });
+        });
+
+        collines.forEach(c => {
+            allPoints.push({
+                ...c,
+                type: 'colline',
+                description: c.description || ''
+            });
+        });
+        totalCollinesCount = totalCollinesFromDb > 0 ? totalCollinesFromDb : collines.length;
+
+        console.log('Total points à afficher:', allPoints.length);
+        console.log('Total collines:', totalCollinesFromDb);
+
         if (markersCluster) {
             map.removeLayer(markersCluster);
         }
-        
+
         markersCluster = L.markerClusterGroup({
             spiderfyOnMaxZoom: true,
             showCoverageOnHover: false,
@@ -1241,22 +1119,23 @@ collinesMarkers.forEach((c, i) => {
                     html: `<div style="background: linear-gradient(135deg, #667eea, #764ba2); width: ${size}px; height: ${size}px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: ${size > 45 ? '16px' : '12px'};">${count}</div>`,
                     className: 'custom-marker',
                     iconSize: L.point(size, size),
-                    iconAnchor: L.point(size/2, size/2)
+                    iconAnchor: L.point(size / 2, size / 2)
                 });
             }
         });
-        
+
         allPoints.forEach(point => {
             markersCluster.addLayer(createCustomColoredMarker(point, point.type));
         });
-        
+
         map.addLayer(markersCluster);
-        
-        // Afficher le nombre de collines uniques
+
         document.getElementById('totalPointsDisplay').innerText = totalCollinesCount;
-        
+
         if (allPoints.length > 0 && markersCluster.getBounds().isValid()) {
-            map.fitBounds(markersCluster.getBounds(), { padding: [50, 50] });
+            map.fitBounds(markersCluster.getBounds(), {
+                padding: [50, 50]
+            });
         }
     }
 
@@ -1269,22 +1148,22 @@ collinesMarkers.forEach((c, i) => {
         const communeSelect = document.getElementById('filterCommune');
         const zoneSelect = document.getElementById('filterZone');
         const collineSelect = document.getElementById('filterColline');
-        
+
         populateSelect(provinceSelect, uniqueProvinces, 'Toutes les provinces');
         populateSelect(communeSelect, uniqueCommunes, 'Toutes les communes');
         populateSelect(zoneSelect, uniqueZones, 'Toutes les zones');
         populateSelect(collineSelect, uniqueCollines, 'Toutes les collines');
-        
+
         provinceSelect.addEventListener('change', function() {
             const provinceId = this.value;
             console.log('Province sélectionnée:', provinceId);
-            
+
             let communesFiltered, zonesFiltered, collinesFiltered;
-            
+
             if (provinceId !== 'all') {
                 const selectedProvince = provinces.find(p => p.nom === provinceId);
                 const provinceIdValue = selectedProvince ? selectedProvince.id : null;
-                
+
                 communesFiltered = getUniqueByName(communes.filter(c => c.province_id == provinceIdValue));
                 zonesFiltered = getUniqueByName(zones.filter(z => z.province_id == provinceIdValue));
                 collinesFiltered = getUniqueByName(collines.filter(c => c.province_id == provinceIdValue));
@@ -1293,94 +1172,94 @@ collinesMarkers.forEach((c, i) => {
                 zonesFiltered = uniqueZones;
                 collinesFiltered = uniqueCollines;
             }
-            
+
             populateSelect(communeSelect, communesFiltered, 'Toutes les communes');
             populateSelect(zoneSelect, zonesFiltered, 'Toutes les zones');
             populateSelect(collineSelect, collinesFiltered, 'Toutes les collines');
-            
+
             communeSelect.value = 'all';
             zoneSelect.value = 'all';
             collineSelect.value = 'all';
-            
+
             applyFilters();
         });
-        
+
         communeSelect.addEventListener('change', function() {
             const communeId = this.value;
             const provinceId = provinceSelect.value;
             console.log('Commune sélectionnée:', communeId);
-            
+
             let zonesFiltered, collinesFiltered;
-            
+
             if (communeId !== 'all') {
                 const selectedCommune = communes.find(c => c.nom === communeId);
                 const communeIdValue = selectedCommune ? selectedCommune.id : null;
-                
+
                 zonesFiltered = getUniqueByName(zones.filter(z => z.commune_id == communeIdValue));
                 collinesFiltered = getUniqueByName(collines.filter(c => c.commune_id == communeIdValue));
             } else if (provinceId !== 'all') {
                 const selectedProvince = provinces.find(p => p.nom === provinceId);
                 const provinceIdValue = selectedProvince ? selectedProvince.id : null;
-                
+
                 zonesFiltered = getUniqueByName(zones.filter(z => z.province_id == provinceIdValue));
                 collinesFiltered = getUniqueByName(collines.filter(c => c.province_id == provinceIdValue));
             } else {
                 zonesFiltered = uniqueZones;
                 collinesFiltered = uniqueCollines;
             }
-            
+
             populateSelect(zoneSelect, zonesFiltered, 'Toutes les zones');
             populateSelect(collineSelect, collinesFiltered, 'Toutes les collines');
-            
+
             zoneSelect.value = 'all';
             collineSelect.value = 'all';
-            
+
             applyFilters();
         });
-        
+
         zoneSelect.addEventListener('change', function() {
             const zoneId = this.value;
             const communeId = communeSelect.value;
             const provinceId = provinceSelect.value;
             console.log('Zone sélectionnée:', zoneId);
-            
+
             let collinesFiltered;
-            
+
             if (zoneId !== 'all') {
                 const selectedZone = zones.find(z => z.nom === zoneId);
                 const zoneIdValue = selectedZone ? selectedZone.id : null;
-                
+
                 collinesFiltered = getUniqueByName(collines.filter(c => c.zone_id == zoneIdValue));
             } else if (communeId !== 'all') {
                 const selectedCommune = communes.find(c => c.nom === communeId);
                 const communeIdValue = selectedCommune ? selectedCommune.id : null;
-                
+
                 collinesFiltered = getUniqueByName(collines.filter(c => c.commune_id == communeIdValue));
             } else if (provinceId !== 'all') {
                 const selectedProvince = provinces.find(p => p.nom === provinceId);
                 const provinceIdValue = selectedProvince ? selectedProvince.id : null;
-                
+
                 collinesFiltered = getUniqueByName(collines.filter(c => c.province_id == provinceIdValue));
             } else {
                 collinesFiltered = uniqueCollines;
             }
-            
+
             populateSelect(collineSelect, collinesFiltered, 'Toutes les collines');
             collineSelect.value = 'all';
-            
+
             applyFilters();
         });
-        
+
         collineSelect.addEventListener('change', function() {
             applyFilters();
         });
-        
+
         const typeSelect = document.getElementById('typeStructureSelect');
         typeSelect.addEventListener('change', function() {
             currentTypeFilter = this.value;
             applyFilters();
         });
-        
+
         document.getElementById('resetFilters').addEventListener('click', function() {
             provinceSelect.value = 'all';
             communeSelect.value = 'all';
@@ -1388,173 +1267,93 @@ collinesMarkers.forEach((c, i) => {
             collineSelect.value = 'all';
             typeSelect.value = 'all';
             currentTypeFilter = 'all';
-            
+
             populateSelect(provinceSelect, uniqueProvinces, 'Toutes les provinces');
             populateSelect(communeSelect, uniqueCommunes, 'Toutes les communes');
             populateSelect(zoneSelect, uniqueZones, 'Toutes les zones');
             populateSelect(collineSelect, uniqueCollines, 'Toutes les collines');
-            
+
             applyFilters();
-            
+
             if (markersCluster && markersCluster.getBounds().isValid()) {
-                map.fitBounds(markersCluster.getBounds(), { padding: [50, 50] });
+                map.fitBounds(markersCluster.getBounds(), {
+                    padding: [50, 50]
+                });
             }
         });
     }
+
     function applyFilters() {
-    if (!markersCluster) return;
-    
-    const provinceId = document.getElementById('filterProvince').value;
-    const communeId = document.getElementById('filterCommune').value;
-    const zoneId = document.getElementById('filterZone').value;
-    const collineId = document.getElementById('filterColline').value;
-    
-    let filtered = [...allPoints];
-    
-    // Filtrage par type de structure
-    if (currentTypeFilter !== 'all') {
-        filtered = filtered.filter(point => {
-            if (point.type === 'colline') {
-                return point.type_structure_nom === currentTypeFilter;
-            }
-            return true;
+        if (!markersCluster) return;
+
+        const provinceId = document.getElementById('filterProvince').value;
+        const communeId = document.getElementById('filterCommune').value;
+        const zoneId = document.getElementById('filterZone').value;
+        const collineId = document.getElementById('filterColline').value;
+
+        console.log('Filtres appliqués:', {
+            provinceId,
+            communeId,
+            zoneId,
+            collineId
         });
-    }
-    
-    // Filtrage hiérarchique
-    if (collineId !== 'all') {
-        filtered = filtered.filter(p => p.type === 'colline' && p.nom === collineId);
-    } else if (zoneId !== 'all') {
-        const selectedZone = zones.find(z => z.nom === zoneId);
-        const zoneIdValue = selectedZone ? selectedZone.id : null;
-        
-        filtered = filtered.filter(p => 
-            (p.type === 'zone' && p.nom === zoneId) || 
-            (p.type === 'colline' && p.zone_id == zoneIdValue)
-        );
-    } else if (communeId !== 'all') {
-        const selectedCommune = communes.find(c => c.nom === communeId);
-        const communeIdValue = selectedCommune ? selectedCommune.id : null;
-        
-        filtered = filtered.filter(p => 
-            (p.type === 'commune' && p.nom === communeId) || 
-            (p.type === 'zone' && p.commune_id == communeIdValue) || 
-            (p.type === 'colline' && p.commune_id == communeIdValue)
-        );
-    } else if (provinceId !== 'all') {
-        const selectedProvince = provinces.find(p => p.nom === provinceId);
-        const provinceIdValue = selectedProvince ? selectedProvince.id : null;
-        
-        filtered = filtered.filter(p => 
-            (p.type === 'province' && p.nom === provinceId) || 
-            (p.type === 'commune' && p.province_id == provinceIdValue) || 
-            (p.type === 'zone' && p.province_id == provinceIdValue) || 
-            (p.type === 'colline' && p.province_id == provinceIdValue)
-        );
-    }
-    
-    // Mise à jour des marqueurs sur la carte
-    markersCluster.clearLayers();
-    filtered.forEach(point => {
-        markersCluster.addLayer(createCustomColoredMarker(point, point.type));
-    });
-    map.addLayer(markersCluster);
-    
-    // Compter les collines UNIQUES après filtrage
-    const filteredCollines = filtered.filter(p => p.type === 'colline');
-    const uniqueCollineIds = new Set();
-    filteredCollines.forEach(c => {
-        if (c.COLLINE_ID) {
-            uniqueCollineIds.add(c.COLLINE_ID);
-        } else {
-            uniqueCollineIds.add(c.id);
+
+        let filtered = [...allPoints];
+
+        if (currentTypeFilter !== 'all') {
+            filtered = filtered.filter(point => {
+                if (point.type === 'colline') {
+                    return point.type_structure_nom === currentTypeFilter;
+                }
+                return true;
+            });
         }
-    });
-    const uniqueCollineCount = uniqueCollineIds.size;
-    
-    document.getElementById('totalPointsDisplay').innerText = uniqueCollineCount;
-    
-    // Mettre à jour les statistiques
-    updateStatsDashboard(filteredCollines);
-}
-    // function applyFilters() {
-    //     if (!markersCluster) return;
-        
-    //     const provinceId = document.getElementById('filterProvince').value;
-    //     const communeId = document.getElementById('filterCommune').value;
-    //     const zoneId = document.getElementById('filterZone').value;
-    //     const collineId = document.getElementById('filterColline').value;
-        
-    //     console.log('Filtres appliqués:', { provinceId, communeId, zoneId, collineId });
-        
-    //     let filtered = [...allPoints];
-        
-    //     if (currentTypeFilter !== 'all') {
-    //         filtered = filtered.filter(point => {
-    //             if (point.type === 'colline') {
-    //                 return point.type_structure_nom === currentTypeFilter;
-    //             }
-    //             return true;
-    //         });
-    //     }
-        
-    //     if (collineId !== 'all') {
-    //         filtered = filtered.filter(p => p.type === 'colline' && p.nom === collineId);
-    //     } else if (zoneId !== 'all') {
-    //         const selectedZone = zones.find(z => z.nom === zoneId);
-    //         const zoneIdValue = selectedZone ? selectedZone.id : null;
-            
-    //         filtered = filtered.filter(p => 
-    //             (p.type === 'zone' && p.nom === zoneId) || 
-    //             (p.type === 'colline' && p.zone_id == zoneIdValue)
-    //         );
-    //     } else if (communeId !== 'all') {
-    //         const selectedCommune = communes.find(c => c.nom === communeId);
-    //         const communeIdValue = selectedCommune ? selectedCommune.id : null;
-            
-    //         filtered = filtered.filter(p => 
-    //             (p.type === 'commune' && p.nom === communeId) || 
-    //             (p.type === 'zone' && p.commune_id == communeIdValue) || 
-    //             (p.type === 'colline' && p.commune_id == communeIdValue)
-    //         );
-    //     } else if (provinceId !== 'all') {
-    //         const selectedProvince = provinces.find(p => p.nom === provinceId);
-    //         const provinceIdValue = selectedProvince ? selectedProvince.id : null;
-            
-    //         filtered = filtered.filter(p => 
-    //             (p.type === 'province' && p.nom === provinceId) || 
-    //             (p.type === 'commune' && p.province_id == provinceIdValue) || 
-    //             (p.type === 'zone' && p.province_id == provinceIdValue) || 
-    //             (p.type === 'colline' && p.province_id == provinceIdValue)
-    //         );
-    //     }
-        
-    //     console.log('Points filtrés:', filtered.length);
-        
-    //     markersCluster.clearLayers();
-    //     filtered.forEach(point => {
-    //         markersCluster.addLayer(createCustomColoredMarker(point, point.type));
-    //     });
-    //     map.addLayer(markersCluster);
-        
-    //     // ====== CORRECTION : Compter les collines UNIQUES après filtrage ======
-    //     const filteredCollines = filtered.filter(p => p.type === 'colline');
-        
-    //     // Utiliser un Set pour compter les collines uniques par ID
-    //     const uniqueCollineIds = new Set();
-    //     filteredCollines.forEach(c => {
-    //         if (c.COLLINE_ID) {
-    //             uniqueCollineIds.add(c.COLLINE_ID);
-    //         } else {
-    //             uniqueCollineIds.add(c.id);
-    //         }
-    //     });
-    //     const uniqueCollineCount = uniqueCollineIds.size;
-        
-    //     document.getElementById('totalPointsDisplay').innerText = uniqueCollineCount;
-        
-    //     updateStatsDashboard(filteredCollines);
-    // }
+
+        if (collineId !== 'all') {
+            filtered = filtered.filter(p => p.type === 'colline' && p.nom === collineId);
+        } else if (zoneId !== 'all') {
+            const selectedZone = zones.find(z => z.nom === zoneId);
+            const zoneIdValue = selectedZone ? selectedZone.id : null;
+
+            filtered = filtered.filter(p =>
+                (p.type === 'zone' && p.nom === zoneId) ||
+                (p.type === 'colline' && p.zone_id == zoneIdValue)
+            );
+        } else if (communeId !== 'all') {
+            const selectedCommune = communes.find(c => c.nom === communeId);
+            const communeIdValue = selectedCommune ? selectedCommune.id : null;
+
+            filtered = filtered.filter(p =>
+                (p.type === 'commune' && p.nom === communeId) ||
+                (p.type === 'zone' && p.commune_id == communeIdValue) ||
+                (p.type === 'colline' && p.commune_id == communeIdValue)
+            );
+        } else if (provinceId !== 'all') {
+            const selectedProvince = provinces.find(p => p.nom === provinceId);
+            const provinceIdValue = selectedProvince ? selectedProvince.id : null;
+
+            filtered = filtered.filter(p =>
+                (p.type === 'province' && p.nom === provinceId) ||
+                (p.type === 'commune' && p.province_id == provinceIdValue) ||
+                (p.type === 'zone' && p.province_id == provinceIdValue) ||
+                (p.type === 'colline' && p.province_id == provinceIdValue)
+            );
+        }
+
+        console.log('Points filtrés:', filtered.length);
+
+        markersCluster.clearLayers();
+        filtered.forEach(point => {
+            markersCluster.addLayer(createCustomColoredMarker(point, point.type));
+        });
+        map.addLayer(markersCluster);
+
+        const filteredCollinesCount = filtered.filter(point => point.type === 'colline').length;
+        document.getElementById('totalPointsDisplay').innerText = filteredCollinesCount;
+
+        const filteredCollines = filtered.filter(p => p.type === 'colline');
+        updateStatsDashboard(filteredCollines);
+    }
 
     // ============================================
     // FLY TO GROUP
@@ -1562,7 +1361,7 @@ collinesMarkers.forEach((c, i) => {
 
     function flyToGroup(groupType) {
         let points = [];
-        
+
         if (groupType === 'province') {
             points = uniqueProvinces;
         } else if (groupType === 'commune') {
@@ -1572,10 +1371,12 @@ collinesMarkers.forEach((c, i) => {
         } else if (groupType === 'colline') {
             points = uniqueCollines;
         }
-        
+
         if (points.length > 0) {
             const bounds = L.latLngBounds(points.map(p => [p.lat, p.lng]));
-            map.fitBounds(bounds, { padding: [50, 50] });
+            map.fitBounds(bounds, {
+                padding: [50, 50]
+            });
         }
     }
 
@@ -1583,421 +1384,140 @@ collinesMarkers.forEach((c, i) => {
     // SHOW DETAILS
     // ============================================
 
-    // ============================================
-// SHOW DETAILS - VERSION AVEC MULTIPLES MARQUEURS ET PHOTOS
-// ============================================
+    window.showDetails = function(collineId) {
+        const colline = collines.find(c => c.id == collineId);
+        if (!colline) return;
 
-window.showDetails = function(collineId) {
-    // Récupérer TOUS les marqueurs de cette colline (avec doublons)
-    const collineMarkers = collinesMarkers.filter(c => c.COLLINE_ID == collineId);
+        let totalCollines = 1;
+        let totalMembres = colline.nb_membres || 0;
+        let totalHommes = colline.nb_hommes || 0;
+        let totalFemmes = colline.nb_femmes || 0;
+        let totalStructures = colline.nb_structures || 0;
 
-    console.log('Marqueurs trouvés pour la colline:', collineMarkers);
-    console.log('Détails des photos:');
-    collineMarkers.forEach((c, i) => {
-        console.log(`Marqueur #${i+1}: photo =`, c.photo, 'type =', typeof c.photo);
-    });
-    
-    // Si aucun marqueur trouvé, essayer avec collines (uniques)
-    let markers = collineMarkers;
-    if (!markers || markers.length === 0) {
-        const fallback = collines.filter(c => c.COLLINE_ID == collineId);
-        if (fallback.length > 0) {
-            markers = fallback;
-        } else {
-            return;
-        }
-    }
-    
-    // Utiliser le premier marqueur pour les informations générales de la colline
-    const mainColline = markers[0];
-    
-    // Calcul des totaux pour TOUS les marqueurs de la colline
-    let totalCollines = markers.length;
-    let totalMembres = markers.reduce((sum, c) => sum + (parseInt(c.nb_membres) || 0), 0);
-    let totalHommes = markers.reduce((sum, c) => sum + (parseInt(c.nb_hommes) || 0), 0);
-    let totalFemmes = markers.reduce((sum, c) => sum + (parseInt(c.nb_femmes) || 0), 0);
-    let totalStructures = markers.reduce((sum, c) => sum + (parseInt(c.nb_structures) || 0), 0);
-    
-    // Générer les lignes du tableau pour CHAQUE marqueur avec SES PROPRES données
-    let tableRows = '';
-    markers.forEach((colline, index) => {
-        const typeBadgeClass = colline.type_structure_nom === 'SLC' ? 'badge-slc' : 
-                              colline.type_structure_nom === 'RESEAU' ? 'badge-reseau' : 'badge-fonctionnel';
-        const hasPhoto = colline.photo && colline.photo.trim() !== '';
-        const photoUrl = hasPhoto ? "<?= base_url('uploads/') ?>" + colline.photo : null;
-        
-        // Description courte pour le tooltip
-        const shortDesc = colline.description && colline.description.trim() !== '' 
-            ? colline.description.substring(0, 50) + (colline.description.length > 50 ? '...' : '')
-            : '';
-        
-        tableRows += `
-            <tr class="${index % 2 === 0 ? 'even-row' : 'odd-row'}">
-                <td style="text-align: left; font-weight: 500;">
-                    ${escapeHtml(colline.zone_nom || 'N/A')}
-                </td>
-                <td style="text-align: center;">
-                    <span class="marker-badge">#${index + 1}</span>
-                </td>
-                <td style="text-align: center;">
-                    <div class="marker-info">
-                         <span class="marker-type ${typeBadgeClass}">${escapeHtml(colline.type_structure_nom || 'Non défini')}</span>
-                        ${colline.description && colline.description.trim() !== '' ? 
-                            `<span class="marker-desc" title="${escapeHtml(colline.description)}" style="cursor:help;">📝</span>` : ''}
-                    </div>
-                </td>
-                <td style="text-align: center;">
-                    ${hasPhoto ? 
-                        `<img src="${photoUrl}" alt="Photo" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px; cursor: pointer; border: 1px solid #ddd;" 
-                              onclick="event.stopPropagation(); openPhotoModal('${photoUrl}', '${escapeHtml(colline.nom)} - Marqueur #${index + 1}')">` : 
-                        `<span class="text-muted" style="font-size: 11px;">Aucune photo</span>`}
-                </td>
-                <td style="text-align: center; font-weight: 600;">
-                    ${formatNumber(colline.nb_membres || 0)}
-                </td>
-                <td style="text-align: center;">
-                    ${formatNumber(colline.nb_hommes || 0)}
-                </td>
-                <td style="text-align: center;">
-                    ${formatNumber(colline.nb_femmes || 0)}
-                </td>
-                <td style="text-align: center;">
-                    ${colline.nb_structures || 0}
-                </td>
-                <td style="text-align: center;">
-                    <button class="btn btn-sm btn-view-detail" 
-                            onclick="event.stopPropagation(); showSingleMarkerDetail(${colline.id})">
-                        <i class="fa fa-eye"></i> Voir
-                    </button>
-                </td>
+        let tableRows = `
+            <tr>
+                <td style="text-align: left; font-weight: 500;">${escapeHtml(colline.zone_nom || 'N/A')}</td>
+                <td style="text-align: center;">1</td>
+                <td style="text-align: center;">${formatNumber(totalMembres)}</td>
+                <td style="text-align: center;">${formatNumber(totalHommes)}</td>
+                <td style="text-align: center;">${formatNumber(totalFemmes)}</td>
+                <td style="text-align: center;">${totalStructures}</td>
             </tr>
         `;
-    });
-    
-    // Ajouter la ligne de total
-    tableRows += `
-        <tr class="total-row">
-            <td style="text-align: left; font-weight: 700;"><strong>TOTAL ${escapeHtml(mainColline.nom)}</strong></td>
-            <td style="text-align: center;"><strong>${totalCollines}</strong></td>
-            <td style="text-align: center;"><strong>Tous types</strong></td>
-            <td style="text-align: center;"><strong>-</strong></td>
-            <td style="text-align: center;"><strong>${formatNumber(totalMembres)}</strong></td>
-            <td style="text-align: center;"><strong>${formatNumber(totalHommes)}</strong></td>
-            <td style="text-align: center;"><strong>${formatNumber(totalFemmes)}</strong></td>
-            <td style="text-align: center;"><strong>${formatNumber(totalStructures)}</strong></td>
-            <td style="text-align: center;"><strong>-</strong></td>
-        </tr>
-    `;
-    
-    // Générer les descriptions pour CHAQUE marqueur avec SES PROPRES données
-    let descriptionHtml = '';
-    const descriptions = markers.filter(c => c.description && c.description.trim() !== '');
-    if (descriptions.length > 0) {
-        descriptionHtml = `
-            <div class="description-box" style="margin-top: 15px;">
-                <h6 style="margin-bottom: 12px; color: #1a1a2e; font-weight: 600;">
-                    📋 Description (${descriptions.length} marqueur(s))
-                </h6>
-                ${descriptions.map((c, idx) => {
-                    const typeColor = c.type_structure_nom === 'SLC' ? '#3498db' : 
-                                     c.type_structure_nom === 'RESEAU' ? '#e67e22' : '#667eea';
-                    return `
-                        <div class="description-item" style="background: #f8f9fa; padding: 12px 15px; margin-bottom: 10px; border-left: 4px solid ${typeColor}; border-radius: 4px;">
-                            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 5px;">
-                                <span style="font-weight: 600; font-size: 12px; background: ${typeColor}; color: white; padding: 2px 12px; border-radius: 12px;">Marqueur #${idx + 1}</span>
-                                <span class="badge-type ${c.type_structure_nom === 'SLC' ? 'badge-slc' : c.type_structure_nom === 'RESEAU' ? 'badge-reseau' : 'badge-fonctionnel'}" style="font-size: 11px; padding: 2px 10px; border-radius: 12px;">
-                                    ${escapeHtml(c.type_structure_nom || 'Non défini')}
-                                </span>
-                                ${c.photo ? `<span style="font-size: 11px; color: #667eea;"><i class="fa fa-image"></i> Photo disponible</span>` : ''}
-                                <span style="font-size: 11px; color: #888; margin-left: auto;">
-                                    <i class="fa fa-users"></i> ${formatNumber(c.nb_membres || 0)} membres
-                                </span>
-                            </div>
-                            <p style="margin: 8px 0 0 0; color: #495057; font-size: 13px; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(c.description)}</p>
-                        </div>
-                    `;
-                }).join('')}
-            </div>
+
+        tableRows += `
+            <tr class="total-row">
+                <td style="text-align: left; font-weight: 700;"><strong>TOTAL</strong></td>
+                <td style="text-align: center;"><strong>${totalCollines}</strong></td>
+                <td style="text-align: center;"><strong>${formatNumber(totalMembres)}</strong></td>
+                <td style="text-align: center;"><strong>${formatNumber(totalHommes)}</strong></td>
+                <td style="text-align: center;"><strong>${formatNumber(totalFemmes)}</strong></td>
+                <td style="text-align: center;"><strong>${totalStructures}</strong></td>
+            </tr>
         `;
-    }
-    
-    // Déterminer le type principal pour l'affichage
-    const mainType = mainColline.type_structure_nom || 'Non défini';
-    const typeBadgeClass = mainType === 'SLC' ? 'badge-slc' : 
-                          mainType === 'RESEAU' ? 'badge-reseau' : 'badge-fonctionnel';
-    
-    const modalContent = `
-        <div class="colline-detail-header">
-            <h4>
-                ${escapeHtml(mainColline.nom)} 
-                <span class="markers-count" style="font-size: 14px; color: #ccc; font-weight: normal;">(${markers.length} marqueur(s))</span>
-            </h4>
-            <div class="detail-info-grid">
-                <div class="detail-info-item">
-                    <label>Zone</label>
-                    <div class="value">${escapeHtml(mainColline.zone_nom || 'N/A')}</div>
+
+        const typeBadgeClass = colline.type_structure_nom === 'SLC' ? 'badge-slc' : 'badge-fonctionnel';
+        const typeBadgeText = colline.type_structure_nom || 'Non défini';
+
+        let descriptionHtml = '';
+        if (colline.description && colline.description.trim() !== '') {
+            descriptionHtml = `
+                <div class="description-box">
+                    <p>${escapeHtml(colline.description)}</p>
                 </div>
-                <div class="detail-info-item">
-                    <label>Commune</label>
-                    <div class="value">${escapeHtml(mainColline.commune_nom || 'N/A')}</div>
-                </div>
-                <div class="detail-info-item">
-                    <label>Province</label>
-                    <div class="value">${escapeHtml(mainColline.province_nom || 'N/A')}</div>
-                </div>
-                <div class="detail-info-item">
-                    <label>Type principal</label>
-                    <div class="value">
-                        <span class="badge-type ${typeBadgeClass}">${escapeHtml(mainType)}</span>
-                    </div>
-                </div>
-                <div class="detail-info-item">
-                    <label>Total Membres</label>
-                    <div class="value">${formatNumber(totalMembres)}</div>
-                </div>
-                <div class="detail-info-item">
-                    <label>Total Hommes / Femmes</label>
-                    <div class="value">${formatNumber(totalHommes)} / ${formatNumber(totalFemmes)}</div>
-                </div>
-                <div class="detail-info-item">
-                    <label>Total Structures</label>
-                    <div class="value">${formatNumber(totalStructures)}</div>
-                </div>
-            </div>
-        </div>
-        ${descriptionHtml}
-        <div class="stats-section">
-            <h5>📊 Détails de(s) ${markers.length} marqueur(s) dans ${escapeHtml(mainColline.nom)}</h5>
-            <div class="stats-table-wrapper">
-                <table class="stats-table" id="detailsTable" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <th style="text-align: left;">Zone</th>
-                            <th style="text-align: center;">#</th>
-                            <th style="text-align: center;">Type</th>
-                            <th style="text-align: center;">Photo</th>
-                            <th style="text-align: center;">Beneficiaires</th>
-                            <th style="text-align: center;">Hommes</th>
-                            <th style="text-align: center;">Femmes</th>
-                            <th style="text-align: center;">Structures</th>
-                            <th style="text-align: center;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>${tableRows}</tbody>
-                </table>
-            </div>
-        </div>
-    `;
-    
-    document.getElementById('modalCollineInfo').innerHTML = modalContent;
-    
-    setTimeout(() => {
-        if ($.fn.DataTable.isDataTable('#detailsTable')) {
-            $('#detailsTable').DataTable().destroy();
+            `;
         }
-        $('#detailsTable').DataTable({
-            language: { 
-                url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json',
-                search: "Rechercher:",
-                lengthMenu: "Afficher _MENU_ entrées",
-                info: "Affichage de _START_ à _END_ sur _TOTAL_ marqueur(s)"
-            },
-            pageLength: 10,
-            scrollX: true,
-            autoWidth: false,
-            columnDefs: [
-                { targets: 0, className: 'dt-left', orderable: true },
-                { targets: [1,2,3,4,5,6,7,8], className: 'dt-center', orderable: true }
-            ]
-        });
-    }, 100);
-    
-    $('#detailModal').modal('show');
-};
-// ============================================
-// SHOW SINGLE MARKER DETAIL - Version avec photo
-// ============================================
 
-window.showSingleMarkerDetail = function(markerId) {
-    // Chercher d'abord dans collinesMarkers (avec doublons)
-    let marker = collinesMarkers.find(c => c.id == markerId);
-    
-    // Si pas trouvé, chercher dans collines (uniques)
-    if (!marker) {
-        marker = collines.find(c => c.id == markerId);
-    }
-    
-    if (!marker) return;
-    
-    const hasPhoto = marker.photo && marker.photo.trim() !== '';
-    const photoUrl = hasPhoto ? "<?= base_url('uploads/') ?>" + marker.photo : null;
-    
-    const typeBadgeClass = marker.type_structure_nom === 'SLC' ? 'badge-slc' : 
-                          marker.type_structure_nom === 'RESEAU' ? 'badge-reseau' : 'badge-fonctionnel';
-    
-    // Créer le contenu du modal avec SES PROPRES données
-    let photoHtml = '';
-    if (hasPhoto) {
-        photoHtml = `
-            <div class="photo-section" style="margin-top: 15px; text-align: center;">
-                <div style="background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px solid #e9ecef;">
-                    <img src="${photoUrl}" 
-                         alt="Photo du marqueur" 
-                         style="max-width: 100%; max-height: 300px; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.1);"
-                         onclick="window.open('${photoUrl}', '_blank')"
-                         >
-                    <div style="margin-top: 8px; font-size: 12px; color: #666;">
-                        <i class="fa fa-image"></i> Cliquez sur l'image pour l'agrandir
+        const modalContent = `
+            <div class="colline-detail-header">
+                <h4>${escapeHtml(colline.nom)}</h4>
+                <div class="detail-info-grid">
+                    <div class="detail-info-item">
+                        <label>Zone</label>
+                        <div class="value">${escapeHtml(colline.zone_nom || 'N/A')}</div>
                     </div>
+                    <div class="detail-info-item">
+                        <label>Commune</label>
+                        <div class="value">${escapeHtml(colline.commune_nom || 'N/A')}</div>
+                    </div>
+                    <div class="detail-info-item">
+                        <label>Province</label>
+                        <div class="value">${escapeHtml(colline.province_nom || 'N/A')}</div>
+                    </div>
+                    <div class="detail-info-item">
+                        <label>Type de structure</label>
+                        <div class="value">
+                            <span class="badge-type ${typeBadgeClass}">${escapeHtml(typeBadgeText)}</span>
+                        </div>
+                    </div>
+                    <div class="detail-info-item">
+                        <label>Membres</label>
+                        <div class="value">${formatNumber(colline.nb_membres)}</div>
+                    </div>
+                    <div class="detail-info-item">
+                        <label>Hommes / Femmes</label>
+                        <div class="value">${formatNumber(colline.nb_hommes)} / ${formatNumber(colline.nb_femmes)}</div>
+                    </div>
+                    <div class="detail-info-item">
+                        <label>Structures</label>
+                        <div class="value">${colline.nb_structures}</div>
+                    </div>
+                </div>
+            </div>
+            ${descriptionHtml}
+            <div class="stats-section">
+                <h5>Statistiques de la colline: ${escapeHtml(colline.nom)}</h5>
+                <div class="stats-table-wrapper">
+                    <table class="stats-table" id="detailsTable" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left;">Zone</th>
+                                <th style="text-align: center;">Collines</th>
+                                <th style="text-align: center;">Beneficiaires</th>
+                                <th style="text-align: center;">Hommes</th>
+                                <th style="text-align: center;">Femmes</th>
+                                <th style="text-align: center;">Structures</th>
+                            </tr>
+                        </thead>
+                        <tbody>${tableRows}</tbody>
+                    </table>
                 </div>
             </div>
         `;
-    }
-    
-    const modalContent = `
-        <div class="colline-detail-header" style="background: linear-gradient(135deg, #2c3e50, #1a1a2e);">
-            <h4>
-                ${escapeHtml(marker.nom)} 
-                <span class="badge badge-info" style="font-size: 12px; background: ${marker.type_structure_nom === 'SLC' ? '#3498db' : marker.type_structure_nom === 'RESEAU' ? '#e67e22' : '#2ecc71'};">Marqueur</span>
-            </h4>
-            <div class="detail-info-grid">
-                <div class="detail-info-item">
-                    <label>Zone</label>
-                    <div class="value">${escapeHtml(marker.zone_nom || 'N/A')}</div>
-                </div>
-                <div class="detail-info-item">
-                    <label>Commune</label>
-                    <div class="value">${escapeHtml(marker.commune_nom || 'N/A')}</div>
-                </div>
-                <div class="detail-info-item">
-                    <label>Province</label>
-                    <div class="value">${escapeHtml(marker.province_nom || 'N/A')}</div>
-                </div>
-                <div class="detail-info-item">
-                    <label>Type de structure</label>
-                    <div class="value">
-                        <span class="badge-type ${typeBadgeClass}">${escapeHtml(marker.type_structure_nom || 'Non défini')}</span>
-                    </div>
-                </div>
-                <div class="detail-info-item">
-                    <label>Membres</label>
-                    <div class="value" style="font-size: 20px;">${formatNumber(marker.nb_membres || 0)}</div>
-                </div>
-                <div class="detail-info-item">
-                    <label>Hommes / Femmes</label>
-                    <div class="value">${formatNumber(marker.nb_hommes || 0)} / ${formatNumber(marker.nb_femmes || 0)}</div>
-                </div>
-                <div class="detail-info-item">
-                    <label>Structures</label>
-                    <div class="value">${marker.nb_structures || 0}</div>
-                </div>
-            </div>
-        </div>
-        ${marker.description && marker.description.trim() !== '' ? `
-            <div class="description-box" style="margin-top: 15px; border-left-color: ${marker.type_structure_nom === 'SLC' ? '#3498db' : marker.type_structure_nom === 'RESEAU' ? '#e67e22' : '#2ecc71'};">
-                <h6 style="margin-bottom: 8px; color: #1a1a2e;">📝 Description complète</h6>
-                <p style="margin: 0; font-size: 14px; line-height: 1.8; color: #495057; white-space: pre-wrap;">${escapeHtml(marker.description)}</p>
-            </div>
-        ` : ''}
-        ${photoHtml}
-        <div class="stats-section" style="margin-top: 15px;">
-            <h5>📊 Statistiques du marqueur</h5>
-            <div class="stats-summary" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px;">
-                <div class="stat-card" style="background: #667eea; color: white; padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);">
-                    <div style="font-size: 28px; font-weight: bold;">${formatNumber(marker.nb_membres || 0)}</div>
-                    <div style="font-size: 13px; opacity: 0.9; margin-top: 5px;">Bénéficiaires</div>
-                </div>
-                <div class="stat-card" style="background: #2ecc71; color: white; padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);">
-                    <div style="font-size: 28px; font-weight: bold;">${formatNumber(marker.nb_hommes || 0)}</div>
-                    <div style="font-size: 13px; opacity: 0.9; margin-top: 5px;">Hommes</div>
-                </div>
-                <div class="stat-card" style="background: #e74c3c; color: white; padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);">
-                    <div style="font-size: 28px; font-weight: bold;">${formatNumber(marker.nb_femmes || 0)}</div>
-                    <div style="font-size: 13px; opacity: 0.9; margin-top: 5px;">Femmes</div>
-                </div>
-                <div class="stat-card" style="background: #f39c12; color: white; padding: 15px; border-radius: 12px; text-align: center; box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);">
-                    <div style="font-size: 28px; font-weight: bold;">${marker.nb_structures || 0}</div>
-                    <div style="font-size: 13px; opacity: 0.9; margin-top: 5px;">Structures</div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    // Créer un modal dédié pour les détails individuels s'il n'existe pas
-    if ($('#singleMarkerModal').length === 0) {
-        const modalHtml = `
-            <div class="modal fade" id="singleMarkerModal" tabindex="-1" role="dialog" aria-labelledby="singleMarkerModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                    <div class="modal-content" style="border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-                        <div class="modal-header" style="background: linear-gradient(135deg, #1a1a2e, #16213e); border-bottom: none; padding: 20px 25px;">
-                            <h5 class="modal-title" style="color: white; font-weight: 600;">
-                                <i class="fa fa-info-circle"></i> Détails du marqueur
-                            </h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white; opacity: 0.8; font-size: 28px;">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body" id="singleMarkerContent" style="padding: 25px; background: #f8f9fa; max-height: 80vh; overflow-y: auto;"></div>
-                        <div class="modal-footer" style="border-top: 1px solid #e9ecef; padding: 15px 25px; background: white;">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" style="background: #6c757d; border: none; padding: 8px 25px; border-radius: 8px; font-weight: 500;">Fermer</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        $('body').append(modalHtml);
-    }
-    
-    $('#singleMarkerContent').html(modalContent);
-    $('#singleMarkerModal').modal('show');
-};
-// ============================================
-// OPEN PHOTO MODAL - Afficher la photo en grand
-// ============================================
 
-window.openPhotoModal = function(photoUrl, title) {
-    if ($('#photoModal').length === 0) {
-        const modalHtml = `
-            <div class="modal fade" id="photoModal" tabindex="-1" role="dialog" aria-labelledby="photoModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-md modal-dialog-centered" role="document">
-                    <div class="modal-content" style="border-radius: 16px; overflow: hidden; background: transparent; box-shadow: none;">
-                        <div class="modal-body" style="padding: 0; background: transparent; text-align: center;">
-                            <div style="background: rgba(0,0,0,0.85); border-radius: 16px; padding: 20px; position: relative;">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="position: absolute; top: 10px; right: 15px; color: white; font-size: 30px; opacity: 0.8; z-index: 10;">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                <img id="photoModalImage" src="" alt="Photo" style="max-width: 100%; max-height: 80vh; border-radius: 8px; margin-top: 10px;">
-                                <div id="photoModalCaption" style="color: white; margin-top: 10px; font-size: 14px;"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        $('body').append(modalHtml);
-    }
-    
-    $('#photoModalImage').attr('src', photoUrl);
-    $('#photoModalCaption').text(title || 'Photo');
-    $('#photoModal').modal('show');
-};
+        document.getElementById('modalCollineInfo').innerHTML = modalContent;
 
-// ============================================
-// FONCTION POUR OBTENIR LA COULEUR D'UN TYPE
-// ============================================
+        setTimeout(() => {
+            if ($.fn.DataTable.isDataTable('#detailsTable')) {
+                $('#detailsTable').DataTable().destroy();
+            }
+            $('#detailsTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/fr-FR.json',
+                    search: "Rechercher:",
+                    lengthMenu: "Afficher _MENU_ entrées",
+                    info: "Affichage de _START_ à _END_ sur _TOTAL_ zones"
+                },
+                pageLength: 10,
+                scrollX: false,
+                autoWidth: true,
+                columnDefs: [{
+                        targets: 0,
+                        className: 'dt-left',
+                        orderable: true
+                    },
+                    {
+                        targets: [1, 2, 3, 4, 5],
+                        className: 'dt-center',
+                        orderable: true
+                    }
+                ]
+            });
+        }, 100);
 
-function getTypeColor(type) {
-    const typeLower = type ? type.toLowerCase() : '';
-    if (typeLower.includes('slc') || typeLower.includes('silc')) {
-        return '#3498db';
-    } else if (typeLower.includes('fonctionnel')) {
-        return '#e67e22';
-    } else if (typeLower.includes('coop')) {
-        return '#27ae60';
-    } else {
-        return '#667eea';
-    }
-}
+        $('#detailModal').modal('show');
+    };
+
     // ============================================
     // INITIALISATION
     // ============================================
@@ -2006,12 +1526,16 @@ function getTypeColor(type) {
         document.getElementById('preloader').style.display = 'none';
         initMarkers();
         initFilters();
-        
+
         setTimeout(function() {
-            const allCollines = collines.map(c => ({ ...c, type: 'colline' }));
+            const allCollines = collines.map(c => ({
+                ...c,
+                type: 'colline'
+            }));
             updateStatsDashboard(allCollines);
         }, 300);
     });
     </script>
 </body>
+
 </html>

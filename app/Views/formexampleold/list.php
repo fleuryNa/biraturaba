@@ -2,27 +2,7 @@
 <html lang="en">
 
 <?= view('includes/backend/header_new') ?>
-<style type="text/css">
-.custom-file-input {
-    cursor: pointer;
-}
 
-.custom-file-input.is-invalid ~ .custom-file-label {
-    border-color: #dc3545;
-}
-
-.custom-file-input.is-invalid ~ .custom-file-label::after {
-    background-color: #dc3545;
-    color: white;
-}
-
-.img-thumbnail {
-    padding: 3px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-</style>
 <body class="fixed-navbar">
     <!--begin::App Wrapper-->
     <div class="App-wrapper">
@@ -48,7 +28,7 @@
                         <div class="ibox-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <a href="<?= site_url('formexample/create') ?>" class="btn btn-primary">
-                                    <i class="fa fa-plus"></i> Ajouter un membre
+                                    <i class="fa fa-plus"></i> Ajouter
                                 </a>
                                 <a href="<?= site_url('formexample/exportCsv') ?>" class="btn btn-info">
                                     <i class="fa fa-file-excel-o"></i> Exporter CSV
@@ -56,22 +36,20 @@
                             </div>
                             <div class="table-responsive">
                                 <table id="membresTable" class="table table-bordered table-hover">
-                                   <thead class="table-light">
-    <tr>
-        <th>Commune</th>
-        <th>Zone</th>
-        <th>Colline</th>
-        <th>Description</th>
-        <th>Photo</th> <!-- Nouvelle colonne -->
-        <th>Membres inscrits</th>
-        <th>Hommes</th>
-        <th>Femmes</th>
-        <th>Structures</th>
-        <th>Type de structures</th>
-        <th>Actions</th>
-    </tr>
-</thead>
-</thead>
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Commune</th>
+                                            <th>Zone</th>
+                                            <th>Colline</th>
+                                            <th>Description</th>
+                                            <th>Membres inscrits</th>
+                                            <th>Hommes</th>
+                                            <th>Femmes</th>
+                                            <th>Structures</th>
+                                            <th>Type de structures</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
                                     <tbody>
                                         <?php foreach ($membres as $m): ?>
                                         <tr>
@@ -80,58 +58,51 @@
                                             <td><?= esc($m['COLLINE_NAME'] ?? '-') ?></td>
                                             <td class="description-cell">
                                                 <?php if (!empty($m['DESCRIPTION'])): ?>
-                                                    <?php 
+                                                <?php 
                                                     $description = strip_tags($m['DESCRIPTION']);
                                                     $truncated = mb_substr($description, 0, 100);
                                                     ?>
-                                                    <span class="description-preview"><?= nl2br(esc($truncated)) ?></span>
-                                                    <?php if (mb_strlen($description) > 100): ?>
-                                                        <a href="#" class="show-more-link" data-fulltext="<?= esc($description) ?>" style="color: #007bff; font-size: 12px;">... voir plus</a>
-                                                    <?php endif ?>
+                                                <span class="description-preview"><?= nl2br(esc($truncated)) ?></span>
+                                                <?php if (mb_strlen($description) > 100): ?>
+                                                <a href="#" class="show-more-link"
+                                                    data-fulltext="<?= esc($description) ?>"
+                                                    style="color: #007bff; font-size: 12px;">... voir plus</a>
+                                                <?php endif ?>
                                                 <?php else: ?>
-                                                    <span class="text-muted">Aucune description</span>
+                                                <span class="text-muted">Aucune description</span>
                                                 <?php endif ?>
                                             </td>
-                                            <td>
-    <?php if (!empty($m['PHOTO'])){  ?>
-        <img src="<?= base_url('uploads/' . $m['PHOTO']) ?>" 
-             alt="Photo" 
-             style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; cursor: pointer; border: 1px solid #ddd;"
-             onclick="window.open(this.src, '_blank')"
-             >
-    <?php }
-        else{ ?>
-        <span class="text-muted">Aucune photo</span>
-    <?php } ?>
-</td>
                                             <td><?= esc($m['NB_MEMBRE_INSCRITS'] ?? 0) ?></td>
                                             <td><?= esc($m['NOMBRE_HOMME'] ?? 0) ?></td>
                                             <td><?= esc($m['NOMBRE_FEMME'] ?? 0) ?></td>
                                             <td><?= esc($m['NB_GROUPE'] ?? 0) ?></td>
                                             <td>
                                                 <?php if (!empty($m['TYPE_GROUPE'])): ?>
-                                                    <span class="badge badge-primary"><?= esc($m['TYPE_GROUPE']) ?></span>
+                                                <span class="badge badge-primary"><?= esc($m['TYPE_GROUPE']) ?></span>
                                                 <?php else: ?>
-                                                    <span class="badge badge-secondary">Non défini</span>
+                                                <span class="badge badge-secondary">Non défini</span>
                                                 <?php endif ?>
                                             </td>
                                             <td class="text-center">
                                                 <div class="dropdown">
-                                                    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                                                    <button class="btn btn-sm btn-secondary dropdown-toggle"
+                                                        type="button" data-toggle="dropdown" aria-expanded="false">
                                                         <i class="fa fa-cog"></i> Actions
                                                     </button>
                                                     <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="<?= site_url('formexample/edit/'.$m['ID_MEMBRES']) ?>">
+                                                        <a class="dropdown-item"
+                                                            href="<?= site_url('formexample/edit/'.$m['ID_MEMBRES']) ?>">
                                                             <i class="fa fa-edit text-warning"></i> Modifier
                                                         </a>
                                                         <div class="dropdown-divider"></div>
-                                                        <a class="dropdown-item" href="#" onclick="confirmDelete(<?= $m['ID_MEMBRES'] ?>, '<?= esc($m['COLLINE_NAME'] ?? 'ce membre') ?>')">
+                                                        <a class="dropdown-item" href="#"
+                                                            onclick="confirmDelete(<?= $m['ID_MEMBRES'] ?>, '<?= esc($m['COLLINE_NAME'] ?? 'ce membre') ?>')">
                                                             <i class="fa fa-trash text-danger"></i> Supprimer
                                                         </a>
                                                     </div>
                                                 </div>
-                                              </td>
-                                         </tr>
+                                            </td>
+                                        </tr>
                                         <?php endforeach ?>
                                     </tbody>
                                 </table>
@@ -157,7 +128,8 @@
     <?= view('includes/backend/script_back_new') ?>
 
     <!-- Modal de confirmation de suppression -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
@@ -198,7 +170,8 @@
                     </button>
                 </div>
                 <div class="modal-body" style="max-height: 500px; overflow-y: auto;">
-                    <div id="fullDescriptionText" style="white-space: pre-wrap; word-wrap: break-word; line-height: 1.6;"></div>
+                    <div id="fullDescriptionText"
+                        style="white-space: pre-wrap; word-wrap: break-word; line-height: 1.6;"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
@@ -212,21 +185,25 @@
     <script>
     $(document).ready(function() {
         $('.content-wrapper').css('min-height', $(window).height() - 100);
-        
+
         // Initialisation de DataTable
         $("#membresTable").DataTable({
-            "order": [[0, 'desc']],
-            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Tous"]],
+            "order": [
+                [0, 'desc']
+            ],
+            "lengthMenu": [
+                [5, 10, 25, 50, -1],
+                [5, 10, 25, 50, "Tous"]
+            ],
             "pageLength": 10,
             "scrollX": true,
             "autoWidth": false,
-            "columnDefs": [
-                { 
-                    "targets": [9],  // Colonne Actions
-                    "orderable": false 
+            "columnDefs": [{
+                    "targets": [9], // Colonne Actions
+                    "orderable": false
                 },
-                { 
-                    "targets": [3],  // Colonne Description
+                {
+                    "targets": [3], // Colonne Description
                     "orderable": true,
                     "width": "250px"
                 }
@@ -281,104 +258,115 @@
     </script>
 
     <style>
-        .App-wrapper {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .content-wrapper {
-            flex: 1;
-            padding-bottom: 20px;
-        }
-        .table-responsive {
-            overflow-x: auto;
-        }
-        .badge-primary {
-            background-color: #007bff;
-            padding: 5px 10px;
-            border-radius: 4px;
-            color: white;
-        }
-        .badge-secondary {
-            background-color: #6c757d;
-            padding: 5px 10px;
-            border-radius: 4px;
-            color: white;
-        }
-        .dropdown-menu {
-            min-width: 150px;
-        }
-        .dropdown-menu .dropdown-item i {
-            margin-right: 8px;
-            width: 16px;
-        }
-        .dropdown-menu .dropdown-item:hover {
-            background-color: #f8f9fa;
-        }
-        .btn-secondary.dropdown-toggle {
-            background-color: #6c757d;
-            border-color: #6c757d;
-        }
-        .modal-header.bg-danger {
-            background-color: #dc3545 !important;
-        }
-        .modal-header.bg-primary {
-            background-color: #007bff !important;
-        }
-        
-        /* Styles pour la colonne description */
+    .App-wrapper {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .content-wrapper {
+        flex: 1;
+        padding-bottom: 20px;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .badge-primary {
+        background-color: #007bff;
+        padding: 5px 10px;
+        border-radius: 4px;
+        color: white;
+    }
+
+    .badge-secondary {
+        background-color: #6c757d;
+        padding: 5px 10px;
+        border-radius: 4px;
+        color: white;
+    }
+
+    .dropdown-menu {
+        min-width: 150px;
+    }
+
+    .dropdown-menu .dropdown-item i {
+        margin-right: 8px;
+        width: 16px;
+    }
+
+    .dropdown-menu .dropdown-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .btn-secondary.dropdown-toggle {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .modal-header.bg-danger {
+        background-color: #dc3545 !important;
+    }
+
+    .modal-header.bg-primary {
+        background-color: #007bff !important;
+    }
+
+    /* Styles pour la colonne description */
+    .description-cell {
+        max-width: 300px;
+        min-width: 200px;
+        white-space: normal;
+        word-wrap: break-word;
+        line-height: 1.4;
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .description-preview {
+        display: inline;
+        color: #333;
+    }
+
+    .show-more-link {
+        display: inline-block;
+        margin-top: 3px;
+        font-size: 11px;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .show-more-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Style pour le modal de description */
+    #fullDescriptionText {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
         .description-cell {
-            max-width: 300px;
-            min-width: 200px;
-            white-space: normal;
-            word-wrap: break-word;
-            line-height: 1.4;
-            font-size: 12px;
-            padding: 8px;
-        }
-        
-        .description-preview {
-            display: inline;
-            color: #333;
-        }
-        
-        .show-more-link {
-            display: inline-block;
-            margin-top: 3px;
+            max-width: 200px;
+            min-width: 150px;
             font-size: 11px;
-            text-decoration: none;
-            cursor: pointer;
         }
-        
-        .show-more-link:hover {
-            text-decoration: underline;
+
+        .table thead th {
+            font-size: 12px;
         }
-        
-        /* Style pour le modal de description */
-        #fullDescriptionText {
-            font-size: 14px;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .description-cell {
-                max-width: 200px;
-                min-width: 150px;
-                font-size: 11px;
-            }
-            
-            .table thead th {
-                font-size: 12px;
-            }
-        }
+    }
     </style>
 
 </body>
+
 </html>

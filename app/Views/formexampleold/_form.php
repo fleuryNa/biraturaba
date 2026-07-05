@@ -1,5 +1,5 @@
 <?php /** @var array $errors */ ?>
-<form method="post" action="<?= $action ?>" enctype="multipart/form-data">
+<form method="post" action="<?= $action ?>">
     <?= csrf_field() ?>
 
 <?php if (isset($errors['somme'])): ?>
@@ -84,38 +84,6 @@
             <?php endif ?>
         </div>
     </div>
-
-    <!-- CHAMP PHOTO -->
-<div class="row">
-    <div class="form-group col-md-12">
-        <label class="form-label">Photo</label>
-        <div class="custom-file">
-            <input type="file" 
-                   name="photo" 
-                   id="photo" 
-                   class="form-control" 
-                   accept="image/*">
-            <!-- <label class="custom-file-label" for="photo">Choisir une image...</label> -->
-        </div>
-        <?php if (isset($errors['photo'])): ?>
-            <div class="text-danger small mt-1"><?= $errors['photo'] ?></div>
-        <?php else: ?>
-            <small class="form-text text-muted">Format acceptés : JPG, PNG, GIF, WEBP. Taille max : 200 Ko.</small>
-        <?php endif ?>
-        
-        <?php if (isset($membre) && !empty($membre['PHOTO'])): ?>
-            <div class="mt-2">
-                <label>Image actuelle :</label>
-                <div class="d-flex align-items-center">
-                    <img src="<?= base_url('uploads/' . $membre['PHOTO']) ?>" 
-                         alt="Photo actuelle" 
-                         style="max-width: 100px; max-height: 100px; border-radius: 5px; border: 1px solid #ddd; padding: 5px;">
-                    <span class="ml-2 text-muted small"><?= esc($membre['PHOTO']) ?></span>
-                </div>
-            </div>
-        <?php endif ?>
-    </div>
-</div>
 
     <div class="row">
         <div class="form-group col-md-4">
